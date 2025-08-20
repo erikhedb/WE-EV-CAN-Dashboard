@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>BMS Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0b1220;
+      --bg-soft:#0e1830;
+      --card:#101a33;
+      --card-2:#0e1830;
+      --text:#e8eefc;
+      --muted:#9fb0d6;
+      --line:#1d2b4a;
+      --accent:#4f83ff;
+      --accent-2:#2dd4ff;
+      --warn:#f59e0b;
+      --ok:#22c55e;
+      --bad:#ef4444;
+      --mono:#cfe1ff;
+      --mono-bg:#0a1224;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 80% -10%, #1a2b55 0%, #0b1220 60%) fixed,
+                  linear-gradient(180deg, #0c1630 0%, #0b1220 100%) fixed;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+    }
+
+    header{
+      padding:14px 20px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg,#0f1b38 0%,#0c1630 100%);
+      position:sticky;top:0;z-index:10;
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+    }
+    h1{margin:0;font-size:20px;letter-spacing:.2px}
+    .meta{
+      margin:0;color:var(--muted);font-size:13px;white-space:nowrap;
+    }
+    .meta strong{color:var(--text)}
+
+    nav{
+      display:flex;gap:10px;padding:12px 20px;border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg,#0e1830,#0b1328);
+      position:sticky;top:58px;z-index:9;
+    }
+    .tab{
+      appearance:none;cursor:pointer;
+      background:linear-gradient(180deg,#15264d,#0f1d3b);
+      color:var(--text);border:1px solid #20335c;border-radius:10px;
+      padding:8px 12px;font-size:14px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03), 0 2px 8px rgba(0,0,0,0.25);
+    }
+    .tab.active{
+      background:linear-gradient(180deg,#1d3a7a,#142b59);
+      border-color:#2c56c3;
+      box-shadow: 0 6px 18px rgba(47,120,255,.35), inset 0 0 0 1px rgba(255,255,255,0.05);
+      font-weight:600;
+    }
+
+    main{padding:16px 20px 24px;max-width:1600px;margin:0 auto}
+    .section{
+      background: linear-gradient(180deg, #121f40, #0f1a36);
+      border:1px solid var(--line);
+      border-radius:14px;padding:14px;margin-bottom:16px;
+      box-shadow: 0 8px 30px rgba(8,14,30,.45), inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+
+    /* Key-value grid */
+    .kv{
+      display:grid;gap:10px;
+      grid-template-columns: repeat(6, minmax(160px, 1fr));
+    }
+    .kv .item{
+      background:linear-gradient(180deg,#0f1a36,#0d1832);
+      border:1px solid #192a4d;border-radius:12px;padding:10px 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.3), inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+    .label{font-size:12px;color:var(--muted)}
+    .value{font-size:16px;margin-top:4px}
+
+    /* Relay flags as pill buttons */
+    .flag-grid{
+      display:grid;gap:10px;
+      grid-template-columns: repeat(4, minmax(160px, 1fr));
+    }
+    .flag{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:8px 10px;border-radius:999px;font-size:13px;font-weight:600;
+      border:1px solid #1b2c52; background:linear-gradient(180deg,#0f1b38,#0c1630);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03), 0 3px 10px rgba(0,0,0,.3);
+      color:var(--muted);
+    }
+    .flag.on{
+      background:linear-gradient(180deg,#1c4ed8,#1940ad);
+      border-color:#2e5ee3;color:#eaf1ff;
+      box-shadow: 0 8px 24px rgba(44,130,255,.45), inset 0 0 0 1px rgba(255,255,255,.06);
+    }
+    .flag .dot{
+      width:8px;height:8px;border-radius:50%;margin-right:8px;background:#526392;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.15)
+    }
+    .flag.on .dot{ background:#93c5fd; box-shadow: 0 0 0 3px rgba(147,197,253,.2) }
+
+    /* Modules */
+    .grid6{
+      display:grid;gap:12px;
+      grid-template-columns: repeat(6, minmax(180px, 1fr));
+    }
+    @media (max-width:1400px){ .grid6{ grid-template-columns: repeat(3, minmax(220px,1fr)); } }
+    @media (max-width:900px){ .grid6{ grid-template-columns: repeat(2, minmax(220px,1fr)); } .kv{ grid-template-columns: repeat(3,minmax(140px,1fr)); } }
+    @media (max-width:600px){ .grid6{ grid-template-columns: 1fr; } .kv{ grid-template-columns: repeat(2,minmax(140px,1fr)); } }
+
+    .module{
+      background:linear-gradient(180deg,#0f1a36,#0e1832);
+      border:1px solid #192a4d;border-radius:12px;padding:10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+    .module h3{margin:0 0 8px;font-size:14px;color:#b9c7ea;letter-spacing:.2px}
+
+    /* One-column cells */
+    .cells{display:grid;grid-template-columns: 1fr; gap:6px}
+    .cell{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:6px 8px;border-radius:10px;
+      background:linear-gradient(180deg,#0a142a,#0a1326);
+      border:1px dashed #1b2d55;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+      color:var(--mono);
+    }
+
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace}
+    pre{
+      white-space: pre-wrap;word-break: break-word;
+      background: var(--mono-bg);color: var(--mono);
+      padding:14px;border-radius:12px;border:1px solid #1b2c52;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+    }
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Orion BMS Dashboard</h1>
+    <p class="meta">Written at: <strong>{{ written_at }}</strong></p>
+  </header>
+
+  <nav>
+    <button class="tab active" data-tab="dash">Dashboard</button>
+    <button class="tab" data-tab="raw">Raw JSON</button>
+  </nav>
+
+  <!-- DASHBOARD -->
+  <main id="dash">
+    <div class="section">
+      <div class="kv">
+        <div class="item"><div class="label">Pack Voltage</div>
+          <div class="value mono">{% if pack.voltage_V is not none %}{{ "%.2f"|format(pack.voltage_V) }} V{% else %}&mdash;{% endif %}</div>
+        </div>
+        <div class="item"><div class="label">Pack Current</div>
+          <div class="value mono">{% if pack.current_A is not none %}{{ "%.2f"|format(pack.current_A) }} A{% else %}&mdash;{% endif %}</div>
+        </div>
+        <div class="item"><div class="label">State of Charge</div>
+          <div class="value mono">{% if pack.soc_pct is not none %}{{ "%.1f"|format(pack.soc_pct) }} %{% else %}&mdash;{% endif %}</div>
+        </div>
+        <div class="item"><div class="label">High Temp</div>
+          <div class="value mono">{% if temps.high_C is not none %}{{ temps.high_C|int }} °C{% else %}&mdash;{% endif %}</div>
+        </div>
+        <div class="item"><div class="label">Low Temp</div>
+          <div class="value mono">{% if temps.low_C is not none %}{{ temps.low_C|int }} °C{% else %}&mdash;{% endif %}</div>
+        </div>
+        <div class="item"><div class="label">Populated Cells</div>
+          <div class="value mono">{% if cell_ids.populated_cells is not none %}{{ cell_ids.populated_cells }}{% else %}&mdash;{% endif %}</div>
+        </div>
+
+        <div class="item"><div class="label">High Cell</div>
+          <div class="value mono">
+            {% if cell_ids.high_cell_id is not none and cell_ids.high_cell_voltage_V is not none %}
+              #{{ cell_ids.high_cell_id }} / {{ "%.4f"|format(cell_ids.high_cell_voltage_V) }} V
+            {% else %}&mdash;{% endif %}
+          </div>
+        </div>
+        <div class="item"><div class="label">Low Cell</div>
+          <div class="value mono">
+            {% if cell_ids.low_cell_id is not none and cell_ids.low_cell_voltage_V is not none %}
+              #{{ cell_ids.low_cell_id }} / {{ "%.4f"|format(cell_ids.low_cell_voltage_V) }} V
+            {% else %}&mdash;{% endif %}
+          </div>
+        </div>
+        <div class="item"><div class="label">Δ (Max - Min)</div>
+          <div class="value mono">{% if derived.delta_V is not none %}{{ "%.4f"|format(derived.delta_V) }} V{% else %}&mdash;{% endif %}</div>
+        </div>
+        <div class="item"><div class="label">Min</div>
+          <div class="value mono">{% if derived.min_V is not none %}{{ "%.4f"|format(derived.min_V) }} V{% else %}&mdash;{% endif %}</div>
+        </div>
+        <div class="item"><div class="label">Max</div>
+          <div class="value mono">{% if derived.max_V is not none %}{{ "%.4f"|format(derived.max_V) }} V{% else %}&mdash;{% endif %}</div>
+        </div>
+        <div class="item"><div class="label">Avg</div>
+          <div class="value mono">{% if derived.avg_V is not none %}{{ "%.4f"|format(derived.avg_V) }} V{% else %}&mdash;{% endif %}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Relay flags -->
+    <div class="section">
+      <div class="label" style="margin-bottom:10px;">Relay / Status Flags</div>
+      {% set rf = pack.relay_flags | default({}) %}
+      <div class="flag-grid">
+        <span class="flag {% if rf.discharge_enabled %}on{% endif %}"><span class="dot"></span>Discharge enabled</span>
+        <span class="flag {% if rf.charge_enabled %}on{% endif %}"><span class="dot"></span>Charge enabled</span>
+        <span class="flag {% if rf.charger_safety_enabled %}on{% endif %}"><span class="dot"></span>Charger safety</span>
+        <span class="flag {% if rf.malfunction_active %}on{% endif %}"><span class="dot"></span>Malfunction</span>
+        <span class="flag {% if rf.mpi_active %}on{% endif %}"><span class="dot"></span>MPI</span>
+        <span class="flag {% if rf.always_on_active %}on{% endif %}"><span class="dot"></span>Always-on</span>
+        <span class="flag {% if rf.is_ready %}on{% endif %}"><span class="dot"></span>Is Ready</span>
+        <span class="flag {% if rf.is_charging %}on{% endif %}"><span class="dot"></span>Is Charging</span>
+      </div>
+    </div>
+
+    <!-- Cells -->
+    <div class="section">
+      <h2 style="margin:0 0 10px 0;font-size:16px;">Cells (6 × 12)</h2>
+      {% if modules and modules|length > 0 %}
+      <div class="grid6">
+        {% for group in modules %}
+          <div class="module">
+            <h3>Module {{ group.module or loop.index }}</h3>
+            <div class="cells">
+              {% for cell in group.cells %}
+                <div class="cell mono">
+                  <span>#{{ cell.index }}</span>
+                  <span>{% if cell.voltage_V is not none %}{{ "%.4f"|format(cell.voltage_V) }} V{% else %}&mdash;{% endif %}</span>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      {% else %}
+        <div class="mono">No cell data found in JSON (expected under <code>cells.groups[*].cells[*].voltage_V</code>).</div>
+      {% endif %}
+    </div>
+  </main>
+
+  <!-- RAW JSON -->
+  <main id="raw" class="hidden">
+    <div class="section">
+      <pre class="mono">{{ raw_json }}</pre>
+    </div>
+  </main>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const dash = document.getElementById('dash');
+    const raw = document.getElementById('raw');
+    tabs.forEach(btn => btn.addEventListener('click', () => {
+      tabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.getAttribute('data-tab');
+      if (tab === 'raw') { dash.classList.add('hidden'); raw.classList.remove('hidden'); }
+      else { raw.classList.add('hidden'); dash.classList.remove('hidden'); }
+    }));
+  </script>
+</body>
+</html>
