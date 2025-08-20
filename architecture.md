@@ -20,9 +20,8 @@ The architecture is designed to:
 
 ```mermaid
 flowchart LR
-  CAN[CAN Bus (Orion BMS + Tesla RDU)] --> Logger[Logger (Python backend)]
+  CAN[CAN Bus Orion BMS + Tesla RDU] --> Logger[Logger (Python backend)]
   Logger -->|JSON| Web[Web UI (Flask SPA)]
   Logger --> Data[Data/]
   Configs[Configs/] --> Logger
 
-  
