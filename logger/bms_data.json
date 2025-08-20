@@ -1,0 +1,27 @@
+{
+  "timestamp_unix": 1755690681.067501,
+  "frames": [],
+  "cells": {
+    "groups_6x12_V": [
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ],
+    "stats": null,
+    "source": "UDS_7EB_F1xx"
+  },
+  "temperatures": {
+    "groups_6x12_C": [
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ],
+    "source": "UDS_7EB_F2xx"
+  }
+}
