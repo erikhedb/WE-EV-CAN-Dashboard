@@ -24,3 +24,5 @@ flowchart LR
   Logger -->|JSON| Web[Web UI (Flask SPA)]
   Logger --> Data[Data/]
   Configs[Configs/] --> Logger
+
+  
