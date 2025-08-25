@@ -1,9 +1,0 @@
-{
-  "can_id": "0x6B0",
-  "current_A": 0.0,
-  "voltage_V": 282.6,
-  "soc_percent": 80.5,
-  "relay_state": "0x0580",
-  "crc": 243,
-  "timestamp": "2025-08-24T21:52:51.410183"
-}

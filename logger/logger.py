@@ -5,7 +5,6 @@ import threading
 import json
 import os
 import datetime
-from handlers import handlers
 
 # This is two dictionaries to store the latest message and last CRC for each CAN ID
 latest_messages = {}
@@ -14,20 +13,19 @@ last_crc = {}
 def save_and_print_messages_periodically():
     while True:
         time.sleep(5)
-        out = []
         for can_id, msg in latest_messages.items():
-            handler = handlers.get(can_id, handlers['default'])
-            formatted = handler(bytes.fromhex(msg['data']), can_id)
-            # Convert timestamp to ISO8601 string
-            formatted["timestamp"] = datetime.datetime.fromtimestamp(formatted["timestamp"]).isoformat()
-            hex_id = formatted["can_id"]
+            # Save only raw frame and readable timestamp
+            hex_id = f"0x{can_id:X}"
             fname = os.path.join("data", f"{hex_id}.json")
             os.makedirs("data", exist_ok=True)
+            out = {
+                "can_id": hex_id,
+                "data": msg["data"],
+                "crc": msg["crc"],
+                "timestamp": datetime.datetime.fromtimestamp(msg["timestamp"]).isoformat()
+            }
             with open(fname, "w") as f:
-                json.dump(formatted, f, indent=2)
-            out.append(formatted)
-        # Optionally print all formatted messages
-        # print(json.dumps(out, indent=2))
+                json.dump(out, f, indent=2)
 
 def main():
     bus = can.interface.Bus(channel='can0', bustype='socketcan')
