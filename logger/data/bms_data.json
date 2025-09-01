@@ -1,0 +1,75 @@
+{
+  "namespace": "orion_bms_can",
+  "version": "1.0.0",
+  "written_at_epoch": 1756755938.668149,
+  "mode": "live",
+  "frames": [
+    {
+      "can_id": "6B0",
+      "Pack_Current": 0.0,
+      "Pack_Inst_Voltage": 279.0,
+      "Pack_SOC": 80.0,
+      "Relay_State": 40965.0,
+      "CRC_Checksum": 1931.0,
+      "relay_state_word": "0xA005",
+      "relay_flags_lowbyte": {
+        "discharge_enabled": true,
+        "charge_enabled": false,
+        "charger_safety_enabled": true,
+        "malfunction_active": false,
+        "mpi_active": false,
+        "always_on_active": false,
+        "is_ready": false,
+        "is_charging": false,
+        "raw_low_byte_hex": "0x05"
+      },
+      "crc": "0x78B",
+      "crc_ok": true,
+      "raw": "00 00 0A E6 A0 05 86 D3"
+    },
+    {
+      "can_id": "6B1",
+      "Pack_DCL": 18.0,
+      "Pack_CCL": 0.0,
+      "High_Temperature": 24.0,
+      "Low_Temperature": 19.0,
+      "CRC_Checksum": 1973.0,
+      "crc": "0x7B5",
+      "crc_ok": true,
+      "raw": "00 12 00 06 18 13 00 FC"
+    },
+    {
+      "can_id": "6B2",
+      "High_Cell_Voltage": 0.0071,
+      "Low_Cell_Voltage": 3.8673,
+      "High_Cell_ID": 71.0,
+      "Low_Cell_ID": 17.0,
+      "Populated_Cells": 72.0,
+      "CRC_Checksum": 143.0,
+      "crc": "0x8F",
+      "crc_ok": true,
+      "raw": "00 47 97 11 47 11 48 8F"
+    },
+    {
+      "can_id": "1806E7F4",
+      "Maximum_Pack_Voltage": 0.0,
+      "Pack_CCL": 3072.0,
+      "DTC_P0A08_Charger_Safety_Relay_Fault": 0.0,
+      "raw": "0B D7 00 3C 00 00 00 00"
+    },
+    {
+      "can_id": "1806E9F4",
+      "Maximum_Cell_Voltage": 0.0,
+      "Pack_CCL": 3072.0,
+      "DTC_P0A08_Charger_Safety_Relay_Fault": 0.0,
+      "raw": "0B D7 00 3C 00 00 00 00"
+    },
+    {
+      "can_id": "1806E5F4",
+      "Maximum_Cell_Voltage": 0.0,
+      "Pack_CCL": 3072.0,
+      "DTC_P0A08_Charger_Safety_Relay_Fault": 0.0,
+      "raw": "0B D7 00 3C 00 00 00 00"
+    }
+  ]
+}

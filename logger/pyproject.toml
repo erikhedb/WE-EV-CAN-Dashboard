@@ -21,5 +21,5 @@ backup_count = 5
 # Data Sources Configuration
 enable_can0 = false
 enable_skv_stream = true
-skv_file_path = "../sample/can0.skv"
+skv_file_path = "../sample/can0.log"
 skv_stream_delay = 0.1  # seconds between messages when streaming

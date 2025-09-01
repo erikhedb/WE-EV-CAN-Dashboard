@@ -15,6 +15,7 @@ import csv
 from typing import Optional
 import can
 import re
+from can_parser import OrionCANParser
 
 class CANMessage:
     """Represents a CAN message"""
@@ -28,6 +29,62 @@ class CANMessage:
     def __str__(self):
         data_hex = ' '.join([f"{byte:02X}" for byte in self.data])
         return f"[{self.source}] {self.timestamp:.6f} {self.can_id} [{self.dlc}] {data_hex}"
+
+class CANLogger:
+    """Enhanced CAN logger with structured parsing"""
+    def __init__(self, config=None):
+        self.config = config or load_config()
+        self.logger = setup_logger(self.config)
+        self.parser = OrionCANParser()
+        self.parsed_messages = []
+        self.data_directory = Path(self.config.get("data_directory", "data/"))
+        self.data_directory.mkdir(exist_ok=True)
+        
+    def on_can_message(self, can_msg: CANMessage):
+        """Enhanced callback function for CAN messages with parsing"""
+        # Parse the message using the DBC parser
+        parsed_msg = self.parser.parse_message(
+            can_msg.can_id,
+            bytes(can_msg.data),
+            can_msg.timestamp,
+            can_msg.dlc
+        )
+        
+        if parsed_msg:
+            self.parsed_messages.append(parsed_msg)
+            self.logger.info(f"Parsed: {parsed_msg.can_id} -> {parsed_msg.signals}")
+            
+            # Save structured JSON periodically (every 10 messages)
+            if len(self.parsed_messages) % 10 == 0:
+                self.save_structured_data()
+        else:
+            self.logger.info(f"Unparsed: {can_msg}")
+    
+    def save_structured_data(self):
+        """Save parsed messages to structured JSON file"""
+        if not self.parsed_messages:
+            return
+            
+        try:
+            # Create structured JSON
+            json_data = self.parser.create_structured_json(
+                self.parsed_messages,
+                mode="live"
+            )
+            
+            # Save to file
+            output_file = self.data_directory / "bms_data.json"
+            if self.parser.save_json(json_data, str(output_file)):
+                self.logger.info(f"Saved structured data to {output_file}")
+            else:
+                self.logger.error(f"Failed to save structured data to {output_file}")
+                
+        except Exception as e:
+            self.logger.error(f"Error saving structured data: {e}")
+    
+    def cleanup(self):
+        """Save any remaining data before shutdown"""
+        self.save_structured_data()
 
 def parse_size(size_str: str) -> int:
     """Parse size string like '10MB' to bytes"""
@@ -97,6 +154,38 @@ def setup_logger(config=None):
     
     return logger
 
+def parse_candump_line(line: str) -> Optional[CANMessage]:
+    """Parse a single candump line into a CANMessage object"""
+    try:
+        # candump format: (timestamp) interface can_id [dlc] data...
+        # Example: (1755680927.992924)  can0  6B0   [8]  00 00 0A E6 A0 05 86 D3
+        
+        # Extract timestamp
+        timestamp_match = re.search(r'\(([\d\.]+)\)', line)
+        if not timestamp_match:
+            return None
+        timestamp = float(timestamp_match.group(1))
+        
+        # Extract interface, can_id, dlc
+        parts = line.strip().split()
+        if len(parts) < 4:
+            return None
+        
+        interface = parts[1]
+        can_id = parts[2]
+        dlc = int(parts[3].strip('[]'))
+        
+        # Parse data bytes (everything after dlc)
+        data = []
+        for i in range(4, len(parts)):
+            if parts[i].strip():
+                data.append(int(parts[i], 16))
+        
+        return CANMessage(timestamp, can_id, dlc, data, interface)
+    except Exception as e:
+        print(f"Error parsing candump line: {e}")
+        return None
+
 def parse_skv_line(line: str) -> Optional[CANMessage]:
     """Parse a single SKV line into a CANMessage object"""
     try:
@@ -120,29 +209,39 @@ def parse_skv_line(line: str) -> Optional[CANMessage]:
         print(f"Error parsing SKV line: {e}")
         return None
 
-def stream_skv_file(skv_file_path: str, delay: float, logger, callback):
-    """Stream CAN messages from SKV file"""
+def stream_can_file(file_path: str, delay: float, logger, callback):
+    """Stream CAN messages from file (supports both SKV and candump formats)"""
     try:
-        with open(skv_file_path, 'r') as f:
-            # Skip header
-            next(f)
+        with open(file_path, 'r') as f:
+            # Try to detect format by reading first line
+            first_line = f.readline().strip()
+            f.seek(0)  # Reset to beginning
+            
+            # Check if it's SKV format (semicolon-separated)
+            if ';' in first_line:
+                logger.info(f"Detected SKV format, skipping header")
+                next(f)  # Skip header
+                parse_func = parse_skv_line
+            else:
+                logger.info(f"Detected candump format")
+                parse_func = parse_candump_line
             
             for line_num, line in enumerate(f, 1):
                 if not line.strip():
                     continue
                 
-                can_msg = parse_skv_line(line)
+                can_msg = parse_func(line)
                 if can_msg:
-                    logger.info(f"SKV Stream: {can_msg}")
+                    logger.info(f"CAN Stream: {can_msg}")
                     if callback:
                         callback(can_msg)
                 
                 time.sleep(delay)
                 
     except FileNotFoundError:
-        logger.error(f"SKV file not found: {skv_file_path}")
+        logger.error(f"CAN file not found: {file_path}")
     except Exception as e:
-        logger.error(f"Error streaming SKV file: {e}")
+        logger.error(f"Error streaming CAN file: {e}")
 
 def listen_can0(interface: str, bitrate: int, logger, callback):
     """Listen to CAN0 interface using python-can"""
@@ -208,18 +307,21 @@ def main():
     logger.info(f"Max Log Size: {config.get('max_log_size', '10MB')}")
     logger.info(f"Backup Count: {config.get('backup_count', 5)}")
     
+    # Create enhanced CAN logger
+    can_logger = CANLogger(config)
+    
     # Start SKV streaming in a separate thread
     if config.get('enable_skv_stream', True):
         skv_file = config.get('skv_file_path', '../sample/can0.skv')
         skv_delay = config.get('skv_stream_delay', 0.1)
         
         skv_thread = threading.Thread(
-            target=stream_skv_file,
-            args=(skv_file, skv_delay, logger, on_can_message),
+            target=stream_can_file,
+            args=(skv_file, skv_delay, logger, can_logger.on_can_message),
             daemon=True
         )
         skv_thread.start()
-        logger.info(f"Started SKV streaming from {skv_file}")
+        logger.info(f"Started CAN file streaming from {skv_file}")
     
     # Start CAN0 listening in a separate thread
     if config.get('enable_can0', True):
@@ -228,7 +330,7 @@ def main():
         
         can_thread = threading.Thread(
             target=listen_can0,
-            args=(can_interface, can_bitrate, logger, on_can_message),
+            args=(can_interface, can_bitrate, logger, can_logger.on_can_message),
             daemon=True
         )
         can_thread.start()
@@ -240,6 +342,7 @@ def main():
             time.sleep(1)
     except KeyboardInterrupt:
         logger.info("Shutting down CAN Bus Logger...")
+        can_logger.cleanup()
 
 if __name__ == "__main__":
     main()
