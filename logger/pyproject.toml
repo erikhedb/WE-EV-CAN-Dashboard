@@ -1,0 +1,25 @@
+[project]
+name = "logger"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "python-can>=4.0.0"
+]
+
+[tool.logger]
+# CAN Bus Configuration
+can_interface = "can0"
+can_bitrate = 500000
+log_level = "INFO"
+log_file = "can_bus.log"
+data_directory = "data/"
+max_log_size = "10MB"
+backup_count = 5
+
+# Data Sources Configuration
+enable_can0 = false
+enable_skv_stream = true
+skv_file_path = "../sample/can0.skv"
+skv_stream_delay = 0.1  # seconds between messages when streaming
