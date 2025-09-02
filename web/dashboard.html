@@ -74,7 +74,7 @@
     /* Key-value grid */
     .kv{
       display:grid;gap:10px;
-      grid-template-columns: repeat(6, minmax(160px, 1fr));
+      grid-template-columns: repeat(5, minmax(160px, 1fr));
     }
     .kv .item{
       background:linear-gradient(180deg,#0f1a36,#0d1832);
@@ -159,51 +159,59 @@
   <main id="dash">
     <div class="section">
       <div class="kv">
-        <div class="item"><div class="label">Pack Voltage</div>
+        
+        <div class="item"><div class="label">Battery Voltage</div>
           <div class="value mono">{% if pack.voltage_V is not none %}{{ "%.2f"|format(pack.voltage_V) }} V{% else %}&mdash;{% endif %}</div>
         </div>
+        
         <div class="item"><div class="label">Pack Current</div>
           <div class="value mono">{% if pack.current_A is not none %}{{ "%.2f"|format(pack.current_A) }} A{% else %}&mdash;{% endif %}</div>
         </div>
+        
         <div class="item"><div class="label">State of Charge</div>
           <div class="value mono">{% if pack.soc_pct is not none %}{{ "%.1f"|format(pack.soc_pct) }} %{% else %}&mdash;{% endif %}</div>
         </div>
-        <div class="item"><div class="label">High Temp</div>
-          <div class="value mono">{% if temps.high_C is not none %}{{ temps.high_C|int }} °C{% else %}&mdash;{% endif %}</div>
+        
+        <div class="item"><div class="label">Pack DCL</div>
+          <div class="value mono">{% if pack_limits.dcl_A is not none %}{{ "%.1f"|format(pack_limits.dcl_A) }} A{% else %}&mdash;{% endif %}</div>
         </div>
+        
+        <div class="item"><div class="label">Pack CCL</div>
+          <div class="value mono">{% if pack_limits.ccl_A is not none %}{{ "%.1f"|format(pack_limits.ccl_A) }} A{% else %}&mdash;{% endif %}</div>
+        </div>
+        
         <div class="item"><div class="label">Low Temp</div>
-          <div class="value mono">{% if temps.low_C is not none %}{{ temps.low_C|int }} °C{% else %}&mdash;{% endif %}</div>
+          <div class="value mono">{% if pack_limits.low_temp_C is not none %}{{ pack_limits.low_temp_C|int }} °C{% else %}&mdash;{% endif %}</div>
         </div>
-        <div class="item"><div class="label">Populated Cells</div>
-          <div class="value mono">{% if cell_ids.populated_cells is not none %}{{ cell_ids.populated_cells }}{% else %}&mdash;{% endif %}</div>
+        
+        <div class="item"><div class="label">High Temp</div>
+          <div class="value mono">{% if pack_limits.high_temp_C is not none %}{{ pack_limits.high_temp_C|int }} °C{% else %}&mdash;{% endif %}</div>
+        </div>
+
+        <div class="item"><div class="label">Low Cell</div>
+          <div class="value mono">
+            {% if cell_data.low_cell_id is not none and cell_data.low_cell_voltage_V is not none %}
+              #{{ cell_data.low_cell_id }} / {{ "%.4f"|format(cell_data.low_cell_voltage_V) }} V
+            {% else %}&mdash;{% endif %}
+          </div>
         </div>
 
         <div class="item"><div class="label">High Cell</div>
           <div class="value mono">
-            {% if cell_ids.high_cell_id is not none and cell_ids.high_cell_voltage_V is not none %}
-              #{{ cell_ids.high_cell_id }} / {{ "%.4f"|format(cell_ids.high_cell_voltage_V) }} V
+            {% if cell_data.high_cell_id is not none and cell_data.high_cell_voltage_V is not none %}
+              #{{ cell_data.high_cell_id }} / {{ "%.4f"|format(cell_data.high_cell_voltage_V) }} V
             {% else %}&mdash;{% endif %}
           </div>
         </div>
-        <div class="item"><div class="label">Low Cell</div>
+
+        <div class="item"><div class="label">Cell Delta</div>
           <div class="value mono">
-            {% if cell_ids.low_cell_id is not none and cell_ids.low_cell_voltage_V is not none %}
-              #{{ cell_ids.low_cell_id }} / {{ "%.4f"|format(cell_ids.low_cell_voltage_V) }} V
+            {% if cell_data.high_cell_delta_V is not none %}
+              {{ "%.4f"|format(cell_data.high_cell_delta_V) }} V
             {% else %}&mdash;{% endif %}
           </div>
         </div>
-        <div class="item"><div class="label">Δ (Max - Min)</div>
-          <div class="value mono">{% if derived.delta_V is not none %}{{ "%.4f"|format(derived.delta_V) }} V{% else %}&mdash;{% endif %}</div>
-        </div>
-        <div class="item"><div class="label">Min</div>
-          <div class="value mono">{% if derived.min_V is not none %}{{ "%.4f"|format(derived.min_V) }} V{% else %}&mdash;{% endif %}</div>
-        </div>
-        <div class="item"><div class="label">Max</div>
-          <div class="value mono">{% if derived.max_V is not none %}{{ "%.4f"|format(derived.max_V) }} V{% else %}&mdash;{% endif %}</div>
-        </div>
-        <div class="item"><div class="label">Avg</div>
-          <div class="value mono">{% if derived.avg_V is not none %}{{ "%.4f"|format(derived.avg_V) }} V{% else %}&mdash;{% endif %}</div>
-        </div>
+        
       </div>
     </div>
 
@@ -223,29 +231,7 @@
       </div>
     </div>
 
-    <!-- Cells -->
-    <div class="section">
-      <h2 style="margin:0 0 10px 0;font-size:16px;">Cells (6 × 12)</h2>
-      {% if modules and modules|length > 0 %}
-      <div class="grid6">
-        {% for group in modules %}
-          <div class="module">
-            <h3>Module {{ group.module or loop.index }}</h3>
-            <div class="cells">
-              {% for cell in group.cells %}
-                <div class="cell mono">
-                  <span>#{{ cell.index }}</span>
-                  <span>{% if cell.voltage_V is not none %}{{ "%.4f"|format(cell.voltage_V) }} V{% else %}&mdash;{% endif %}</span>
-                </div>
-              {% endfor %}
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-      {% else %}
-        <div class="mono">No cell data found in JSON (expected under <code>cells.groups[*].cells[*].voltage_V</code>).</div>
-      {% endif %}
-    </div>
+
   </main>
 
   <!-- RAW JSON -->

@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 from flask import Flask, render_template, abort
 
 APP_DIR = os.path.abspath(os.path.dirname(__file__))
-DEFAULT_JSON = os.path.join(APP_DIR, "bms_data.json")
+DEFAULT_JSON = os.path.join(APP_DIR, "..", "logger", "data", "bms_data.json")
 TEMPLATE_NAME = "dashboard.html"  # must sit next to this app.py
 
 def _read_json(path: str) -> tuple[Dict[str, Any], str]:
@@ -37,69 +37,44 @@ def build_context(data: Dict[str, Any], raw_text: str, json_path: str) -> Dict[s
     frames = {f.get("can_id"): f for f in data.get("frames", []) if isinstance(f, dict)}
 
     f6B0 = frames.get("6B0", {})  # pack current/voltage/SOC/relay
-    f6B1 = frames.get("6B1", {})  # temps
-    f6B2 = frames.get("6B2", {})  # hi/lo cell + IDs + populated
+    f6B1 = frames.get("6B1", {})  # pack DCL/CCL/temperatures
+    f6B2 = frames.get("6B2", {})  # cell voltages and IDs
 
-    # Pack/temps primary metrics
+    # Pack metrics
     pack = {
-        "current_A": _safe_num(f6B0.get("pack_current_A"), 2),
-        "voltage_V": _safe_num(f6B0.get("pack_inst_voltage_V"), 2),
-        "soc_pct": _safe_num(f6B0.get("pack_soc_percent"), 1),
+        "current_A": _safe_num(f6B0.get("Pack_Current"), 2),
+        "voltage_V": _safe_num(f6B0.get("Pack_Inst_Voltage"), 2),
+        "soc_pct": _safe_num(f6B0.get("Pack_SOC"), 1),
         "relay_word": f6B0.get("relay_state_word"),
         "relay_flags": f6B0.get("relay_flags_lowbyte") or {},
         "crc_ok": bool(f6B0.get("crc_ok")),
     }
 
-    temps = {
-        "high_C": _safe_num(f6B1.get("high_temperature_C")),
-        "low_C": _safe_num(f6B1.get("low_temperature_C")),
+    # Pack DCL/CCL and temperatures
+    pack_limits = {
+        "dcl_A": _safe_num(f6B1.get("Pack_DCL"), 2),
+        "ccl_A": _safe_num(f6B1.get("Pack_CCL"), 2),
+        "high_temp_C": _safe_num(f6B1.get("High_Temperature"), 1),
+        "low_temp_C": _safe_num(f6B1.get("Low_Temperature"), 1),
         "crc_ok": bool(f6B1.get("crc_ok")),
     }
 
-    cells_section = data.get("cells", {})
-    modules: List[Dict[str, Any]] = []
-    derived = {}
-
-    # Expecting your exact structure: cells.groups -> [{module:int, cells:[{index:int, voltage_V:float}, ...]}]
-    if isinstance(cells_section, dict) and isinstance(cells_section.get("groups"), list):
-        for grp in cells_section["groups"]:
-            if not isinstance(grp, dict):
-                continue
-            mod_no = grp.get("module")
-            cell_list = []
-            for cell in grp.get("cells", []):
-                if not isinstance(cell, dict):
-                    continue
-                idx = cell.get("index")
-                v = _safe_num(cell.get("voltage_V"), 4)
-                cell_list.append({"index": idx, "voltage_V": v})
-            modules.append({"module": mod_no, "cells": cell_list})
-
-        # derived stats (use provided, fallback to recompute)
-        d = cells_section.get("derived") or {}
-        vols = [c["voltage_V"] for g in modules for c in g["cells"] if c.get("voltage_V") is not None]
-        if vols:
-            derived = {
-                "cells_valid": int(d.get("cells_valid") or len(vols)),
-                "min_V": _safe_num(d.get("min_V") if d.get("min_V") is not None else min(vols), 4),
-                "max_V": _safe_num(d.get("max_V") if d.get("max_V") is not None else max(vols), 4),
-                "avg_V": _safe_num(d.get("avg_V") if d.get("avg_V") is not None else sum(vols)/len(vols), 4),
-                "delta_V": _safe_num(d.get("delta_V") if d.get("delta_V") is not None else (max(vols)-min(vols)), 4),
-            }
-        else:
-            derived = {"cells_valid": 0, "min_V": None, "max_V": None, "avg_V": None, "delta_V": None}
-    else:
-        # No cells present
-        modules = []
-        derived = {"cells_valid": 0, "min_V": None, "max_V": None, "avg_V": None, "delta_V": None}
-
-    # 6B2 details (some may be null in your sample)
-    cell_ids = {
-        "high_cell_voltage_V": _safe_num(f6B2.get("high_cell_voltage_V"), 4),
-        "low_cell_voltage_V": _safe_num(f6B2.get("low_cell_voltage_V"), 4),
-        "high_cell_id": f6B2.get("high_cell_id"),
-        "low_cell_id": f6B2.get("low_cell_id"),
-        "populated_cells": f6B2.get("populated_cells"),
+    # Cell voltages and IDs
+    low_cell_voltage = _safe_num(f6B2.get("Low_Cell_Voltage"), 4)
+    high_cell_delta = _safe_num(f6B2.get("High_Cell_Voltage"), 4)
+    
+    # Calculate high cell voltage (low + delta)
+    high_cell_voltage = None
+    if low_cell_voltage is not None and high_cell_delta is not None:
+        high_cell_voltage = low_cell_voltage + high_cell_delta
+        print(f"DEBUG: Low cell: {low_cell_voltage}, Delta: {high_cell_delta}, High cell: {high_cell_voltage}")
+    
+    cell_data = {
+        "low_cell_voltage_V": low_cell_voltage,
+        "high_cell_delta_V": high_cell_delta,
+        "high_cell_voltage_V": high_cell_voltage,
+        "high_cell_id": f6B2.get("High_Cell_ID"),
+        "low_cell_id": f6B2.get("Low_Cell_ID"),
         "crc_ok": bool(f6B2.get("crc_ok")),
     }
 
@@ -120,10 +95,8 @@ def build_context(data: Dict[str, Any], raw_text: str, json_path: str) -> Dict[s
         "mode": mode,
         "raw_json": raw_text,
         "pack": pack,
-        "temps": temps,
-        "cell_ids": cell_ids,
-        "modules": modules,
-        "derived": derived,
+        "pack_limits": pack_limits,
+        "cell_data": cell_data,
     }
 
 def create_app(json_path: str) -> Flask:
