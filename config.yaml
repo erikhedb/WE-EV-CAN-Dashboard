@@ -1,0 +1,3 @@
+logs:
+  raw_file: logs/can_raw_20250916.log
+  service_log: logs/reader_service.log
