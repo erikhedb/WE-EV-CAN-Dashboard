@@ -1,0 +1,11 @@
+services:
+  nats-server:
+    image: nats:latest
+    container_name: nats-server
+    command: ["-js"]     # Enable JetStream
+    restart: unless-stopped
+    ports:
+      - "4222:4222"      # Client connections
+      - "8223:8222"      # Monitoring (mapped to 8223 on host)
+    volumes:
+      - ./data:/data 

@@ -9,7 +9,7 @@ BINARIES = reader handler replay tools/raw-convert
 
 all: build
 
-build:
+build: bin/
 	@echo "Building all binaries..."
 	@for dir in $(BINARIES); do \
 		cd cmd/$$dir 2>/dev/null || cd cmd/$$dir/..; \

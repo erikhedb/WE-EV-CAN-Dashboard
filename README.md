@@ -76,6 +76,15 @@ brew install nats-server
 nats-server
 ```
 
+### Option 3: Docker-compose
+```bash
+> docker compose up -d
+> docker compose down
+> docker compose logs -f
+```
+
+
+
 ---
 
 ## ⚙️ Compile and Run Services
