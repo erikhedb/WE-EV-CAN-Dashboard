@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-09-19T18:01:18.898197+02:00",
+  "battery": {
+    "high_cell_voltage_id": 19,
+    "high_cell_voltage_volts": 3.9175,
+    "low_cell_voltage_id": 19,
+    "low_cell_voltage_volts": 3.9105000000000003,
+    "cell_delta_mV": 7,
+    "delta_volts": 0.006999999999999879,
+    "populated_cells": 72,
+    "crc_ok": false
+  }
+}
