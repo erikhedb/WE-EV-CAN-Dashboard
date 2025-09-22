@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>EV Battery Dashboard</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    h1 { margin-bottom: 0; }
+    .section { margin: 20px 0; }
+    .ok { color: green; }
+    .fail { color: red; }
+  </style>
+  <script>
+    async function updateState() {
+      try {
+        const res = await fetch('/api');
+        const state = await res.json();
+
+        document.getElementById('timestamp').textContent = state.timestamp;
+
+        // Battery
+        document.getElementById('highVolt').textContent =
+          state.battery.high_cell_voltage_volts.toFixed(3) + ' V (ID ' + state.battery.high_cell_voltage_id + ')';
+        document.getElementById('lowVolt').textContent =
+          state.battery.low_cell_voltage_volts.toFixed(3) + ' V (ID ' + state.battery.low_cell_voltage_id + ')';
+        document.getElementById('delta').textContent =
+          state.battery.cell_delta_mV + ' mV (' + state.battery.delta_volts.toFixed(3) + ' V)';
+        document.getElementById('cells').textContent = state.battery.populated_cells;
+        document.getElementById('crcBms').textContent = state.battery.crc_ok ? '✔ OK' : '✘ FAIL';
+        document.getElementById('crcBms').className = state.battery.crc_ok ? 'ok' : 'fail';
+
+        // BMS
+        document.getElementById('packCurrent').textContent = state.bms.pack_current_amps.toFixed(1) + ' A';
+        document.getElementById('packVoltage').textContent = state.bms.pack_voltage_volts.toFixed(1) + ' V';
+        document.getElementById('soc').textContent = state.bms.soc_percent.toFixed(1) + ' %';
+        document.getElementById('relay').textContent = '0x' + state.bms.relay_state_raw.toString(16).toUpperCase();
+      } catch (err) {
+        console.error('Update failed:', err);
+      }
+    }
+    setInterval(updateState, 1000);
+    window.onload = updateState;
+  </script>
+</head>
+<body>
+  <h1>EV Battery Dashboard</h1>
+  <p><b>Last update:</b> <span id="timestamp"></span></p>
+
+  <div class="section">
+    <h2>Battery (0x6B2)</h2>
+    <ul>
+      <li><b>High Cell Voltage:</b> <span id="highVolt"></span></li>
+      <li><b>Low Cell Voltage:</b> <span id="lowVolt"></span></li>
+      <li><b>Delta:</b> <span id="delta"></span></li>
+      <li><b>Cells:</b> <span id="cells"></span></li>
+      <li><b>CRC:</b> <span id="crcBms"></span></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Pack (0x6B0)</h2>
+    <ul>
+      <li><b>Current:</b> <span id="packCurrent"></span></li>
+      <li><b>Voltage:</b> <span id="packVoltage"></span></li>
+      <li><b>SOC:</b> <span id="soc"></span></li>
+      <li><b>Relay State (raw):</b> <span id="relay"></span></li>
+    </ul>
+  </div>
+</body>
+</html>
