@@ -3,7 +3,7 @@
 # Standard Go build/test/lint targets for multi-cmd repo
 
 # Binaries to build (add more as needed)
-BINARIES = reader handler replay tools/raw-convert
+BINARIES = reader handler replay tools/raw-convert ui
 
 .PHONY: all build test lint clean
 
@@ -14,6 +14,7 @@ build: bin/
 	@for dir in $(BINARIES); do \
 		cd cmd/$$dir 2>/dev/null || cd cmd/$$dir/..; \
 		if [ -f main.go ]; then \
+			echo "Building $$dir..."; \
 			go build -o ../../bin/$$dir . ; \
 			cd - >/dev/null; \
 		fi \

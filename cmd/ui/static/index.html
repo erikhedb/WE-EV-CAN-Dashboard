@@ -4,21 +4,50 @@
   <meta charset="UTF-8">
   <title>EV Battery Dashboard</title>
   <style>
-    body { font-family: sans-serif; margin: 20px; }
-    h1 { margin-bottom: 0; }
-    .section { margin: 20px 0; }
-    .ok { color: green; }
-    .fail { color: red; }
+    body { font-family: sans-serif; margin: 0; padding: 0; }
+    .tabs { display: flex; background: #001f3f; color: white; }
+    .tab {
+      flex: 1; text-align: center; padding: 10px; cursor: pointer;
+      background: #001f3f; border-bottom: 3px solid transparent;
+    }
+    .tab.active { border-bottom: 3px solid #FFDC00; font-weight: bold; }
+    .content { display: none; padding: 20px; }
+    .content.active { display: block; }
+    /* Dashboard styling */
+    .dashboard {
+      background-color: #3C6172; /* Land Rover Marine Blue */
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    table {
+      width: 100%; border-collapse: collapse; margin-bottom: 20px;
+      background: rgba(255,255,255,0.1);
+    }
+    th, td {
+      padding: 10px; border: 1px solid rgba(255,255,255,0.3);
+      text-align: left;
+    }
+    th { background: rgba(0,0,0,0.3); }
+    .ok { color: lightgreen; font-weight: bold; }
+    .fail { color: red; font-weight: bold; }
   </style>
   <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      document.getElementById(tabId + "-content").classList.add('active');
+    }
+
     async function updateState() {
       try {
         const res = await fetch('/api');
+        if (!res.ok) return;
         const state = await res.json();
 
+        // --- CAN view ---
         document.getElementById('timestamp').textContent = state.timestamp;
-
-        // Battery
         document.getElementById('highVolt').textContent =
           state.battery.high_cell_voltage_volts.toFixed(3) + ' V (ID ' + state.battery.high_cell_voltage_id + ')';
         document.getElementById('lowVolt').textContent =
@@ -29,24 +58,47 @@
         document.getElementById('crcBms').textContent = state.battery.crc_ok ? '✔ OK' : '✘ FAIL';
         document.getElementById('crcBms').className = state.battery.crc_ok ? 'ok' : 'fail';
 
-        // BMS
         document.getElementById('packCurrent').textContent = state.bms.pack_current_amps.toFixed(1) + ' A';
         document.getElementById('packVoltage').textContent = state.bms.pack_voltage_volts.toFixed(1) + ' V';
         document.getElementById('soc').textContent = state.bms.soc_percent.toFixed(1) + ' %';
-        document.getElementById('relay').textContent = '0x' + state.bms.relay_state_raw.toString(16).toUpperCase();
+        document.getElementById('relay').textContent =
+          '0x' + state.bms.relay_state_raw.toString(16).toUpperCase();
+
+        // --- Dashboard view ---
+        document.getElementById('dashPackVoltage').textContent = state.bms.pack_voltage_volts.toFixed(1) + ' V';
+        document.getElementById('dashPackCurrent').textContent = state.bms.pack_current_amps.toFixed(1) + ' A';
+        document.getElementById('dashSoc').textContent = state.bms.soc_percent.toFixed(1) + ' %';
+        document.getElementById('dashHighCell').textContent =
+          state.battery.high_cell_voltage_volts.toFixed(3) + ' V (ID ' + state.battery.high_cell_voltage_id + ')';
+        document.getElementById('dashLowCell').textContent =
+          state.battery.low_cell_voltage_volts.toFixed(3) + ' V (ID ' + state.battery.low_cell_voltage_id + ')';
+        document.getElementById('dashDelta').textContent =
+          state.battery.cell_delta_mV + ' mV (' + state.battery.delta_volts.toFixed(3) + ' V)';
+        document.getElementById('dashCells').textContent = state.battery.populated_cells;
+        document.getElementById('dashCrc').textContent = state.battery.crc_ok ? '✔ OK' : '✘ FAIL';
+        document.getElementById('dashCrc').className = state.battery.crc_ok ? 'ok' : 'fail';
       } catch (err) {
         console.error('Update failed:', err);
       }
     }
     setInterval(updateState, 1000);
-    window.onload = updateState;
+    window.onload = () => {
+      switchTab('can-view');
+      updateState();
+    };
   </script>
 </head>
 <body>
-  <h1>EV Battery Dashboard</h1>
-  <p><b>Last update:</b> <span id="timestamp"></span></p>
+  <div class="tabs">
+    <div class="tab active" id="can-view" onclick="switchTab('can-view')">CAN View</div>
+    <div class="tab" id="dashboard" onclick="switchTab('dashboard')">EV Dashboard</div>
+  </div>
 
-  <div class="section">
+  <!-- CAN VIEW TAB -->
+  <div id="can-view-content" class="content active">
+    <h1>CAN Raw Values</h1>
+    <p><b>Last update:</b> <span id="timestamp"></span></p>
+
     <h2>Battery (0x6B2)</h2>
     <ul>
       <li><b>High Cell Voltage:</b> <span id="highVolt"></span></li>
@@ -55,9 +107,7 @@
       <li><b>Cells:</b> <span id="cells"></span></li>
       <li><b>CRC:</b> <span id="crcBms"></span></li>
     </ul>
-  </div>
 
-  <div class="section">
     <h2>Pack (0x6B0)</h2>
     <ul>
       <li><b>Current:</b> <span id="packCurrent"></span></li>
@@ -65,6 +115,28 @@
       <li><b>SOC:</b> <span id="soc"></span></li>
       <li><b>Relay State (raw):</b> <span id="relay"></span></li>
     </ul>
+  </div>
+
+  <!-- DASHBOARD TAB -->
+  <div id="dashboard-content" class="content">
+    <div class="dashboard">
+      <h1>EV Dashboard</h1>
+      <table>
+        <tr><th colspan="2">Pack Summary</th></tr>
+        <tr><td>Voltage</td><td id="dashPackVoltage"></td></tr>
+        <tr><td>Current</td><td id="dashPackCurrent"></td></tr>
+        <tr><td>State of Charge</td><td id="dashSoc"></td></tr>
+      </table>
+
+      <table>
+        <tr><th colspan="2">Battery Cells</th></tr>
+        <tr><td>High Cell Voltage</td><td id="dashHighCell"></td></tr>
+        <tr><td>Low Cell Voltage</td><td id="dashLowCell"></td></tr>
+        <tr><td>Delta</td><td id="dashDelta"></td></tr>
+        <tr><td>Populated Cells</td><td id="dashCells"></td></tr>
+        <tr><td>CRC</td><td id="dashCrc"></td></tr>
+      </table>
+    </div>
   </div>
 </body>
 </html>
