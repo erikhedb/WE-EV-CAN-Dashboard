@@ -25,8 +25,8 @@ type CANFrame struct {
 }
 
 func main() {
-	// Command-line flag for logging
-	logFileFlag := flag.String("l", "", "Optional log file for writing JSON messages")
+	// Command-line flag for canbus logging
+	enableLogging := flag.Bool("l", false, "Enable logging of CAN messages to canbus.json file")
 	flag.Parse()
 
 	// Load configuration
@@ -39,6 +39,7 @@ func main() {
 	}
 
 	serviceLogPath := viper.GetString("logs.service_log")
+	canbusJSONPath := viper.GetString("logs.canbus_json")
 
 	// Setup service logger (append mode, keep between runs)
 	serviceLogFile, err := os.OpenFile(serviceLogPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
@@ -80,43 +81,51 @@ func main() {
 	defer conn.Close()
 	receiver := socketcan.NewReceiver(conn)
 
-	// Optional JSON log file from -l flag
-	var logEncoder *json.Encoder
-	if *logFileFlag != "" {
-		lf, err := os.Create(*logFileFlag)
+	// Setup canbus JSON file (only if logging enabled)
+	var canbusEncoder *json.Encoder
+	if *enableLogging {
+		canbusJSONFile, err := os.Create(canbusJSONPath)
 		if err != nil {
-			log.Fatalf("Failed to create log file: %v", err)
+			log.Fatalf("Failed to create canbus JSON file: %v", err)
 		}
-		defer lf.Close()
-		logEncoder = json.NewEncoder(lf)
+		defer canbusJSONFile.Close()
+		canbusEncoder = json.NewEncoder(canbusJSONFile)
 	}
 
-	// Mark program start time
-	startTime := time.Now()
+       // Track time of last frame
+       var lastFrameTime time.Time
+       for receiver.Receive() {
+	       frame := receiver.Frame()
 
-	for receiver.Receive() {
-		frame := receiver.Frame()
+	       now := time.Now()
+	       var deltaMs int64
+	       if lastFrameTime.IsZero() {
+		       deltaMs = 0 // First frame
+	       } else {
+		       deltaMs = now.Sub(lastFrameTime).Milliseconds()
+	       }
+	       lastFrameTime = now
 
-		wrapped := CANFrame{
-			ID:     fmt.Sprintf("%X", frame.ID),
-			Length: len(frame.Data[:frame.Length]),
-			Data:   fmt.Sprintf("%X", frame.Data[:frame.Length]),
-			Meta:   time.Since(startTime).Milliseconds(),
-		}
+	       wrapped := CANFrame{
+		       ID:     fmt.Sprintf("%X", frame.ID),
+		       Length: len(frame.Data[:frame.Length]),
+		       Data:   fmt.Sprintf("%X", frame.Data[:frame.Length]),
+		       Meta:   deltaMs,
+	       }
 
-		encoded, err := json.Marshal(wrapped)
-		if err != nil {
-			continue
-		}
+	       encoded, err := json.Marshal(wrapped)
+	       if err != nil {
+		       continue
+	       }
 
-		// Publish to NATS JetStream
-		_, _ = js.Publish("can.raw", encoded)
+	       // Publish to NATS JetStream
+	       _, _ = js.Publish("can.raw", encoded)
 
-		// Write to JSON log file if enabled
-		if logEncoder != nil {
-			_ = logEncoder.Encode(wrapped)
-		}
-	}
+	       // Write to canbus JSON file if logging enabled
+	       if canbusEncoder != nil {
+		       _ = canbusEncoder.Encode(wrapped)
+	       }
+       }
 
 	// On exit, record stop time
 	if err := receiver.Err(); err != nil {

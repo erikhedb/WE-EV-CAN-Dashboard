@@ -1,2 +1,3 @@
 logs:
   service_log: logs/reader_service.log
+  canbus_json: logs/canbus.json
