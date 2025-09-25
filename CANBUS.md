@@ -39,9 +39,9 @@ Byte Order - Big Endian = Most significant byte first -> 0001h = 1 in decimal
     Low Temp    -> 0010 = 16    -> 16
 
 0x6B4 - 0162 0004 1200 0000
-    Relay State -> 0001 0110 0010  
-    Pack CCL    -> 0004 = 4         -> 
-    Pack DCL    -> 1200 = 4608      ->
+    Relay State -> 0001 0110 0010 
+    Pack CCL    -> 0004 = 4         -> 4h
+    Pack DCL    -> 1200 = 4608      -> ???
 
 
 ## Zero EV CSS Controller - From the Orion BMS 2
