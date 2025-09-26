@@ -2,6 +2,10 @@
 
 This project is a modular CAN bus dashboard system for a DIY EV build using a Raspberry Pi and Orion BMS 2. It is written in Go and uses NATS as the internal message bus to decouple components.
 
+![Sample UI](sample-ui.png)
+
+
+
 ## 🧩 Architecture Overview
 
 The project is split into three main services:

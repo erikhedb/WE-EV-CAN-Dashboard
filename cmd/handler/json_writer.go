@@ -14,15 +14,61 @@ type CellData struct {
 	Voltage float64 `json:"voltage"`
 }
 
+// PackData represents 6B0 battery pack status information
+type PackData struct {
+	SOC         float64 `json:"soc"`
+	CellCount   int     `json:"cell_count"`
+	PackVoltage float64 `json:"pack_voltage"`
+}
+
+// RelayState represents the relay and system status bits
+type RelayState struct {
+	DischargeRelay bool `json:"discharge_relay"`
+	ChargeRelay    bool `json:"charge_relay"`
+	ChargerSafety  bool `json:"charger_safety"`
+	MalfunctionDTC bool `json:"malfunction_dtc"`
+	MPInput1       bool `json:"mp_input_1"`
+	AlwaysOn       bool `json:"always_on"`
+	IsReady        bool `json:"is_ready"`
+	IsCharging     bool `json:"is_charging"`
+	MPInput2       bool `json:"mp_input_2"`
+	MPInput3       bool `json:"mp_input_3"`
+	Reserved       bool `json:"reserved"`
+	MPOutput2      bool `json:"mp_output_2"`
+	MPOutput3      bool `json:"mp_output_3"`
+	MPOutput4      bool `json:"mp_output_4"`
+	MPEnable       bool `json:"mp_enable"`
+	MPOutput1      bool `json:"mp_output_1"`
+}
+
+// TemperatureData represents 6B3 temperature information
+type TemperatureData struct {
+	HighTemp int `json:"high_temp"`
+	LowTemp  int `json:"low_temp"`
+}
+
+// SystemControl represents 6B4 system control data
+type SystemControl struct {
+	RelayState RelayState `json:"relay_state"`
+	PackCCL    int        `json:"pack_ccl"`
+	PackDCL    int        `json:"pack_dcl"`
+}
+
 // CellDataJSON is the structure saved to cell_data.json
 type CellDataJSON struct {
-	Timestamp  string   `json:"timestamp"`
-	HighCell   CellData `json:"high_cell"`
-	LowCell    CellData `json:"low_cell"`
-	CellDelta  float64  `json:"cell_delta"`
-	LastUpdate struct {
-		HighCell string `json:"high_cell"`
-		LowCell  string `json:"low_cell"`
+	Timestamp       string          `json:"timestamp"`
+	PackData        PackData        `json:"pack_data"`
+	HighCell        CellData        `json:"high_cell"`
+	LowCell         CellData        `json:"low_cell"`
+	CellDelta       float64         `json:"cell_delta"`
+	TemperatureData TemperatureData `json:"temperature_data"`
+	SystemControl   SystemControl   `json:"system_control"`
+	LastUpdate      struct {
+		PackData        string `json:"pack_data"`
+		HighCell        string `json:"high_cell"`
+		LowCell         string `json:"low_cell"`
+		TemperatureData string `json:"temperature_data"`
+		SystemControl   string `json:"system_control"`
 	} `json:"last_update"`
 }
 
@@ -64,8 +110,22 @@ func writeJSONFile() error {
 func initCellData() {
 	cellData = &CellDataJSON{
 		Timestamp: time.Now().Format(time.RFC3339Nano),
+		PackData: PackData{
+			SOC:         0.0,
+			CellCount:   0,
+			PackVoltage: 0.0,
+		},
 		HighCell:  CellData{ID: 0, Voltage: 0.0},
 		LowCell:   CellData{ID: 0, Voltage: 0.0},
 		CellDelta: 0.0,
+		TemperatureData: TemperatureData{
+			HighTemp: 0,
+			LowTemp:  0,
+		},
+		SystemControl: SystemControl{
+			RelayState: RelayState{},
+			PackCCL:    0,
+			PackDCL:    0,
+		},
 	}
 }

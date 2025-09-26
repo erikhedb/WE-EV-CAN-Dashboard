@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BMS Cell Data Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <header>
+    <h1>BMS Cell Data Dashboard</h1>
+    <p class="meta">Last Updated: <strong id="lastUpdated">--</strong></p>
+  </header>
+  
+  <nav>
+    <button class="tab active" data-tab="dash">Dashboard</button>
+    <button class="tab" data-tab="raw">Raw JSON</button>
+  </nav>
+
+  <!-- DASHBOARD -->
+  <main id="dash">
+    <!-- Pack Data Section -->
+    <div class="section">
+      <div class="label" style="margin-bottom:10px;">Pack Information</div>
+      <div class="kv">
+        <div class="item">
+          <div class="label">State of Charge</div>
+          <div class="value mono" id="soc">--</div>
+        </div>
+        
+        <div class="item">
+          <div class="label">Cell Count</div>
+          <div class="value mono" id="cellCount">--</div>
+        </div>
+        
+        <div class="item">
+          <div class="label">Pack Voltage</div>
+          <div class="value mono" id="packVoltage">--</div>
+        </div>
+        
+        <div class="item">
+          <div class="label">Pack CCL</div>
+          <div class="value mono" id="packCCL">--</div>
+        </div>
+        
+        <div class="item">
+          <div class="label">Pack DCL</div>
+          <div class="value mono" id="packDCL">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cell Data & Temperature Section -->
+    <div class="section">
+      <div class="label" style="margin-bottom:10px;">Cell & Temperature Information</div>
+      <div class="kv">
+        <div class="item">
+          <div class="label">High Cell</div>
+          <div class="value mono" id="highCell">--</div>
+        </div>
+        
+        <div class="item">
+          <div class="label">Low Cell</div>
+          <div class="value mono" id="lowCell">--</div>
+        </div>
+        
+        <div class="item">
+          <div class="label">Cell Delta</div>
+          <div class="value mono" id="cellDelta">--</div>
+        </div>
+        
+        <div class="item">
+          <div class="label">High Temperature</div>
+          <div class="value mono" id="highTemp">--</div>
+        </div>
+        
+        <div class="item">
+          <div class="label">Low Temperature</div>
+          <div class="value mono" id="lowTemp">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Relay States Section -->
+    <div class="section">
+      <div class="label" style="margin-bottom:10px;">Relay States</div>
+      <div class="flag-grid">
+        <span class="flag" id="dischargeRelay">
+          <span class="dot"></span>Discharge Relay
+        </span>
+        <span class="flag" id="chargeRelay">
+          <span class="dot"></span>Charge Relay
+        </span>
+        <span class="flag" id="chargerSafety">
+          <span class="dot"></span>Charger Safety
+        </span>
+        <span class="flag" id="malfunctionDTC">
+          <span class="dot"></span>Malfunction DTC
+        </span>
+        <span class="flag" id="mpInput1">
+          <span class="dot"></span>MP Input 1
+        </span>
+        <span class="flag" id="alwaysOn">
+          <span class="dot"></span>Always On
+        </span>
+        <span class="flag" id="isReady">
+          <span class="dot"></span>Is Ready
+        </span>
+        <span class="flag" id="isCharging">
+          <span class="dot"></span>Is Charging
+        </span>
+        <span class="flag" id="mpInput2">
+          <span class="dot"></span>MP Input 2
+        </span>
+        <span class="flag" id="mpInput3">
+          <span class="dot"></span>MP Input 3
+        </span>
+        <span class="flag" id="mpOutput1">
+          <span class="dot"></span>MP Output 1
+        </span>
+        <span class="flag" id="mpOutput2">
+          <span class="dot"></span>MP Output 2
+        </span>
+        <span class="flag" id="mpOutput3">
+          <span class="dot"></span>MP Output 3
+        </span>
+        <span class="flag" id="mpOutput4">
+          <span class="dot"></span>MP Output 4
+        </span>
+        <span class="flag" id="mpEnable">
+          <span class="dot"></span>MP Enable
+        </span>
+      </div>
+    </div>
+  </main>
+
+  <!-- RAW JSON -->
+  <main id="raw" class="hidden">
+    <div class="section">
+      <pre class="mono" id="rawJson">Loading...</pre>
+    </div>
+  </main>
+
+  <script>
+    // Tab switching
+    const tabs = document.querySelectorAll('.tab');
+    const dash = document.getElementById('dash');
+    const raw = document.getElementById('raw');
+    
+    tabs.forEach(btn => btn.addEventListener('click', () => {
+      tabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.getAttribute('data-tab');
+      if (tab === 'raw') {
+        dash.classList.add('hidden');
+        raw.classList.remove('hidden');
+      } else {
+        raw.classList.add('hidden');
+        dash.classList.remove('hidden');
+      }
+    }));
+
+    // Data fetching and updating
+    async function fetchData() {
+      try {
+        const response = await fetch('/api');
+        const data = await response.json();
+        
+        updateDashboard(data);
+        
+        // Update raw JSON display with pretty formatting
+        document.getElementById('rawJson').textContent = JSON.stringify(data, null, 2);
+        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        document.getElementById('rawJson').textContent = 'Error loading data: ' + error.message;
+      }
+    }
+
+    function updateDashboard(data) {
+      try {
+        // Update timestamp
+        document.getElementById('lastUpdated').textContent = 
+          data.timestamp ? new Date(data.timestamp).toLocaleString() : '--';
+
+        // Pack Data
+        if (data.pack_data) {
+          const pack = data.pack_data;
+          document.getElementById('soc').textContent = 
+            pack.soc !== undefined ? `${(pack.soc / 10).toFixed(1)}%` : '--%';
+          document.getElementById('cellCount').textContent = 
+            pack.cell_count || '--';
+          document.getElementById('packVoltage').textContent = 
+            pack.pack_voltage !== undefined ? `${pack.pack_voltage.toFixed(1)} V` : '-- V';
+        }
+
+        // Cell Data
+        if (data.high_cell) {
+          document.getElementById('highCell').textContent = 
+            `#${data.high_cell.id} / ${data.high_cell.voltage.toFixed(4)} V`;
+        }
+        if (data.low_cell) {
+          document.getElementById('lowCell').textContent = 
+            `#${data.low_cell.id} / ${data.low_cell.voltage.toFixed(4)} V`;
+        }
+        if (data.cell_delta !== undefined) {
+          document.getElementById('cellDelta').textContent = 
+            `${data.cell_delta.toFixed(4)} V`;
+        }
+
+        // Temperature Data
+        if (data.temperature_data) {
+          const temp = data.temperature_data;
+          document.getElementById('highTemp').textContent = 
+            temp.high_temp !== undefined ? `${temp.high_temp}°C` : '--°C';
+          document.getElementById('lowTemp').textContent = 
+            temp.low_temp !== undefined ? `${temp.low_temp}°C` : '--°C';
+        }
+
+        // System Control Data
+        if (data.system_control) {
+          const control = data.system_control;
+          
+          // Pack current limits
+          document.getElementById('packCCL').textContent = 
+            control.pack_ccl !== undefined ? `${control.pack_ccl} A` : '-- A';
+          document.getElementById('packDCL').textContent = 
+            control.pack_dcl !== undefined ? `${control.pack_dcl} A` : '-- A';
+
+          // Relay states
+          if (control.relay_state) {
+            const relay = control.relay_state;
+            updateFlag('dischargeRelay', relay.discharge_relay);
+            updateFlag('chargeRelay', relay.charge_relay);
+            updateFlag('chargerSafety', relay.charger_safety);
+            updateFlag('malfunctionDTC', relay.malfunction_dtc);
+            updateFlag('mpInput1', relay.mp_input_1);
+            updateFlag('alwaysOn', relay.always_on);
+            updateFlag('isReady', relay.is_ready);
+            updateFlag('isCharging', relay.is_charging);
+            updateFlag('mpInput2', relay.mp_input_2);
+            updateFlag('mpInput3', relay.mp_input_3);
+            updateFlag('mpOutput1', relay.mp_output_1);
+            updateFlag('mpOutput2', relay.mp_output_2);
+            updateFlag('mpOutput3', relay.mp_output_3);
+            updateFlag('mpOutput4', relay.mp_output_4);
+            updateFlag('mpEnable', relay.mp_enable);
+          }
+        }
+
+      } catch (error) {
+        console.error('Error updating dashboard:', error);
+      }
+    }
+
+    function updateFlag(elementId, isActive) {
+      const element = document.getElementById(elementId);
+      if (element) {
+        if (isActive) {
+          element.classList.add('on');
+        } else {
+          element.classList.remove('on');
+        }
+      }
+    }
+
+    // Auto-refresh every 2 seconds
+    setInterval(fetchData, 2000);
+    
+    // Initial load
+    fetchData();
+  </script>
+</body>
+</html>

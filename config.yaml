@@ -1,3 +1,11 @@
+paths:
+  data_folder: data
+  log_folder: logs
+  ui_static_folder: bin/ui/static
+
 logs:
   service_log: logs/reader_service.log
   canbus_json: logs/canbus.json
+
+server:
+  ui_port: 8080

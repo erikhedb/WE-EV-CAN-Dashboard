@@ -1,633 +1,274 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>EV Battery Dashboard</title>
-  <style>
-    /* Land Rover Marine Blue color scheme */
-    :root {
-      --marine-blue-dark: #1a3a4a;
-      --marine-blue: #3C6172;
-      --marine-blue-light: #5a7a8a;
-      --accent-gold: #FFDC00;
-      --text-light: #ffffff;
-      --text-secondary: #b8d4e0;
-      --background-overlay: rgba(60, 97, 114, 0.1);
-      --border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    body { 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      margin: 0; 
-      padding: 0; 
-      background: linear-gradient(135deg, var(--marine-blue-dark) 0%, var(--marine-blue) 100%);
-      min-height: 100vh;
-      color: var(--text-light);
-    }
-    
-    .tabs { 
-      display: flex; 
-      background: var(--marine-blue-dark); 
-      color: var(--text-light);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    }
-    
-    .tab {
-      flex: 1; 
-      text-align: center; 
-      padding: 15px 10px; 
-      cursor: pointer;
-      background: var(--marine-blue-dark); 
-      border-bottom: 3px solid transparent;
-      transition: all 0.3s ease;
-      font-weight: 500;
-    }
-    
-    .tab:hover {
-      background: var(--marine-blue);
-    }
-    
-    .tab.active { 
-      border-bottom: 3px solid var(--accent-gold); 
-      font-weight: bold;
-      background: var(--marine-blue);
-    }
-    
-    .content { 
-      display: none; 
-      padding: 30px;
-      background: var(--marine-blue);
-      min-height: calc(100vh - 60px);
-    }
-    
-    .content.active { display: block; }
-    
-    h1, h2 {
-      color: var(--text-light);
-      margin-bottom: 20px;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-    }
-    
-    h1 { font-size: 2.2em; margin-bottom: 30px; }
-    h2 { font-size: 1.5em; margin-top: 30px; }
-    
-    /* CAN View styling */
-    .content ul {
-      background: var(--background-overlay);
-      padding: 20px;
-      border-radius: 8px;
-      border-left: 4px solid var(--accent-gold);
-      backdrop-filter: blur(10px);
-    }
-    
-    .content li {
-      margin: 10px 0;
-      color: var(--text-secondary);
-    }
-    
-    .content li b {
-      color: var(--text-light);
-    }
-    
-    /* Dashboard styling */
-    .dashboard {
-      background: var(--background-overlay);
-      color: var(--text-light);
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--border-color);
-    }
-
-    /* Three-column grid layout */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    /* Responsive design for smaller screens */
-    @media (max-width: 1200px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-    }
-    
-    table {
-      width: 100%; 
-      border-collapse: collapse; 
-      margin-bottom: 15px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    }
-    
-    th, td {
-      padding: 10px 15px; 
-      border: 1px solid var(--border-color);
-      text-align: left;
-      font-size: 0.9em;
-    }
-    
-    th { 
-      background: var(--marine-blue-dark);
-      color: var(--text-light);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    td {
-      background: rgba(255, 255, 255, 0.02);
-      color: var(--text-secondary);
-    }
-    
-    tr:hover td {
-      background: rgba(255, 255, 255, 0.08);
-    }
-    
-    .ok { 
-      color: #4ade80; 
-      font-weight: bold;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    }
-    
-    .fail { 
-      color: #ef4444; 
-      font-weight: bold;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    }
-    
-    /* Timestamp styling */
-    #timestamp {
-      color: var(--accent-gold);
-      font-weight: 600;
-    }
-
-    /* JSON View styling */
-    .json-container {
-      background: var(--background-overlay);
-      border-radius: 12px;
-      padding: 20px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(10px);
-    }
-
-    .json-content {
-      color: var(--text-secondary);
-      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-      font-size: 14px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      overflow-x: auto;
-      margin: 0;
-      padding: 0;
-    }
-
-    /* JSON syntax highlighting */
-    .json-key {
-      color: #79b8ff;
-    }
-
-    .json-string {
-      color: #9ecbff;
-    }
-
-    .json-number {
-      color: #ffab70;
-    }
-
-    .json-boolean {
-      color: #56d364;
-    }
-
-    .json-null {
-      color: #f85149;
-    }
-  </style>
-  <script>
-    // Global state for dashboard
-    let dashboardState = {
-      timestamp: 'Loading...',
-      bms: {
-        high_cell: {
-          voltage: 0,
-          id: 0
-        },
-        low_cell: {
-          voltage: 0,
-          id: 0
-        },
-        cell_delta: 0,
-        temperature: {
-          high: 0,
-          low: 0
-        },
-        system_state: {
-          soc: 0,
-          pack_voltage: 0,
-          pack_current: 0,
-          cell_count: 0,
-          balancing: false,
-          charger_safety: false,
-          charge_power: false,
-          ready_power: false,
-          is_charging: false
-        },
-        failsafe: {
-          raw_value: 0,
-          voltage_failsafe_active: false,
-          current_failsafe_active: false,
-          relay_failsafe_active: false,
-          cell_balancing_active: false,
-          charge_interlock_failsafe_active: false,
-          thermistor_b_value_table_invalid: false,
-          input_power_supply_failsafe_active: false
-        }
-      }
-    };
-
-    /**
-     * Switch between tabs (CAN View and Dashboard)
-     */
-    function switchTab(tabId) {
-      // Remove active class from all tabs and content
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.content').forEach(content => content.classList.remove('active'));
-      
-      // Add active class to selected tab and its content
-      const selectedTab = document.getElementById(tabId);
-      const selectedContent = document.getElementById(tabId + "-content");
-      
-      if (selectedTab && selectedContent) {
-        selectedTab.classList.add('active');
-        selectedContent.classList.add('active');
-      }
-    }
-
-    /**
-     * Safely get element and update its content
-     */
-    function updateElement(id, content, className = null) {
-      const element = document.getElementById(id);
-      if (element) {
-        element.textContent = content;
-        if (className) {
-          element.className = className;
-        }
-      }
-    }
-
-    /**
-     * Format voltage with proper precision
-     */
-    function formatVoltage(volts, precision = 3) {
-      return Number(volts).toFixed(precision) + ' V';
-    }
-
-    /**
-     * Format current with proper precision
-     */
-    function formatCurrent(amps, precision = 1) {
-      return Number(amps).toFixed(precision) + ' A';
-    }
-
-    /**
-     * Format percentage with proper precision
-     */
-    function formatPercentage(percent, precision = 1) {
-      return Number(percent).toFixed(precision) + ' %';
-    }
-
-    /**
-     * Format hex value
-     */
-    function formatHex(value) {
-      return '0x' + Number(value).toString(16).toUpperCase();
-    }
-
-    /**
-     * Update CAN view elements
-     */
-    function updateCanView(state) {
-      updateElement('timestamp', state.timestamp || 'No data');
-      
-      if (state.battery) {
-        updateElement('highVolt', 
-          `${formatVoltage(state.battery.high_cell_voltage_volts)} (ID ${state.battery.high_cell_voltage_id})`);
-        updateElement('lowVolt', 
-          `${formatVoltage(state.battery.low_cell_voltage_volts)} (ID ${state.battery.low_cell_voltage_id})`);
-        updateElement('delta', 
-          `${state.battery.cell_delta_mV} mV (${formatVoltage(state.battery.delta_volts)})`);
-        updateElement('cells', state.battery.populated_cells);
-        updateElement('crcBms', state.battery.crc_ok ? '✔ OK' : '✘ FAIL', 
-          state.battery.crc_ok ? 'ok' : 'fail');
-      }
-
-      if (state.bms) {
-        updateElement('packCurrent', formatCurrent(state.bms.pack_current_amps));
-        updateElement('packVoltage', formatVoltage(state.bms.pack_voltage_volts));
-        updateElement('soc', formatPercentage(state.bms.soc_percent));
-        updateElement('relay', formatHex(state.bms.relay_state_raw));
-      }
-    }
-
-    /**
-     * Update Dashboard view elements
-     */
-    function updateDashboard(state) {
-      if (state.bms && state.bms.system_state) {
-        updateElement('dashPackVoltage', formatVoltage(state.bms.system_state.pack_voltage));
-        updateElement('dashPackCurrent', formatCurrent(state.bms.system_state.pack_current));
-        updateElement('dashSoc', formatPercentage(state.bms.system_state.soc));
-        
-        // Temperature information
-        if (state.bms.temperature) {
-          updateElement('dashTempHigh', state.bms.temperature.high + ' °C');
-          updateElement('dashTempLow', state.bms.temperature.low + ' °C');
-        }
-        
-        // Cell information
-        if (state.bms.high_cell && state.bms.low_cell) {
-          updateElement('dashHighCell', 
-            `${formatVoltage(state.bms.high_cell.voltage)} (ID ${state.bms.high_cell.id})`);
-          updateElement('dashLowCell', 
-            `${formatVoltage(state.bms.low_cell.voltage)} (ID ${state.bms.low_cell.id})`);
-        }
-        
-        updateElement('dashDelta', state.bms.cell_delta + ' mV');
-        updateElement('dashCells', state.bms.system_state.cell_count);
-        
-        // System state information (now directly in system_state)
-        updateElement('dashCharging', state.bms.system_state.is_charging ? '⚡ Charging' : '🔋 Not Charging', 
-          state.bms.system_state.is_charging ? 'ok' : 'fail');
-        updateElement('dashBalancing', state.bms.system_state.balancing ? '✔ Active' : '✘ Inactive', 
-          state.bms.system_state.balancing ? 'ok' : 'fail');
-        updateElement('dashChargerSafety', state.bms.system_state.charger_safety ? '✔ OK' : '✘ FAIL', 
-          state.bms.system_state.charger_safety ? 'ok' : 'fail');
-        updateElement('dashChargePower', state.bms.system_state.charge_power ? '✔ OK' : '✘ FAIL', 
-          state.bms.system_state.charge_power ? 'ok' : 'fail');
-        updateElement('dashReadyPower', state.bms.system_state.ready_power ? '✔ Ready' : '✘ Not Ready', 
-          state.bms.system_state.ready_power ? 'ok' : 'fail');
-        
-        // Failsafe information
-        if (state.bms.failsafe) {
-          updateElement('dashFailsafeStatus', checkFailsafeStatus(state.bms.failsafe));
-          updateElement('dashVoltageFailsafe', state.bms.failsafe.voltage_failsafe_active ? '⚠ ACTIVE' : '✔ OK', 
-            state.bms.failsafe.voltage_failsafe_active ? 'fail' : 'ok');
-          updateElement('dashCurrentFailsafe', state.bms.failsafe.current_failsafe_active ? '⚠ ACTIVE' : '✔ OK', 
-            state.bms.failsafe.current_failsafe_active ? 'fail' : 'ok');
-          updateElement('dashRelayFailsafe', state.bms.failsafe.relay_failsafe_active ? '⚠ ACTIVE' : '✔ OK', 
-            state.bms.failsafe.relay_failsafe_active ? 'fail' : 'ok');
-          updateElement('dashChargeInterlock', state.bms.failsafe.charge_interlock_failsafe_active ? '⚠ ACTIVE' : '✔ OK', 
-            state.bms.failsafe.charge_interlock_failsafe_active ? 'fail' : 'ok');
-          updateElement('dashThermistorStatus', state.bms.failsafe.thermistor_b_value_table_invalid ? '⚠ INVALID' : '✔ OK', 
-            state.bms.failsafe.thermistor_b_value_table_invalid ? 'fail' : 'ok');
-          updateElement('dashPowerSupplyFailsafe', state.bms.failsafe.input_power_supply_failsafe_active ? '⚠ ACTIVE' : '✔ OK', 
-            state.bms.failsafe.input_power_supply_failsafe_active ? 'fail' : 'ok');
-        }
-      } else {
-        // Fallback values when BMS data is not available
-        updateElement('dashPackVoltage', 'N/A');
-        updateElement('dashPackCurrent', 'N/A');
-        updateElement('dashSoc', 'N/A');
-      }
-    }
-
-    /**
-     * Check overall failsafe status
-     */
-    function checkFailsafeStatus(failsafe) {
-      const activeFailsafes = [
-        failsafe.voltage_failsafe_active,
-        failsafe.current_failsafe_active,
-        failsafe.relay_failsafe_active,
-        failsafe.charge_interlock_failsafe_active,
-        failsafe.thermistor_b_value_table_invalid,
-        failsafe.input_power_supply_failsafe_active
-      ].filter(Boolean).length;
-
-      if (activeFailsafes === 0) {
-        return '✔ All Systems OK';
-      } else {
-        return `⚠ ${activeFailsafes} Failsafe(s) Active`;
-      }
-    }
-
-    /**
-     * Apply syntax highlighting to JSON string
-     */
-    function syntaxHighlight(json) {
-      if (typeof json !== 'string') {
-        json = JSON.stringify(json, null, 2);
-      }
-      
-      json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      
-      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-        let cls = 'json-number';
-        if (/^"/.test(match)) {
-          if (/:$/.test(match)) {
-            cls = 'json-key';
-          } else {
-            cls = 'json-string';
-          }
-        } else if (/true|false/.test(match)) {
-          cls = 'json-boolean';
-        } else if (/null/.test(match)) {
-          cls = 'json-null';
-        }
-        return '<span class="' + cls + '">' + match + '</span>';
-      });
-    }
-
-    /**
-     * Update JSON view with current state
-     */
-    function updateJsonView(state) {
-      const jsonElement = document.getElementById('jsonDisplay');
-      if (jsonElement) {
-        const formattedJson = syntaxHighlight(state);
-        jsonElement.innerHTML = formattedJson;
-      }
-    }
-
-    /**
-     * Fetch data from API and update displays
-     */
-    async function updateState() {
-      try {
-        const response = await fetch('/api');
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const state = await response.json();
-        
-        // Merge with default state to handle missing properties
-        const mergedState = {
-          ...dashboardState,
-          ...state,
-          bms: {
-            ...dashboardState.bms,
-            ...(state.bms || {}),
-            high_cell: { ...dashboardState.bms.high_cell, ...(state.bms?.high_cell || {}) },
-            low_cell: { ...dashboardState.bms.low_cell, ...(state.bms?.low_cell || {}) },
-            temperature: { ...dashboardState.bms.temperature, ...(state.bms?.temperature || {}) },
-            system_state: { ...dashboardState.bms.system_state, ...(state.bms?.system_state || {}) },
-            failsafe: { ...dashboardState.bms.failsafe, ...(state.bms?.failsafe || {}) }
-          }
-        };
-        
-        // Update all views
-        updateCanView(mergedState);
-        updateDashboard(mergedState);
-        updateJsonView(mergedState);
-        
-        // Store the current state
-        dashboardState = mergedState;
-        
-      } catch (error) {
-        console.error('Failed to update state:', error);
-        
-        // Update timestamp to show error
-        updateElement('timestamp', `Error: ${error.message}`);
-        
-        // Show fallback values in dashboard
-        updateDashboard(dashboardState);
-      }
-    }
-
-    /**
-     * Initialize the application
-     */
-    function initApp() {
-      // Set dashboard as default tab
-      switchTab('dashboard');
-      
-      // Initial data fetch
-      updateState();
-      
-      // Set up periodic updates every second
-      setInterval(updateState, 1000);
-    }
-
-    // Start the application when page loads
-    window.addEventListener('DOMContentLoaded', initApp);
-  </script>
+  <meta charset="utf-8">
+  <title>BMS Cell Data Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-  <div class="tabs">
-    <div class="tab" id="can-view" onclick="switchTab('can-view')">CAN View</div>
-    <div class="tab active" id="dashboard" onclick="switchTab('dashboard')">EV Dashboard</div>
-    <div class="tab" id="json-view" onclick="switchTab('json-view')">JSON Data</div>
-  </div>
+  <header>
+    <h1>BMS Cell Data Dashboard</h1>
+    <p class="meta">Last Updated: <strong id="lastUpdated">--</strong></p>
+  </header>
+  
+  <nav>
+    <button class="tab active" data-tab="dash">Dashboard</button>
+    <button class="tab" data-tab="raw">Raw JSON</button>
+  </nav>
 
-  <!-- CAN VIEW TAB -->
-  <div id="can-view-content" class="content">
-    <h1>CAN Raw Values</h1>
-    <p><b>Last update:</b> <span id="timestamp"></span></p>
-
-    <h2>Battery (0x6B2)</h2>
-    <ul>
-      <li><b>High Cell Voltage:</b> <span id="highVolt"></span></li>
-      <li><b>Low Cell Voltage:</b> <span id="lowVolt"></span></li>
-      <li><b>Delta:</b> <span id="delta"></span></li>
-      <li><b>Cells:</b> <span id="cells"></span></li>
-      <li><b>CRC:</b> <span id="crcBms"></span></li>
-    </ul>
-
-    <h2>Pack (0x6B0)</h2>
-    <ul>
-      <li><b>Current:</b> <span id="packCurrent"></span></li>
-      <li><b>Voltage:</b> <span id="packVoltage"></span></li>
-      <li><b>SOC:</b> <span id="soc"></span></li>
-      <li><b>Relay State (raw):</b> <span id="relay"></span></li>
-    </ul>
-  </div>
-
-  <!-- DASHBOARD TAB -->
-  <div id="dashboard-content" class="content active">
-    <div class="dashboard">
-      <h1>EV Dashboard</h1>
-      
-      <div class="dashboard-grid">
-        <!-- Column 1: Pack & Battery Data -->
-        <div class="dashboard-column">
-          <table>
-            <tr><th colspan="2">Pack Summary</th></tr>
-            <tr><td>Voltage</td><td id="dashPackVoltage"></td></tr>
-            <tr><td>Current</td><td id="dashPackCurrent"></td></tr>
-            <tr><td>State of Charge</td><td id="dashSoc"></td></tr>
-          </table>
-
-          <table>
-            <tr><th colspan="2">Battery Cells</th></tr>
-            <tr><td>High Cell</td><td id="dashHighCell"></td></tr>
-            <tr><td>Low Cell</td><td id="dashLowCell"></td></tr>
-            <tr><td>Delta</td><td id="dashDelta"></td></tr>
-            <tr><td>Cell Count</td><td id="dashCells"></td></tr>
-          </table>
+  <!-- DASHBOARD -->
+  <main id="dash">
+    <!-- Pack Data Section -->
+    <div class="section">
+      <div class="label" style="margin-bottom:10px;">Pack Information</div>
+      <div class="kv">
+        <div class="item">
+          <div class="label">State of Charge</div>
+          <div class="value mono" id="soc">--</div>
         </div>
-
-        <!-- Column 2: Temperature & System State -->
-        <div class="dashboard-column">
-          <table>
-            <tr><th colspan="2">Temperature</th></tr>
-            <tr><td>High Temp</td><td id="dashTempHigh"></td></tr>
-            <tr><td>Low Temp</td><td id="dashTempLow"></td></tr>
-          </table>
-
-          <table>
-            <tr><th colspan="2">System State</th></tr>
-            <tr><td>Charging</td><td id="dashCharging"></td></tr>
-            <tr><td>Balancing</td><td id="dashBalancing"></td></tr>
-            <tr><td>Charger Safety</td><td id="dashChargerSafety"></td></tr>
-            <tr><td>Charge Power</td><td id="dashChargePower"></td></tr>
-            <tr><td>Ready Power</td><td id="dashReadyPower"></td></tr>
-          </table>
+        
+        <div class="item">
+          <div class="label">Cell Count</div>
+          <div class="value mono" id="cellCount">--</div>
         </div>
-
-        <!-- Column 3: Failsafe Status -->
-        <div class="dashboard-column">
-          <table>
-            <tr><th colspan="2">Failsafe Status</th></tr>
-            <tr><td>Overall</td><td id="dashFailsafeStatus"></td></tr>
-            <tr><td>Voltage</td><td id="dashVoltageFailsafe"></td></tr>
-            <tr><td>Current</td><td id="dashCurrentFailsafe"></td></tr>
-            <tr><td>Relay</td><td id="dashRelayFailsafe"></td></tr>
-          </table>
-
-          <table>
-            <tr><th colspan="2">Safety Systems</th></tr>
-            <tr><td>Charge Interlock</td><td id="dashChargeInterlock"></td></tr>
-            <tr><td>Thermistor</td><td id="dashThermistorStatus"></td></tr>
-            <tr><td>Power Supply</td><td id="dashPowerSupplyFailsafe"></td></tr>
-          </table>
+        
+        <div class="item">
+          <div class="label">Pack Voltage</div>
+          <div class="value mono" id="packVoltage">--</div>
+        </div>
+        
+        <div class="item">
+          <div class="label">Pack CCL</div>
+          <div class="value mono" id="packCCL">--</div>
+        </div>
+        
+        <div class="item">
+          <div class="label">Pack DCL</div>
+          <div class="value mono" id="packDCL">--</div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- JSON VIEW TAB -->
-  <div id="json-view-content" class="content">
-    <h1>JSON Data</h1>
-    <div class="json-container">
-      <pre id="jsonDisplay" class="json-content"></pre>
+    <!-- Cell Data & Temperature Section -->
+    <div class="section">
+      <div class="label" style="margin-bottom:10px;">Cell & Temperature Information</div>
+      <div class="kv">
+        <div class="item">
+          <div class="label">High Cell</div>
+          <div class="value mono" id="highCell">--</div>
+        </div>
+        
+        <div class="item">
+          <div class="label">Low Cell</div>
+          <div class="value mono" id="lowCell">--</div>
+        </div>
+        
+        <div class="item">
+          <div class="label">Cell Delta</div>
+          <div class="value mono" id="cellDelta">--</div>
+        </div>
+        
+        <div class="item">
+          <div class="label">High Temperature</div>
+          <div class="value mono" id="highTemp">--</div>
+        </div>
+        
+        <div class="item">
+          <div class="label">Low Temperature</div>
+          <div class="value mono" id="lowTemp">--</div>
+        </div>
+      </div>
     </div>
-  </div>
+
+    <!-- Relay States Section -->
+    <div class="section">
+      <div class="label" style="margin-bottom:10px;">Relay States</div>
+      <div class="flag-grid">
+        <span class="flag" id="dischargeRelay">
+          <span class="dot"></span>Discharge Relay
+        </span>
+        <span class="flag" id="chargeRelay">
+          <span class="dot"></span>Charge Relay
+        </span>
+        <span class="flag" id="chargerSafety">
+          <span class="dot"></span>Charger Safety
+        </span>
+        <span class="flag" id="malfunctionDTC">
+          <span class="dot"></span>Malfunction DTC
+        </span>
+        <span class="flag" id="mpInput1">
+          <span class="dot"></span>MP Input 1
+        </span>
+        <span class="flag" id="alwaysOn">
+          <span class="dot"></span>Always On
+        </span>
+        <span class="flag" id="isReady">
+          <span class="dot"></span>Is Ready
+        </span>
+        <span class="flag" id="isCharging">
+          <span class="dot"></span>Is Charging
+        </span>
+        <span class="flag" id="mpInput2">
+          <span class="dot"></span>MP Input 2
+        </span>
+        <span class="flag" id="mpInput3">
+          <span class="dot"></span>MP Input 3
+        </span>
+        <span class="flag" id="mpOutput1">
+          <span class="dot"></span>MP Output 1
+        </span>
+        <span class="flag" id="mpOutput2">
+          <span class="dot"></span>MP Output 2
+        </span>
+        <span class="flag" id="mpOutput3">
+          <span class="dot"></span>MP Output 3
+        </span>
+        <span class="flag" id="mpOutput4">
+          <span class="dot"></span>MP Output 4
+        </span>
+        <span class="flag" id="mpEnable">
+          <span class="dot"></span>MP Enable
+        </span>
+      </div>
+    </div>
+  </main>
+
+  <!-- RAW JSON -->
+  <main id="raw" class="hidden">
+    <div class="section">
+      <pre class="mono" id="rawJson">Loading...</pre>
+    </div>
+  </main>
+
+  <script>
+    // Tab switching
+    const tabs = document.querySelectorAll('.tab');
+    const dash = document.getElementById('dash');
+    const raw = document.getElementById('raw');
+    
+    tabs.forEach(btn => btn.addEventListener('click', () => {
+      tabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.getAttribute('data-tab');
+      if (tab === 'raw') {
+        dash.classList.add('hidden');
+        raw.classList.remove('hidden');
+      } else {
+        raw.classList.add('hidden');
+        dash.classList.remove('hidden');
+      }
+    }));
+
+    // Data fetching and updating
+    async function fetchData() {
+      try {
+        const response = await fetch('/api');
+        const data = await response.json();
+        
+        updateDashboard(data);
+        
+        // Update raw JSON display with pretty formatting
+        document.getElementById('rawJson').textContent = JSON.stringify(data, null, 2);
+        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        document.getElementById('rawJson').textContent = 'Error loading data: ' + error.message;
+      }
+    }
+
+    function updateDashboard(data) {
+      try {
+        // Update timestamp
+        document.getElementById('lastUpdated').textContent = 
+          data.timestamp ? new Date(data.timestamp).toLocaleString() : '--';
+
+        // Pack Data
+        if (data.pack_data) {
+          const pack = data.pack_data;
+          document.getElementById('soc').textContent = 
+            pack.soc !== undefined ? `${(pack.soc / 10).toFixed(1)}%` : '--%';
+          document.getElementById('cellCount').textContent = 
+            pack.cell_count || '--';
+          document.getElementById('packVoltage').textContent = 
+            pack.pack_voltage !== undefined ? `${pack.pack_voltage.toFixed(1)} V` : '-- V';
+        }
+
+        // Cell Data
+        if (data.high_cell) {
+          document.getElementById('highCell').textContent = 
+            `#${data.high_cell.id} / ${data.high_cell.voltage.toFixed(4)} V`;
+        }
+        if (data.low_cell) {
+          document.getElementById('lowCell').textContent = 
+            `#${data.low_cell.id} / ${data.low_cell.voltage.toFixed(4)} V`;
+        }
+        if (data.cell_delta !== undefined) {
+          document.getElementById('cellDelta').textContent = 
+            `${data.cell_delta.toFixed(4)} V`;
+        }
+
+        // Temperature Data
+        if (data.temperature_data) {
+          const temp = data.temperature_data;
+          document.getElementById('highTemp').textContent = 
+            temp.high_temp !== undefined ? `${temp.high_temp}°C` : '--°C';
+          document.getElementById('lowTemp').textContent = 
+            temp.low_temp !== undefined ? `${temp.low_temp}°C` : '--°C';
+        }
+
+        // System Control Data
+        if (data.system_control) {
+          const control = data.system_control;
+          
+          // Pack current limits
+          document.getElementById('packCCL').textContent = 
+            control.pack_ccl !== undefined ? `${control.pack_ccl} A` : '-- A';
+          document.getElementById('packDCL').textContent = 
+            control.pack_dcl !== undefined ? `${control.pack_dcl} A` : '-- A';
+
+          // Relay states
+          if (control.relay_state) {
+            const relay = control.relay_state;
+            updateFlag('dischargeRelay', relay.discharge_relay);
+            updateFlag('chargeRelay', relay.charge_relay);
+            updateFlag('chargerSafety', relay.charger_safety);
+            updateFlag('malfunctionDTC', relay.malfunction_dtc);
+            updateFlag('mpInput1', relay.mp_input_1);
+            updateFlag('alwaysOn', relay.always_on);
+            updateFlag('isReady', relay.is_ready);
+            updateFlag('isCharging', relay.is_charging);
+            updateFlag('mpInput2', relay.mp_input_2);
+            updateFlag('mpInput3', relay.mp_input_3);
+            updateFlag('mpOutput1', relay.mp_output_1);
+            updateFlag('mpOutput2', relay.mp_output_2);
+            updateFlag('mpOutput3', relay.mp_output_3);
+            updateFlag('mpOutput4', relay.mp_output_4);
+            updateFlag('mpEnable', relay.mp_enable);
+          }
+        }
+
+      } catch (error) {
+        console.error('Error updating dashboard:', error);
+      }
+    }
+
+    function updateFlag(elementId, isActive) {
+      const element = document.getElementById(elementId);
+      if (element) {
+        if (isActive) {
+          element.classList.add('on');
+        } else {
+          element.classList.remove('on');
+        }
+      }
+    }
+
+    // Auto-refresh every 2 seconds
+    setInterval(fetchData, 2000);
+    
+    // Initial load
+    fetchData();
+  </script>
 </body>
 </html>

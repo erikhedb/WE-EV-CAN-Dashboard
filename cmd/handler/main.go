@@ -33,8 +33,12 @@ func main() {
 			return
 		}
 
-		// Filter for only 6B1 and 6B2 messages
+		// Filter for only 6B0, 6B1, 6B2, 6B3, and 6B4 messages
 		switch canMsg.ID {
+		case "6B0":
+			if err := decode6B0(canMsg); err != nil {
+				log.Printf("Error decoding 6B0: %v", err)
+			}
 		case "6B1":
 			if err := decode6B1(canMsg); err != nil {
 				log.Printf("Error decoding 6B1: %v", err)
@@ -42,6 +46,14 @@ func main() {
 		case "6B2":
 			if err := decode6B2(canMsg); err != nil {
 				log.Printf("Error decoding 6B2: %v", err)
+			}
+		case "6B3":
+			if err := decode6B3(canMsg); err != nil {
+				log.Printf("Error decoding 6B3: %v", err)
+			}
+		case "6B4":
+			if err := decode6B4(canMsg); err != nil {
+				log.Printf("Error decoding 6B4: %v", err)
 			}
 		default:
 			// Ignore all other messages
@@ -53,9 +65,9 @@ func main() {
 		log.Fatalf("Failed to subscribe: %v", err)
 	}
 
-	log.Printf("🎧 CAN Handler started - listening on '%s'", subject)
-	log.Println("� Filtering for CAN IDs: 6B1 (High Cell) and 6B2 (Low Cell)")
-	log.Println("📊 Decoded cell voltage data will be displayed")
+	log.Printf("CAN Handler started - listening on '%s'", subject)
+	log.Println("Filtering for CAN IDs: 6B0 (Pack Status), 6B1 (High Cell), 6B2 (Low Cell), 6B3 (Temperature), 6B4 (System Control)")
+	log.Println("Decoded pack status, cell voltage, temperature, and system control data will be written to JSON")
 
 	// Keep the program running
 	select {}
