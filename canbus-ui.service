@@ -1,0 +1,16 @@
+[Unit]
+Description=CAN Bus UI Service
+After=network.target canbus-handler.service
+Wants=canbus-handler.service
+
+[Service]
+Type=simple
+ExecStart=/home/erwa/Projects/WE-EV-CAN-Dashboard/canbus-ui
+WorkingDirectory=/home/erwa/Projects/WE-EV-CAN-Dashboard
+Restart=on-failure
+RestartSec=5
+User=erwa
+Group=erwa
+
+[Install]
+WantedBy=multi-user.target

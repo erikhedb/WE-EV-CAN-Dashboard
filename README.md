@@ -131,16 +131,61 @@ logs:
 
 MIT License
 
----
+# Install
 
-## 🔧 TODO
+## CAN Bus System Services Setup
 
-* [x] CAN reader with NATS + logging
-* [ ] Handler to decode messages
-* [ ] UI to visualize JSON
-* [ ] Replay engine
-* [ ] Docker Compose setup
+### File Locations
+- **Reader executable**: `/home/erwa/Projects/WE-EV-CAN-Dashboard/canbus-reader`
+- **Handler executable**: `/home/erwa/Projects/WE-EV-CAN-Dashboard/canbus-handler`
+- **UI executable**: `/home/erwa/Projects/WE-EV-CAN-Dashboard/canbus-ui`
+- **Log file**: `/home/erwa/Projects/WE-EV-CAN-Dashboard/logs/canbus.json` (when `-l` flag is used)
+- **Reader service**: `/etc/systemd/system/canbus-reader.service`
+- **Handler service**: `/etc/systemd/system/canbus-handler.service`
+- **UI service**: `/etc/systemd/system/canbus-ui.service`
+- **Configuration**: `/home/erwa/Projects/WE-EV-CAN-Dashboard/config.yaml`
 
----
+### Build and Install Services
+```bash
+# Build all binaries
+go build -o canbus-reader ./cmd/reader
+go build -o canbus-handler ./cmd/handler
+go build -o canbus-ui ./cmd/ui
+chmod +x canbus-reader canbus-handler canbus-ui
 
-Made with ⚡ for a DIY EV Land Rover project.
+# Install systemd services
+sudo cp canbus-reader.service /etc/systemd/system/
+sudo cp canbus-handler.service /etc/systemd/system/
+sudo cp canbus-ui.service /etc/systemd/system/
+sudo systemctl daemon-reload
+
+# Enable and start all services
+sudo systemctl enable canbus-reader canbus-handler canbus-ui
+sudo systemctl start canbus-reader canbus-handler canbus-ui
+```
+
+### Service Management
+```bash
+# Check all service status
+sudo systemctl status canbus-reader canbus-handler canbus-ui
+
+# View live logs
+sudo journalctl -u canbus-reader -f
+sudo journalctl -u canbus-handler -f
+sudo journalctl -u canbus-ui -f
+
+# Stop all services
+sudo systemctl stop canbus-reader canbus-handler canbus-ui
+
+# Start all services
+sudo systemctl start canbus-reader canbus-handler canbus-ui
+
+# Restart all services
+sudo systemctl restart canbus-reader canbus-handler canbus-ui
+
+# Disable auto-start on boot
+sudo systemctl disable canbus-reader canbus-handler canbus-ui
+```
+
+### Access the Web UI
+Once all services are running, access the dashboard at: http://localhost:8080

@@ -1,0 +1,16 @@
+[Unit]
+Description=CAN Bus Handler Service
+After=network.target canbus-reader.service
+Wants=canbus-reader.service
+
+[Service]
+Type=simple
+ExecStart=/home/erwa/Projects/WE-EV-CAN-Dashboard/canbus-handler
+WorkingDirectory=/home/erwa/Projects/WE-EV-CAN-Dashboard
+Restart=on-failure
+RestartSec=5
+User=erwa
+Group=erwa
+
+[Install]
+WantedBy=multi-user.target
