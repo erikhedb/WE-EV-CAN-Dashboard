@@ -1,0 +1,50 @@
+{
+  "timestamp": "2025-10-15T17:02:04.470428048+02:00",
+  "pack_data": {
+    "soc": 525,
+    "cell_count": 72,
+    "pack_voltage": 288.1
+  },
+  "high_cell": {
+    "id": 21,
+    "voltage": 4.0023
+  },
+  "low_cell": {
+    "id": 70,
+    "voltage": 3.9944
+  },
+  "cell_delta": 0.0079,
+  "temperature_data": {
+    "high_temp": 18,
+    "low_temp": 15
+  },
+  "system_control": {
+    "relay_state": {
+      "discharge_relay": false,
+      "charge_relay": true,
+      "charger_safety": false,
+      "malfunction_dtc": false,
+      "mp_input_1": false,
+      "always_on": true,
+      "is_ready": true,
+      "is_charging": false,
+      "mp_input_2": true,
+      "mp_input_3": false,
+      "reserved": false,
+      "mp_output_2": false,
+      "mp_output_3": false,
+      "mp_output_4": false,
+      "mp_enable": false,
+      "mp_output_1": false
+    },
+    "pack_ccl": 2,
+    "pack_dcl": 5120
+  },
+  "last_update": {
+    "pack_data": "2025-10-15T17:02:04.4651429+02:00",
+    "high_cell": "2025-10-15T17:02:04.47042703+02:00",
+    "low_cell": "2025-10-15T17:02:04.469632678+02:00",
+    "temperature_data": "2025-10-15T17:02:04.468685382+02:00",
+    "system_control": "2025-10-15T17:02:04.465849882+02:00"
+  }
+}

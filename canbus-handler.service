@@ -5,8 +5,8 @@ Wants=canbus-reader.service
 
 [Service]
 Type=simple
-ExecStart=/Users/erikwastlin/Projects/github/WE-EV-CAN-Dashboard/bin/handler
-WorkingDirectory=/Users/erikwastlin/Projects/github/WE-EV-CAN-Dashboard
+ExecStart=/home/erwa/Projects/WE-EV-CAN-Dashboard/bin/handler
+WorkingDirectory=/home/erwa/Projects/WE-EV-CAN-Dashboard
 Restart=on-failure
 RestartSec=5
 User=erwa

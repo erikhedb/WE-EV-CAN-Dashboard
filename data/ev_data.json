@@ -1,21 +1,21 @@
 {
-  "timestamp": "2025-10-15T11:52:57.79801+02:00",
+  "timestamp": "2025-10-15T18:28:54.486665975+02:00",
   "pack_data": {
-    "soc": 505,
+    "soc": 525,
     "cell_count": 72,
-    "pack_voltage": 287.84,
-    "pack_current": -10.9
+    "pack_voltage": 288.08,
+    "pack_current": 0
   },
   "high_cell": {
-    "id": 4,
-    "voltage": 3.9985
+    "id": 21,
+    "voltage": 4.002
   },
   "low_cell": {
     "id": 70,
-    "voltage": 3.9912
+    "voltage": 3.9943
   },
-  "aux_voltage": 13.2,
-  "cell_delta": 0.0073,
+  "aux_voltage": 13.1,
+  "cell_delta": 0.0077,
   "temperature_data": {
     "high_temp": 19,
     "low_temp": 15
@@ -24,31 +24,31 @@
     "relay_state": {
       "discharge_relay": false,
       "charge_relay": true,
-      "charger_safety": true,
+      "charger_safety": false,
       "malfunction_dtc": false,
       "mp_input_1": false,
       "always_on": true,
       "is_ready": true,
-      "is_charging": true,
+      "is_charging": false,
       "mp_input_2": true,
       "mp_input_3": false,
-      "reserved": true,
+      "reserved": false,
       "mp_output_2": false,
       "mp_output_3": false,
       "mp_output_4": false,
       "mp_enable": false,
       "mp_output_1": false
     },
-    "pack_ccl": 1.1,
-    "pack_dcl": 256
+    "pack_ccl": 0.2,
+    "pack_dcl": 512
   },
   "last_update": {
-    "pack_data": "2025-10-15T11:52:57.796568+02:00",
-    "pack_current": "2025-10-15T11:52:57.79801+02:00",
-    "high_cell": "2025-10-15T11:52:57.79801+02:00",
-    "low_cell": "2025-10-15T11:52:57.797936+02:00",
-    "aux_voltage": "2025-10-15T11:52:57.797936+02:00",
-    "temperature_data": "2025-10-15T11:52:57.797821+02:00",
-    "system_control": "2025-10-15T11:52:57.797269+02:00"
+    "pack_data": "2025-10-15T18:28:54.481744261+02:00",
+    "pack_current": "2025-10-15T18:28:54.486664753+02:00",
+    "high_cell": "2025-10-15T18:28:54.486664753+02:00",
+    "low_cell": "2025-10-15T18:28:54.484130988+02:00",
+    "aux_voltage": "2025-10-15T18:28:54.484130988+02:00",
+    "temperature_data": "2025-10-15T18:28:54.483234227+02:00",
+    "system_control": "2025-10-15T18:28:54.482109799+02:00"
   }
 }
