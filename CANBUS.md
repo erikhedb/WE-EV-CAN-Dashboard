@@ -22,8 +22,8 @@ This document describes the CAN bus messages used in the EV system, primarily fo
 #### Sample Data
 ```json
 {"id":"6B0","length":8,"data":"00A100486E50005F","meta":39}
-{"id":"6B1","length":8,"data":"00120000993A009E","meta":0}
-{"id":"6B2","length":8,"data":"00460000990100E0","meta":0}
+{"id":"6B1","length":8,"data":"0015FF929BF300ED","meta":0}
+{"id":"6B2","length":8,"data":"004600859BAA0010","meta":0}
 {"id":"6B3","length":8,"data":"0013000000100000","meta":0}
 {"id":"6B4","length":8,"data":"0162000412000000","meta":0}
 ```
@@ -44,26 +44,30 @@ This document describes the CAN bus messages used in the EV system, primarily fo
 ---
 
 ### 0x6B1 - High Cell Information
-**Data**: `0012 0000 993A 009E`
+**Data**: `0015 FF92 9BF3 00ED`
 
 | Bytes | Field | Hex Value | Decimal | Final Value | Calculation | Description |
 |-------|-------|-----------|---------|-------------|-------------|-------------|
-| 0-1   | High Cell ID | `0012` | 18 | 18 | Direct | Cell with highest voltage |
-| 2-3   | Reserved | `0000` | 0 | - | - | Not used |
-| 4-5   | High Cell Voltage | `993A` | 39,226 | 3.9226V | `39226 ÷ 10000` | Voltage of highest cell |
-| 6-7   | Reserved | `009E` | 158 | - | - | Purpose unknown |
+| 0-1   | High Cell ID | `0015` | 21 | 21 | Direct | Cell with highest voltage |
+| 2-3   | Pack Current | `FF92` | -110 | -11.0A | `Int16(FF92) ÷ 10` | Battery pack current (negative = charging) |
+| 4-5   | High Cell Voltage | `9BF3` | 39,923 | 3.9923V | `39923 ÷ 10000` | Voltage of highest cell |
+| 6-7   | Reserved | `00ED` | 237 | - | - | Purpose unknown |
+
+Pack current is reported as a signed 16-bit value with 0.1A resolution; positive values indicate discharge and negative values indicate charging.
 
 ---
 
 ### 0x6B2 - Low Cell Information
-**Data**: `0046 0000 9901 00E0`
+**Data**: `0046 0085 9BAA 0010`
 
 | Bytes | Field | Hex Value | Decimal | Final Value | Calculation | Description |
 |-------|-------|-----------|---------|-------------|-------------|-------------|
 | 0-1   | Low Cell ID | `0046` | 70 | 70 | Direct | Cell with lowest voltage |
-| 2-3   | Reserved | `0000` | 0 | - | - | Not used |
-| 4-5   | Low Cell Voltage | `9901` | 39,169 | 3.9169V | `39169 ÷ 10000` | Voltage of lowest cell |
-| 6-7   | Reserved | `00E0` | 224 | - | - | Purpose unknown |
+| 2-3   | 12V System Voltage | `0085` | 133 | 13.3V | `133 ÷ 10` | Auxiliary system voltage (0.1V resolution) |
+| 4-5   | Low Cell Voltage | `9BAA` | 39,850 | 3.9850V | `39850 ÷ 10000` | Voltage of lowest cell |
+| 6-7   | Reserved | `0010` | 16 | - | - | Purpose unknown |
+
+The 12V system voltage field reflects the vehicle's auxiliary battery rail rather than the high-voltage pack.
 
 ---
 
@@ -80,41 +84,44 @@ This document describes the CAN bus messages used in the EV system, primarily fo
 ---
 
 ### 0x6B4 - System Control Information
-**Data**: `0162 0004 1200 0000`
+**Data**: `05E6 000B 0A00 0000`
 
 | Bytes | Field | Hex Value | Decimal | Final Value | Calculation | Description |
 |-------|-------|-----------|---------|-------------|-------------|-------------|
-| 0-1   | Relay State | `0162` | 354 | See below | Bitwise | 16-bit relay/system status |
-| 2-3   | Pack CCL | `0004` | 4 | 4A | Direct | Pack Charge Current Limit |
-| 4-5   | Pack DCL | `1200` | 4608 | TBD | TBD | Pack Discharge Current Limit |
+| 0-1   | Relay State | `05E6` | 1,510 | See below | Bitwise | 16-bit relay/system status |
+| 2-3   | Pack CCL | `000B` | 11 | 1.1A | `11 ÷ 10` | Pack Charge Current Limit (0.1A resolution) |
+| 4-5   | Pack DCL | `0A00` | 2,560 | 256.0A | `2560 ÷ 10` | Pack Discharge Current Limit (0.1A resolution) |
 | 6-7   | Reserved | `0000` | 0 | - | - | Not used |
 
-#### Relay State Bit Mapping (0x0162 = `0000 0001 0110 0010`)
+#### Relay State Bit Mapping (0x05E6 = `0000 0101 1110 0110`)
 
 | Bit | Hex Mask | Decimal | Status | Field Name | Description |
 |-----|----------|---------|--------|------------|-------------|
 | 0   | `0x01` | 1 | ❌ | Discharge Relay | Discharge relay enabled |
 | 1   | `0x02` | 2 | ✅ | Charge Relay | Charge relay enabled |
-| 2   | `0x04` | 4 | ❌ | Charger Safety | Charger safety enabled |
+| 2   | `0x04` | 4 | ✅ | Charger Safety | Charger safety enabled |
 | 3   | `0x08` | 8 | ❌ | Malfunction DTC | Malfunction indicator active |
 | 4   | `0x10` | 16 | ❌ | MP Input 1 | Multi-Purpose Input signal status |
 | 5   | `0x20` | 32 | ✅ | Always On | Always-on signal status |
 | 6   | `0x40` | 64 | ✅ | Is Ready | Is-Ready signal status |
-| 7   | `0x80` | 128 | ❌ | Is Charging | Is-Charging signal status |
+| 7   | `0x80` | 128 | ✅ | Is Charging | Is-Charging signal status |
 | 8   | `0x0100` | 256 | ✅ | MP Input 2 | Multi-Purpose Input #2 signal status |
 | 9   | `0x0200` | 512 | ❌ | MP Input 3 | Multi-Purpose Input #3 signal status |
-| 10  | `0x0400` | 1024 | ❌ | Reserved | RESERVED |
+| 10  | `0x0400` | 1024 | ✅ | Reserved | RESERVED |
 | 11  | `0x0800` | 2048 | ❌ | MP Output 2 | Multi-Purpose Output #2 signal status |
 | 12  | `0x1000` | 4096 | ❌ | MP Output 3 | Multi-Purpose Output #3 signal status |
 | 13  | `0x2000` | 8192 | ❌ | MP Output 4 | Multi-Purpose Output #4 signal status |
 | 14  | `0x4000` | 16384 | ❌ | MP Enable | Multi-Purpose Enable signal status |
 | 15  | `0x8000` | 32768 | ❌ | MP Output 1 | Multi-Purpose Output #1 signal status |
 
-**Example Analysis**: `0x0162` = 354 decimal = bits 1, 5, 6, 8 active
+**Example Analysis**: `0x05E6` = 1,510 decimal → bits 1, 2, 5, 6, 7, 8, 10 active
 - Charge relay enabled
-- Always-on signal active  
+- Charger safety asserted
+- Always-on signal active
 - System is ready
+- Vehicle is charging
 - Multi-Purpose Input #2 active
+- Reserved bit 10 set (purpose unknown)
 
 ---
 

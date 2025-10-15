@@ -7,11 +7,12 @@ import (
 	"time"
 )
 
-// decode6B1 handles High Cell ID and Voltage
-// 0x6B1 - 0012 0000 993A 009E
+// decode6B1 handles High Cell ID, Pack Current, and High Cell Voltage
+// 0x6B1 - 0015 FF92 9BF3 00ED
 //
-//	High Cell Id     -> 0012 = 18 -> 18
-//	High Cell Voltage -> 993A = 39,226 -> 3.9336 (/ 10000)
+//	High Cell Id      -> 0015 = 21 -> 21
+//	Pack Current      -> FF92 = -110 -> -11.0A (Int16 ÷ 10)
+//	High Cell Voltage -> 9BF3 = 39,923 -> 3.9923 (/ 10000)
 func decode6B1(msg CANMessage) error {
 	if len(msg.Data) != 16 { // 8 bytes = 16 hex chars
 		return fmt.Errorf("invalid data length for 6B1: expected 16, got %d", len(msg.Data))
@@ -24,6 +25,13 @@ func decode6B1(msg CANMessage) error {
 		return fmt.Errorf("failed to parse high cell ID: %v", err)
 	}
 
+	// Parse pack current from bytes 2-3 (chars 4-7)
+	packCurrentHex := msg.Data[4:8]
+	packCurrentRaw, err := strconv.ParseUint(packCurrentHex, 16, 16)
+	if err != nil {
+		return fmt.Errorf("failed to parse pack current: %v", err)
+	}
+
 	// Parse High Cell Voltage from bytes 4-5 (chars 8-11)
 	highCellVoltageHex := msg.Data[8:12]
 	highCellVoltageRaw, err := strconv.ParseInt(highCellVoltageHex, 16, 32)
@@ -33,11 +41,15 @@ func decode6B1(msg CANMessage) error {
 
 	// Convert voltage: divide by 10000 to get correct value
 	highCellVoltage := float64(highCellVoltageRaw) / 10000.0
+	packCurrent := float64(int16(packCurrentRaw)) / 10.0
 
 	// Update cell data
 	cellData.HighCell.ID = int(highCellID)
 	cellData.HighCell.Voltage = highCellVoltage
-	cellData.LastUpdate.HighCell = time.Now().Format(time.RFC3339Nano)
+	cellData.PackData.PackCurrent = packCurrent
+	timestamp := time.Now().Format(time.RFC3339Nano)
+	cellData.LastUpdate.HighCell = timestamp
+	cellData.LastUpdate.PackCurrent = timestamp
 
 	// Write to JSON file
 	if err := writeJSONFile(); err != nil {
@@ -47,10 +59,11 @@ func decode6B1(msg CANMessage) error {
 	return nil
 }
 
-// decode6B2 handles Low Cell ID and Voltage
-// 0x6B2 - 0046 0000 9901 00E0
+// decode6B2 handles Low Cell ID, Auxiliary System Voltage, and Low Cell Voltage
+// 0x6B2 - 0046 0085 9BAA 0010
 //
 //	Low Cell Id      -> 0046 = 70 -> 70
+//	12V System Volt. -> 0085 = 133 -> 13.3V (/ 10)
 //	Low Cell Voltage -> 9901 = 39.169 -> 3.9169 (/ 10000)
 func decode6B2(msg CANMessage) error {
 	if len(msg.Data) != 16 { // 8 bytes = 16 hex chars
@@ -64,6 +77,13 @@ func decode6B2(msg CANMessage) error {
 		return fmt.Errorf("failed to parse low cell ID: %v", err)
 	}
 
+	// Parse 12V system voltage from bytes 2-3 (chars 4-7)
+	auxVoltageHex := msg.Data[4:8]
+	auxVoltageRaw, err := strconv.ParseInt(auxVoltageHex, 16, 32)
+	if err != nil {
+		return fmt.Errorf("failed to parse auxiliary voltage: %v", err)
+	}
+
 	// Parse Low Cell Voltage from bytes 4-5 (chars 8-11)
 	lowCellVoltageHex := msg.Data[8:12]
 	lowCellVoltageRaw, err := strconv.ParseInt(lowCellVoltageHex, 16, 32)
@@ -73,11 +93,14 @@ func decode6B2(msg CANMessage) error {
 
 	// Convert voltage: divide by 10000 to get correct value
 	lowCellVoltage := float64(lowCellVoltageRaw) / 10000.0
+	auxVoltage := float64(auxVoltageRaw) / 10.0
 
 	// Update cell data
 	cellData.LowCell.ID = int(lowCellID)
 	cellData.LowCell.Voltage = lowCellVoltage
+	cellData.AuxVoltage = auxVoltage
 	cellData.LastUpdate.LowCell = time.Now().Format(time.RFC3339Nano)
+	cellData.LastUpdate.AuxVoltage = cellData.LastUpdate.LowCell
 
 	// Write to JSON file
 	if err := writeJSONFile(); err != nil {
@@ -141,8 +164,9 @@ func decode6B4(msg CANMessage) error {
 
 	// Update cell data
 	cellData.SystemControl.RelayState = relayState
-	cellData.SystemControl.PackCCL = int(packCCL)
-	cellData.SystemControl.PackDCL = int(packDCL)
+	// The BMS reports CCL/DCL using 0.1A resolution; convert to amps.
+	cellData.SystemControl.PackCCL = float64(packCCL) / 10.0
+	cellData.SystemControl.PackDCL = float64(packDCL) / 10.0
 	cellData.LastUpdate.SystemControl = time.Now().Format(time.RFC3339Nano)
 
 	// Write to JSON file

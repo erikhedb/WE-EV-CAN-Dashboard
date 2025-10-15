@@ -19,6 +19,7 @@ type PackData struct {
 	SOC         float64 `json:"soc"`
 	CellCount   int     `json:"cell_count"`
 	PackVoltage float64 `json:"pack_voltage"`
+	PackCurrent float64 `json:"pack_current"`
 }
 
 // RelayState represents the relay and system status bits
@@ -50,23 +51,26 @@ type TemperatureData struct {
 // SystemControl represents 6B4 system control data
 type SystemControl struct {
 	RelayState RelayState `json:"relay_state"`
-	PackCCL    int        `json:"pack_ccl"`
-	PackDCL    int        `json:"pack_dcl"`
+	PackCCL    float64    `json:"pack_ccl"`
+	PackDCL    float64    `json:"pack_dcl"`
 }
 
-// CellDataJSON is the structure saved to cell_data.json
+// CellDataJSON is the structure saved to ev_data.json
 type CellDataJSON struct {
 	Timestamp       string          `json:"timestamp"`
 	PackData        PackData        `json:"pack_data"`
 	HighCell        CellData        `json:"high_cell"`
 	LowCell         CellData        `json:"low_cell"`
+	AuxVoltage      float64         `json:"aux_voltage"`
 	CellDelta       float64         `json:"cell_delta"`
 	TemperatureData TemperatureData `json:"temperature_data"`
 	SystemControl   SystemControl   `json:"system_control"`
 	LastUpdate      struct {
 		PackData        string `json:"pack_data"`
+		PackCurrent     string `json:"pack_current"`
 		HighCell        string `json:"high_cell"`
 		LowCell         string `json:"low_cell"`
+		AuxVoltage      string `json:"aux_voltage"`
 		TemperatureData string `json:"temperature_data"`
 		SystemControl   string `json:"system_control"`
 	} `json:"last_update"`
@@ -74,7 +78,7 @@ type CellDataJSON struct {
 
 var cellData *CellDataJSON
 
-// writeJSONFile writes the current cell data to cell_data.json
+// writeJSONFile writes the current cell data to ev_data.json
 func writeJSONFile() error {
 	if cellData == nil {
 		return fmt.Errorf("no cell data to write")
@@ -91,9 +95,9 @@ func writeJSONFile() error {
 	}
 
 	// Write to file
-	file, err := os.Create("data/cell_data.json")
+	file, err := os.Create("data/ev_data.json")
 	if err != nil {
-		return fmt.Errorf("failed to create cell_data.json: %v", err)
+		return fmt.Errorf("failed to create ev_data.json: %v", err)
 	}
 	defer file.Close()
 
@@ -114,10 +118,12 @@ func initCellData() {
 			SOC:         0.0,
 			CellCount:   0,
 			PackVoltage: 0.0,
+			PackCurrent: 0.0,
 		},
-		HighCell:  CellData{ID: 0, Voltage: 0.0},
-		LowCell:   CellData{ID: 0, Voltage: 0.0},
-		CellDelta: 0.0,
+		HighCell:   CellData{ID: 0, Voltage: 0.0},
+		LowCell:    CellData{ID: 0, Voltage: 0.0},
+		AuxVoltage: 0.0,
+		CellDelta:  0.0,
 		TemperatureData: TemperatureData{
 			HighTemp: 0,
 			LowTemp:  0,

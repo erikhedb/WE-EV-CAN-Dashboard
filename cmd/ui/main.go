@@ -49,7 +49,7 @@ func main() {
 	}
 
 	// Build paths
-	dataPath := filepath.Join(config.Paths.DataFolder, "cell_data.json")
+	dataPath := filepath.Join(config.Paths.DataFolder, "ev_data.json")
 	staticPath := config.Paths.UIStaticFolder
 
 	log.Printf("Config loaded from: %s", configPath)
@@ -57,12 +57,12 @@ func main() {
 	log.Printf("Static path: %s", staticPath)
 	log.Printf("UI port: %d", config.Server.UIPort)
 
-	// Serve cell_data.json as the main API endpoint
+	// Serve ev_data.json as the main API endpoint
 	http.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
 		f, err := os.Open(dataPath)
 		if err != nil {
-			log.Printf("Error opening cell_data.json: %v", err)
-			http.Error(w, "cell_data.json not available", http.StatusInternalServerError)
+			log.Printf("Error opening ev_data.json: %v", err)
+			http.Error(w, "ev_data.json not available", http.StatusInternalServerError)
 			return
 		}
 		defer f.Close()

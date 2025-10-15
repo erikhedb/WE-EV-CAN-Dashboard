@@ -5,8 +5,8 @@ Wants=canbus-handler.service
 
 [Service]
 Type=simple
-ExecStart=/home/erwa/Projects/WE-EV-CAN-Dashboard/canbus-ui
-WorkingDirectory=/home/erwa/Projects/WE-EV-CAN-Dashboard
+ExecStart=/Users/erikwastlin/Projects/github/WE-EV-CAN-Dashboard/bin/ui/ui
+WorkingDirectory=/Users/erikwastlin/Projects/github/WE-EV-CAN-Dashboard
 Restart=on-failure
 RestartSec=5
 User=erwa

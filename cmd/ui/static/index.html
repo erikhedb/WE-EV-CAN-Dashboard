@@ -29,15 +29,20 @@
         </div>
         
         <div class="item">
-          <div class="label">Cell Count</div>
-          <div class="value mono" id="cellCount">--</div>
-        </div>
-        
-        <div class="item">
           <div class="label">Pack Voltage</div>
           <div class="value mono" id="packVoltage">--</div>
         </div>
-        
+
+        <div class="item">
+          <div class="label">Pack Current</div>
+          <div class="value mono" id="packCurrent">--</div>
+        </div>
+
+        <div class="item">
+          <div class="label">Aux Voltage</div>
+          <div class="value mono" id="auxVoltage">--</div>
+        </div>
+
         <div class="item">
           <div class="label">Pack CCL</div>
           <div class="value mono" id="packCCL">--</div>
@@ -77,6 +82,11 @@
         <div class="item">
           <div class="label">Low Temperature</div>
           <div class="value mono" id="lowTemp">--</div>
+        </div>
+
+        <div class="item">
+          <div class="label">Cell Count</div>
+          <div class="value mono" id="cellCount">--</div>
         </div>
       </div>
     </div>
@@ -188,10 +198,10 @@
           const pack = data.pack_data;
           document.getElementById('soc').textContent = 
             pack.soc !== undefined ? `${(pack.soc / 10).toFixed(1)}%` : '--%';
-          document.getElementById('cellCount').textContent = 
-            pack.cell_count || '--';
           document.getElementById('packVoltage').textContent = 
             pack.pack_voltage !== undefined ? `${pack.pack_voltage.toFixed(1)} V` : '-- V';
+          document.getElementById('packCurrent').textContent =
+            pack.pack_current !== undefined ? `${pack.pack_current.toFixed(1)} A` : '-- A';
         }
 
         // Cell Data
@@ -199,9 +209,17 @@
           document.getElementById('highCell').textContent = 
             `#${data.high_cell.id} / ${data.high_cell.voltage.toFixed(4)} V`;
         }
+        if (data.aux_voltage !== undefined) {
+          document.getElementById('auxVoltage').textContent =
+            `${data.aux_voltage.toFixed(1)} V`;
+        }
         if (data.low_cell) {
           document.getElementById('lowCell').textContent = 
             `#${data.low_cell.id} / ${data.low_cell.voltage.toFixed(4)} V`;
+        }
+        if (data.pack_data && data.pack_data.cell_count !== undefined) {
+          document.getElementById('cellCount').textContent =
+            data.pack_data.cell_count;
         }
         if (data.cell_delta !== undefined) {
           document.getElementById('cellDelta').textContent = 
@@ -223,9 +241,9 @@
           
           // Pack current limits
           document.getElementById('packCCL').textContent = 
-            control.pack_ccl !== undefined ? `${control.pack_ccl} A` : '-- A';
+            control.pack_ccl !== undefined ? `${control.pack_ccl.toFixed(1)} A` : '-- A';
           document.getElementById('packDCL').textContent = 
-            control.pack_dcl !== undefined ? `${control.pack_dcl} A` : '-- A';
+            control.pack_dcl !== undefined ? `${control.pack_dcl.toFixed(1)} A` : '-- A';
 
           // Relay states
           if (control.relay_state) {

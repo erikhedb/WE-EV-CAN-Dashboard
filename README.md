@@ -30,7 +30,7 @@ The project is split into three main services:
 4. **Relpay**
 
 ```
-go build -o bin/replay ./cmd/replay
+make replay
 ./bin/replay
 ```
 
@@ -98,14 +98,25 @@ nats-server
 Build and run:
 
 ```bash
-cd cmd/reader
-go build -o can-reader
-./can-reader
+make reader
+./bin/reader
 ```
 
-### 2. Message Handler *(coming soon)*
+### 2. Message Handler
 
-### 3. UI *(coming soon)*
+```bash
+make handler
+./bin/handler
+```
+
+### 3. UI
+
+```bash
+make ui
+./bin/ui/ui
+```
+
+To build every component at once, run `make build`. Binaries and UI assets will be created under `bin/`.
 
 ---
 
@@ -136,22 +147,19 @@ MIT License
 ## CAN Bus System Services Setup
 
 ### File Locations
-- **Reader executable**: `/home/erwa/Projects/WE-EV-CAN-Dashboard/canbus-reader`
-- **Handler executable**: `/home/erwa/Projects/WE-EV-CAN-Dashboard/canbus-handler`
-- **UI executable**: `/home/erwa/Projects/WE-EV-CAN-Dashboard/canbus-ui`
-- **Log file**: `/home/erwa/Projects/WE-EV-CAN-Dashboard/logs/canbus.json` (when `-l` flag is used)
+- **Reader executable**: `<repo>/bin/reader`
+- **Handler executable**: `<repo>/bin/handler`
+- **UI executable**: `<repo>/bin/ui/ui`
+- **Log file**: `<repo>/logs/canbus.json` (when `-l` flag is used)
 - **Reader service**: `/etc/systemd/system/canbus-reader.service`
 - **Handler service**: `/etc/systemd/system/canbus-handler.service`
 - **UI service**: `/etc/systemd/system/canbus-ui.service`
-- **Configuration**: `/home/erwa/Projects/WE-EV-CAN-Dashboard/config.yaml`
+- **Configuration**: `<repo>/config.yaml`
 
 ### Build and Install Services
 ```bash
-# Build all binaries
-go build -o canbus-reader ./cmd/reader
-go build -o canbus-handler ./cmd/handler
-go build -o canbus-ui ./cmd/ui
-chmod +x canbus-reader canbus-handler canbus-ui
+# Build all binaries (outputs to bin/)
+make build
 
 # Install systemd services
 sudo cp canbus-reader.service /etc/systemd/system/
@@ -163,6 +171,8 @@ sudo systemctl daemon-reload
 sudo systemctl enable canbus-reader canbus-handler canbus-ui
 sudo systemctl start canbus-reader canbus-handler canbus-ui
 ```
+
+The unit files expect the binaries to remain inside the repository `bin/` directory. If you relocate them, update `ExecStart` in each service file accordingly.
 
 ### Service Management
 ```bash
