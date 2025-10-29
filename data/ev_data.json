@@ -1,54 +1,54 @@
 {
-  "timestamp": "2025-10-15T18:28:54.486665975+02:00",
+  "timestamp": "2025-10-29T20:21:40.699859616+01:00",
   "pack_data": {
-    "soc": 525,
+    "soc": 835,
     "cell_count": 72,
-    "pack_voltage": 288.08,
+    "pack_voltage": 292.58,
     "pack_current": 0
   },
   "high_cell": {
     "id": 21,
-    "voltage": 4.002
+    "voltage": 4.0652
   },
   "low_cell": {
     "id": 70,
-    "voltage": 3.9943
+    "voltage": 4.0558
   },
-  "aux_voltage": 13.1,
-  "cell_delta": 0.0077,
+  "aux_voltage": 12,
+  "cell_delta": 0.0094,
   "temperature_data": {
-    "high_temp": 19,
+    "high_temp": 18,
     "low_temp": 15
   },
   "system_control": {
     "relay_state": {
-      "discharge_relay": false,
+      "discharge_relay": true,
       "charge_relay": true,
       "charger_safety": false,
       "malfunction_dtc": false,
       "mp_input_1": false,
       "always_on": true,
-      "is_ready": true,
+      "is_ready": false,
       "is_charging": false,
       "mp_input_2": true,
       "mp_input_3": false,
       "reserved": false,
-      "mp_output_2": false,
+      "mp_output_2": true,
       "mp_output_3": false,
       "mp_output_4": false,
       "mp_enable": false,
       "mp_output_1": false
     },
-    "pack_ccl": 0.2,
-    "pack_dcl": 512
+    "pack_ccl": 0.1,
+    "pack_dcl": 2
   },
   "last_update": {
-    "pack_data": "2025-10-15T18:28:54.481744261+02:00",
-    "pack_current": "2025-10-15T18:28:54.486664753+02:00",
-    "high_cell": "2025-10-15T18:28:54.486664753+02:00",
-    "low_cell": "2025-10-15T18:28:54.484130988+02:00",
-    "aux_voltage": "2025-10-15T18:28:54.484130988+02:00",
-    "temperature_data": "2025-10-15T18:28:54.483234227+02:00",
-    "system_control": "2025-10-15T18:28:54.482109799+02:00"
+    "pack_data": "2025-10-29T20:21:40.694775197+01:00",
+    "pack_current": "2025-10-29T20:21:40.699857616+01:00",
+    "high_cell": "2025-10-29T20:21:40.699857616+01:00",
+    "low_cell": "2025-10-29T20:21:40.698732307+01:00",
+    "aux_voltage": "2025-10-29T20:21:40.698732307+01:00",
+    "temperature_data": "2025-10-29T20:21:40.696951519+01:00",
+    "system_control": "2025-10-29T20:21:40.695853247+01:00"
   }
 }
