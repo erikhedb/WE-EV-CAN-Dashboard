@@ -18,6 +18,7 @@ type CANMessage struct {
 func main() {
 	// Initialize cell data structure
 	initCellData()
+	initMainData()
 
 	nc, err := nats.Connect(nats.DefaultURL)
 	if err != nil {
@@ -33,7 +34,7 @@ func main() {
 			return
 		}
 
-		// Filter for only 6B0, 6B1, 6B2, 6B3, and 6B4 messages
+		// Filter for tracked CAN IDs that we decode into JSON
 		switch canMsg.ID {
 		case "6B0":
 			if err := decode6B0(canMsg); err != nil {
@@ -55,6 +56,34 @@ func main() {
 			if err := decode6B4(canMsg); err != nil {
 				log.Printf("Error decoding 6B4: %v", err)
 			}
+		case "351":
+			if err := decodeBmsLimits(canMsg); err != nil {
+				log.Printf("Error decoding 351: %v", err)
+			}
+		case "355":
+			if err := decodeBmsSOC(canMsg); err != nil {
+				log.Printf("Error decoding 355: %v", err)
+			}
+		case "356":
+			if err := decodeBmsStatus1(canMsg); err != nil {
+				log.Printf("Error decoding 356: %v", err)
+			}
+		case "35A":
+			if err := decodeBmsErrors(canMsg); err != nil {
+				log.Printf("Error decoding 35A: %v", err)
+			}
+		case "35B":
+			if err := decodeBmsStatus2(canMsg); err != nil {
+				log.Printf("Error decoding 35B: %v", err)
+			}
+		case "125":
+			if err := decodeDU1Feedback(canMsg); err != nil {
+				log.Printf("Error decoding 125: %v", err)
+			}
+		case "126":
+			if err := decodeDU1Status(canMsg); err != nil {
+				log.Printf("Error decoding 126: %v", err)
+			}
 		default:
 			// Ignore all other messages
 			return
@@ -67,7 +96,8 @@ func main() {
 
 	log.Printf("CAN Handler started - listening on '%s'", subject)
 	log.Println("Filtering for CAN IDs: 6B0 (Pack Status), 6B1 (High Cell), 6B2 (Low Cell), 6B3 (Temperature), 6B4 (System Control)")
-	log.Println("Decoded pack status, cell voltage, temperature, and system control data will be written to JSON")
+	log.Println("Additional IDs captured: 351 (BmsLimits), 355 (BmsSOC), 356 (BmsStatus1), 35A (BmsErrors), 35B (BmsStatus2), 125 (DU1Feedback), 126 (DU1Status)")
+	log.Println("Decoded data is written to data/ev_data.json and data/main_data.json")
 
 	// Keep the program running
 	select {}

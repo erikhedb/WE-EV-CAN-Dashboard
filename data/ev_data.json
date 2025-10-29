@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-29T20:21:40.699859616+01:00",
+  "timestamp": "2025-10-29T21:29:53.289345+01:00",
   "pack_data": {
     "soc": 835,
     "cell_count": 72,
@@ -8,13 +8,13 @@
   },
   "high_cell": {
     "id": 21,
-    "voltage": 4.0652
+    "voltage": 4.0651
   },
   "low_cell": {
     "id": 70,
-    "voltage": 4.0558
+    "voltage": 4.0557
   },
-  "aux_voltage": 12,
+  "aux_voltage": 12.6,
   "cell_delta": 0.0094,
   "temperature_data": {
     "high_temp": 18,
@@ -28,7 +28,7 @@
       "malfunction_dtc": false,
       "mp_input_1": false,
       "always_on": true,
-      "is_ready": false,
+      "is_ready": true,
       "is_charging": false,
       "mp_input_2": true,
       "mp_input_3": false,
@@ -43,12 +43,12 @@
     "pack_dcl": 2
   },
   "last_update": {
-    "pack_data": "2025-10-29T20:21:40.694775197+01:00",
-    "pack_current": "2025-10-29T20:21:40.699857616+01:00",
-    "high_cell": "2025-10-29T20:21:40.699857616+01:00",
-    "low_cell": "2025-10-29T20:21:40.698732307+01:00",
-    "aux_voltage": "2025-10-29T20:21:40.698732307+01:00",
-    "temperature_data": "2025-10-29T20:21:40.696951519+01:00",
-    "system_control": "2025-10-29T20:21:40.695853247+01:00"
+    "pack_data": "2025-10-29T21:29:53.289054+01:00",
+    "pack_current": "2025-10-29T21:29:53.289345+01:00",
+    "high_cell": "2025-10-29T21:29:53.289345+01:00",
+    "low_cell": "2025-10-29T21:29:53.289285+01:00",
+    "aux_voltage": "2025-10-29T21:29:53.289285+01:00",
+    "temperature_data": "2025-10-29T21:29:53.289204+01:00",
+    "system_control": "2025-10-29T21:29:53.289132+01:00"
   }
 }

@@ -49,17 +49,19 @@ func main() {
 	}
 
 	// Build paths
-	dataPath := filepath.Join(config.Paths.DataFolder, "ev_data.json")
+	evDataPath := filepath.Join(config.Paths.DataFolder, "ev_data.json")
+	mainDataPath := filepath.Join(config.Paths.DataFolder, "main_data.json")
 	staticPath := config.Paths.UIStaticFolder
 
 	log.Printf("Config loaded from: %s", configPath)
-	log.Printf("Data path: %s", dataPath)
+	log.Printf("EV data path: %s", evDataPath)
+	log.Printf("Main data path: %s", mainDataPath)
 	log.Printf("Static path: %s", staticPath)
 	log.Printf("UI port: %d", config.Server.UIPort)
 
 	// Serve ev_data.json as the main API endpoint
 	http.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
-		f, err := os.Open(dataPath)
+		f, err := os.Open(evDataPath)
 		if err != nil {
 			log.Printf("Error opening ev_data.json: %v", err)
 			http.Error(w, "ev_data.json not available", http.StatusInternalServerError)
@@ -69,6 +71,20 @@ func main() {
 
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = io.Copy(w, f) // stream file content as-is
+	})
+
+	// Serve main_data.json for extended telemetry
+	http.HandleFunc("/api/main", func(w http.ResponseWriter, r *http.Request) {
+		f, err := os.Open(mainDataPath)
+		if err != nil {
+			log.Printf("Error opening main_data.json: %v", err)
+			http.Error(w, "main_data.json not available", http.StatusInternalServerError)
+			return
+		}
+		defer f.Close()
+
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.Copy(w, f)
 	})
 
 	// Serve static files (index.html etc.)

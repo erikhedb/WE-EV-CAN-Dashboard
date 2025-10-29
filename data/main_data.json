@@ -1,0 +1,91 @@
+{
+  "timestamp": "2025-10-29T21:29:53.489163+01:00",
+  "bms_limits": {
+    "charge_voltage_limit": 298.8,
+    "charge_current_limit": 1,
+    "discharge_current_limit": 20,
+    "discharge_voltage_limit": 216
+  },
+  "bms_soc": {
+    "state_of_charge": 83,
+    "state_of_health": 100,
+    "state_of_charge_high_def": 83.5
+  },
+  "bms_status_1": {
+    "pack_voltage": 292.5,
+    "pack_current": 0,
+    "pack_temperature": 18
+  },
+  "bms_errors": {
+    "p0a06_chg_limit_enforce_fault": false,
+    "p0a05_input_psu_fault": false,
+    "p0aa6_hv_isolation_fault": false,
+    "p0560_redundant_psu_fault": false,
+    "u0100_external_comms": false,
+    "p0a9c_thermistor_fault": false,
+    "p0a81_fan_monitor_fault": false,
+    "p0a02_weak_pack_fault": false,
+    "p0a0f_cell_asic_fault": false,
+    "p0a0d_high_cell_5v_fault": false,
+    "p0ac0_current_sensor_fault": false,
+    "p0a04_open_wiring_fault": false,
+    "p0afa_low_cell_volt_fault": false,
+    "p0a80_weak_cell_fault": false,
+    "p0a12_cell_balance_off_fault": false,
+    "p0a1f_internal_comms_fault": false,
+    "p0a10_pack_hot_fault": false,
+    "p0a0e_low_cell_fault": false,
+    "p0a0c_high_cell_fault": false,
+    "p0a0b_int_sw_fault": false,
+    "p0a0a_int_heatsink_fault": false,
+    "p0a09_internal_hw_fault": false,
+    "p0a08_chg_safety_relay": false,
+    "p0a07_dischg_limit_enforce_fault": false
+  },
+  "bms_status_2": {
+    "mpo4": false,
+    "mpo3": false,
+    "mpo2": true,
+    "mpo1": false,
+    "charge_interlock": false,
+    "discharge_relay": true,
+    "charge_power": false,
+    "ready_power": true,
+    "isolation_adc_volts": 4.23
+  },
+  "du1_feedback": {
+    "dc_current": 1,
+    "bus_voltage": 0,
+    "throttle_torque_request": 0,
+    "ac_current": 0
+  },
+  "du1_status": {
+    "brake_regen_light_request": true,
+    "error": true,
+    "drive_power_limited": true,
+    "mode": false,
+    "motor_temp": 18,
+    "inverter_temp": 16,
+    "motor_speed": 0,
+    "gear": 2,
+    "op_mode": 0
+  },
+  "message_count": {
+    "bms_limits": 7593,
+    "bms_soc": 7593,
+    "bms_status_1": 7588,
+    "bms_errors": 1564,
+    "bms_status_2": 1569,
+    "du1_feedback": 7810,
+    "du1_status": 7820
+  },
+  "last_update": {
+    "bms_limits": "2025-10-29T21:29:53.489087+01:00",
+    "bms_soc": "2025-10-29T21:29:53.488996+01:00",
+    "bms_status_1": "2025-10-29T21:29:53.489163+01:00",
+    "bms_errors": "2025-10-29T21:29:53.478404+01:00",
+    "bms_status_2": "2025-10-29T21:29:53.474929+01:00",
+    "du1_feedback": "2025-10-29T21:29:53.488701+01:00",
+    "du1_status": "2025-10-29T21:29:53.488887+01:00"
+  }
+}

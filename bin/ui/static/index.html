@@ -14,11 +14,13 @@
   
   <nav>
     <button class="tab active" data-tab="dash">Dashboard</button>
-    <button class="tab" data-tab="raw">Raw JSON</button>
+    <button class="tab" data-tab="mainPanel">BMS &amp; Drive</button>
+    <button class="tab" data-tab="raw">EV JSON</button>
+    <button class="tab" data-tab="mainRaw">Main JSON</button>
   </nav>
 
   <!-- DASHBOARD -->
-  <main id="dash">
+  <main id="dash" class="panel">
     <!-- Pack Data Section -->
     <div class="section">
       <div class="label" style="margin-bottom:10px;">Pack Information</div>
@@ -144,61 +146,241 @@
     </div>
   </main>
 
+  <!-- BMS & DRIVE PANEL -->
+  <main id="mainPanel" class="panel hidden">
+    <div class="section">
+      <div class="label" style="margin-bottom:10px;">BMS Summary</div>
+      <p class="meta">Main Data Last Updated: <strong id="mainLastUpdated">--</strong></p>
+      <div class="kv">
+        <div class="item">
+          <div class="label">Charge Voltage Limit</div>
+          <div class="value mono" id="bmsChargeVoltageLimit">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Charge Current Limit</div>
+          <div class="value mono" id="bmsChargeCurrentLimit">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Discharge Current Limit</div>
+          <div class="value mono" id="bmsDischargeCurrentLimit">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Discharge Voltage Limit</div>
+          <div class="value mono" id="bmsDischargeVoltageLimit">--</div>
+        </div>
+        <div class="item">
+          <div class="label">State of Charge</div>
+          <div class="value mono" id="bmsSoc">--</div>
+        </div>
+        <div class="item">
+          <div class="label">High-Def SOC</div>
+          <div class="value mono" id="bmsSocHighDef">--</div>
+        </div>
+        <div class="item">
+          <div class="label">State of Health</div>
+          <div class="value mono" id="bmsSoh">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Pack Voltage</div>
+          <div class="value mono" id="bmsStatusPackVoltage">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Pack Current</div>
+          <div class="value mono" id="bmsStatusPackCurrent">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Pack Temperature</div>
+          <div class="value mono" id="bmsStatusPackTemp">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Isolation Monitor</div>
+          <div class="value mono" id="bmsIsolation">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Message Counts</div>
+          <div class="value mono" id="bmsMessageCount">--</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="label" style="margin-bottom:10px;">BMS Status Flags</div>
+      <div class="flag-grid">
+        <span class="flag" id="bmsReadyPower"><span class="dot"></span>Ready Power</span>
+        <span class="flag" id="bmsChargePower"><span class="dot"></span>Charge Power</span>
+        <span class="flag" id="bmsDischargeRelayFlag"><span class="dot"></span>Discharge Relay</span>
+        <span class="flag" id="bmsChargeInterlock"><span class="dot"></span>Charge Interlock</span>
+        <span class="flag" id="bmsMPO1"><span class="dot"></span>MPO1</span>
+        <span class="flag" id="bmsMPO2"><span class="dot"></span>MPO2</span>
+        <span class="flag" id="bmsMPO3"><span class="dot"></span>MPO3</span>
+        <span class="flag" id="bmsMPO4"><span class="dot"></span>MPO4</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="label" style="margin-bottom:10px;">Active BMS Errors</div>
+      <ul class="errors-list" id="bmsErrorsList">
+        <li class="placeholder">No active faults</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="label" style="margin-bottom:10px;">Drive Unit Summary</div>
+      <div class="kv">
+        <div class="item">
+          <div class="label">Bus Voltage</div>
+          <div class="value mono" id="duBusVoltage">--</div>
+        </div>
+        <div class="item">
+          <div class="label">DC Current</div>
+          <div class="value mono" id="duDcCurrent">--</div>
+        </div>
+        <div class="item">
+          <div class="label">AC Current</div>
+          <div class="value mono" id="duAcCurrent">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Torque Request</div>
+          <div class="value mono" id="duTorque">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Motor Speed</div>
+          <div class="value mono" id="duMotorSpeed">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Motor Temp</div>
+          <div class="value mono" id="duMotorTemp">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Inverter Temp</div>
+          <div class="value mono" id="duInverterTemp">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Gear</div>
+          <div class="value mono" id="duGear">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Operating Mode</div>
+          <div class="value mono" id="duOpMode">--</div>
+        </div>
+        <div class="item">
+          <div class="label">Message Counts</div>
+          <div class="value mono" id="duMessageCount">--</div>
+        </div>
+      </div>
+
+      <div class="flag-grid">
+        <span class="flag" id="duModeFlag"><span class="dot"></span>Mode (Run)</span>
+        <span class="flag" id="duDriveLimited"><span class="dot"></span>Drive Power Limited</span>
+        <span class="flag" id="duErrorFlag"><span class="dot"></span>Error</span>
+        <span class="flag" id="duBrakeLight"><span class="dot"></span>Brake Regen Light</span>
+      </div>
+    </div>
+  </main>
+
   <!-- RAW JSON -->
-  <main id="raw" class="hidden">
+  <main id="raw" class="panel hidden">
     <div class="section">
       <pre class="mono" id="rawJson">Loading...</pre>
+    </div>
+  </main>
+
+  <!-- MAIN RAW JSON -->
+  <main id="mainRaw" class="panel hidden">
+    <div class="section">
+      <pre class="mono" id="mainRawJson">Loading...</pre>
     </div>
   </main>
 
   <script>
     // Tab switching
     const tabs = document.querySelectorAll('.tab');
-    const dash = document.getElementById('dash');
-    const raw = document.getElementById('raw');
-    
+    const panels = document.querySelectorAll('main.panel');
+
     tabs.forEach(btn => btn.addEventListener('click', () => {
       tabs.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const tab = btn.getAttribute('data-tab');
-      if (tab === 'raw') {
-        dash.classList.add('hidden');
-        raw.classList.remove('hidden');
-      } else {
-        raw.classList.add('hidden');
-        dash.classList.remove('hidden');
-      }
+      const target = btn.dataset.tab;
+      panels.forEach(panel => {
+        panel.classList.toggle('hidden', panel.id !== target);
+      });
     }));
+
+    const bmsErrorLabels = {
+      p0a06_chg_limit_enforce_fault: 'P0A06 Charge Limit Enforce Fault',
+      p0a05_input_psu_fault: 'P0A05 Input PSU Fault',
+      p0aa6_hv_isolation_fault: 'P0AA6 HV Isolation Fault',
+      p0560_redundant_psu_fault: 'P0560 Redundant PSU Fault',
+      u0100_external_comms: 'U0100 External Communications Fault',
+      p0a9c_thermistor_fault: 'P0A9C Thermistor Fault',
+      p0a81_fan_monitor_fault: 'P0A81 Fan Monitor Fault',
+      p0a02_weak_pack_fault: 'P0A02 Weak Pack Fault',
+      p0a0f_cell_asic_fault: 'P0A0F Cell ASIC Fault',
+      p0a0d_high_cell_5v_fault: 'P0A0D High Cell 5V Fault',
+      p0ac0_current_sensor_fault: 'P0AC0 Current Sensor Fault',
+      p0a04_open_wiring_fault: 'P0A04 Open Wiring Fault',
+      p0afa_low_cell_volt_fault: 'P0AFA Low Cell Voltage Fault',
+      p0a80_weak_cell_fault: 'P0A80 Weak Cell Fault',
+      p0a12_cell_balance_off_fault: 'P0A12 Cell Balance Off Fault',
+      p0a1f_internal_comms_fault: 'P0A1F Internal Comms Fault',
+      p0a10_pack_hot_fault: 'P0A10 Pack Hot Fault',
+      p0a0e_low_cell_fault: 'P0A0E Low Cell Fault',
+      p0a0c_high_cell_fault: 'P0A0C High Cell Fault',
+      p0a0b_int_sw_fault: 'P0A0B Internal Switch Fault',
+      p0a0a_int_heatsink_fault: 'P0A0A Internal Heatsink Fault',
+      p0a09_internal_hw_fault: 'P0A09 Internal HW Fault',
+      p0a08_chg_safety_relay: 'P0A08 Charge Safety Relay Fault',
+      p0a07_dischg_limit_enforce_fault: 'P0A07 Discharge Limit Enforce Fault'
+    };
+
+    const gearLabels = { 0: 'Neutral', 1: 'Forward', 15: 'Reverse' };
+    const opModeLabels = { 0: 'Off', 1: 'Run' };
 
     // Data fetching and updating
     async function fetchData() {
       try {
-        const response = await fetch('/api');
-        const data = await response.json();
-        
-        updateDashboard(data);
-        
-        // Update raw JSON display with pretty formatting
-        document.getElementById('rawJson').textContent = JSON.stringify(data, null, 2);
-        
+        const [evResponse, mainResponse] = await Promise.all([
+          fetch('/api'),
+          fetch('/api/main')
+        ]);
+
+        if (!evResponse.ok) {
+          throw new Error('Failed to load ev_data.json');
+        }
+
+        const evData = await evResponse.json();
+        updateDashboard(evData);
+        document.getElementById('rawJson').textContent = JSON.stringify(evData, null, 2);
+
+        if (mainResponse.ok) {
+          const mainData = await mainResponse.json();
+          updateMainPanel(mainData);
+          document.getElementById('mainRawJson').textContent = JSON.stringify(mainData, null, 2);
+        } else {
+          document.getElementById('mainLastUpdated').textContent = '--';
+          document.getElementById('mainRawJson').textContent = 'main_data.json not available';
+          clearMainPanel();
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
         document.getElementById('rawJson').textContent = 'Error loading data: ' + error.message;
+        document.getElementById('mainRawJson').textContent = 'Error loading main data: ' + error.message;
+        clearMainPanel();
       }
     }
 
     function updateDashboard(data) {
       try {
         // Update timestamp
-        document.getElementById('lastUpdated').textContent = 
+        document.getElementById('lastUpdated').textContent =
           data.timestamp ? new Date(data.timestamp).toLocaleString() : '--';
 
         // Pack Data
         if (data.pack_data) {
           const pack = data.pack_data;
-          document.getElementById('soc').textContent = 
+          document.getElementById('soc').textContent =
             pack.soc !== undefined ? `${(pack.soc / 10).toFixed(1)}%` : '--%';
-          document.getElementById('packVoltage').textContent = 
+          document.getElementById('packVoltage').textContent =
             pack.pack_voltage !== undefined ? `${pack.pack_voltage.toFixed(1)} V` : '-- V';
           document.getElementById('packCurrent').textContent =
             pack.pack_current !== undefined ? `${pack.pack_current.toFixed(1)} A` : '-- A';
@@ -206,7 +388,7 @@
 
         // Cell Data
         if (data.high_cell) {
-          document.getElementById('highCell').textContent = 
+          document.getElementById('highCell').textContent =
             `#${data.high_cell.id} / ${data.high_cell.voltage.toFixed(4)} V`;
         }
         if (data.aux_voltage !== undefined) {
@@ -214,7 +396,7 @@
             `${data.aux_voltage.toFixed(1)} V`;
         }
         if (data.low_cell) {
-          document.getElementById('lowCell').textContent = 
+          document.getElementById('lowCell').textContent =
             `#${data.low_cell.id} / ${data.low_cell.voltage.toFixed(4)} V`;
         }
         if (data.pack_data && data.pack_data.cell_count !== undefined) {
@@ -222,27 +404,27 @@
             data.pack_data.cell_count;
         }
         if (data.cell_delta !== undefined) {
-          document.getElementById('cellDelta').textContent = 
+          document.getElementById('cellDelta').textContent =
             `${data.cell_delta.toFixed(4)} V`;
         }
 
         // Temperature Data
         if (data.temperature_data) {
           const temp = data.temperature_data;
-          document.getElementById('highTemp').textContent = 
+          document.getElementById('highTemp').textContent =
             temp.high_temp !== undefined ? `${temp.high_temp}°C` : '--°C';
-          document.getElementById('lowTemp').textContent = 
+          document.getElementById('lowTemp').textContent =
             temp.low_temp !== undefined ? `${temp.low_temp}°C` : '--°C';
         }
 
         // System Control Data
         if (data.system_control) {
           const control = data.system_control;
-          
+
           // Pack current limits
-          document.getElementById('packCCL').textContent = 
+          document.getElementById('packCCL').textContent =
             control.pack_ccl !== undefined ? `${control.pack_ccl.toFixed(1)} A` : '-- A';
-          document.getElementById('packDCL').textContent = 
+          document.getElementById('packDCL').textContent =
             control.pack_dcl !== undefined ? `${control.pack_dcl.toFixed(1)} A` : '-- A';
 
           // Relay states
@@ -271,6 +453,178 @@
       }
     }
 
+    function updateMainPanel(mainData) {
+      if (!mainData) {
+        clearMainPanel();
+        return;
+      }
+
+      document.getElementById('mainLastUpdated').textContent =
+        mainData.timestamp ? new Date(mainData.timestamp).toLocaleString() : '--';
+
+      const limits = mainData.bms_limits || {};
+      setValue('bmsChargeVoltageLimit', limits.charge_voltage_limit, 'V', 1);
+      setValue('bmsChargeCurrentLimit', limits.charge_current_limit, 'A', 1);
+      setValue('bmsDischargeCurrentLimit', limits.discharge_current_limit, 'A', 1);
+      setValue('bmsDischargeVoltageLimit', limits.discharge_voltage_limit, 'V', 1);
+
+      const soc = mainData.bms_soc || {};
+      setText('bmsSoc', formatPercent(soc.state_of_charge));
+      setText('bmsSocHighDef', formatPercent(soc.state_of_charge_high_def));
+      setText('bmsSoh', formatPercent(soc.state_of_health));
+
+      const status1 = mainData.bms_status_1 || {};
+      setValue('bmsStatusPackVoltage', status1.pack_voltage, 'V', 1);
+      setValue('bmsStatusPackCurrent', status1.pack_current, 'A', 1);
+      setValue('bmsStatusPackTemp', status1.pack_temperature, '°C', 1);
+
+      const status2 = mainData.bms_status_2 || {};
+      setValue('bmsIsolation', status2.isolation_adc_volts, 'V', 3);
+      updateFlag('bmsReadyPower', !!status2.ready_power);
+      updateFlag('bmsChargePower', !!status2.charge_power);
+      updateFlag('bmsDischargeRelayFlag', !!status2.discharge_relay);
+      updateFlag('bmsChargeInterlock', !!status2.charge_interlock);
+      updateFlag('bmsMPO1', !!status2.mpo1);
+      updateFlag('bmsMPO2', !!status2.mpo2);
+      updateFlag('bmsMPO3', !!status2.mpo3);
+      updateFlag('bmsMPO4', !!status2.mpo4);
+
+      const counts = mainData.message_count || {};
+      setText('bmsMessageCount', formatBmsCounts(counts));
+
+      const errors = mainData.bms_errors || {};
+      renderBmsErrors(errors);
+
+      const feedback = mainData.du1_feedback || {};
+      setValue('duBusVoltage', feedback.bus_voltage, 'V', 1);
+      setValue('duDcCurrent', feedback.dc_current, 'A', 1);
+      setValue('duAcCurrent', feedback.ac_current, 'A', 1);
+      setValue('duTorque', feedback.throttle_torque_request, 'Nm', 0);
+
+      const duStatus = mainData.du1_status || {};
+      setValue('duMotorSpeed', duStatus.motor_speed, 'RPM', 0);
+      setValue('duMotorTemp', duStatus.motor_temp, '°C', 1);
+      setValue('duInverterTemp', duStatus.inverter_temp, '°C', 1);
+      setText('duGear', formatGear(duStatus.gear));
+      setText('duOpMode', formatOpMode(duStatus.op_mode));
+      updateFlag('duModeFlag', !!duStatus.mode);
+      updateFlag('duDriveLimited', !!duStatus.drive_power_limited);
+      updateFlag('duErrorFlag', !!duStatus.error);
+      updateFlag('duBrakeLight', !!duStatus.brake_regen_light_request);
+
+      setText('duMessageCount', formatDuCounts(counts));
+    }
+
+    function renderBmsErrors(errors) {
+      const list = document.getElementById('bmsErrorsList');
+      if (!list) {
+        return;
+      }
+      list.innerHTML = '';
+      const active = Object.entries(errors).filter(([, value]) => value);
+      if (active.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'No active faults';
+        li.classList.add('placeholder');
+        list.appendChild(li);
+        return;
+      }
+      active.forEach(([key]) => {
+        const li = document.createElement('li');
+        li.textContent = bmsErrorLabels[key] || key;
+        list.appendChild(li);
+      });
+    }
+
+    function clearMainPanel() {
+      [
+        'bmsChargeVoltageLimit',
+        'bmsChargeCurrentLimit',
+        'bmsDischargeCurrentLimit',
+        'bmsDischargeVoltageLimit',
+        'bmsStatusPackVoltage',
+        'bmsStatusPackCurrent',
+        'bmsStatusPackTemp',
+        'bmsIsolation',
+        'duBusVoltage',
+        'duDcCurrent',
+        'duAcCurrent',
+        'duTorque',
+        'duMotorSpeed',
+        'duMotorTemp',
+        'duInverterTemp'
+      ].forEach(id => setValue(id, null));
+
+      ['bmsSoc', 'bmsSocHighDef', 'bmsSoh', 'bmsMessageCount', 'duGear', 'duOpMode', 'duMessageCount']
+        .forEach(id => setText(id, '--'));
+
+      ['bmsReadyPower', 'bmsChargePower', 'bmsDischargeRelayFlag', 'bmsChargeInterlock', 'bmsMPO1', 'bmsMPO2', 'bmsMPO3', 'bmsMPO4', 'duModeFlag', 'duDriveLimited', 'duErrorFlag', 'duBrakeLight']
+        .forEach(id => updateFlag(id, false));
+
+      renderBmsErrors({});
+    }
+
+    function formatPercent(value) {
+      if (value === undefined || value === null || Number.isNaN(value)) {
+        return '--';
+      }
+      return `${Number(value).toFixed(1)}%`;
+    }
+
+    function formatGear(value) {
+      if (value === undefined || value === null || Number.isNaN(value)) {
+        return '--';
+      }
+      return gearLabels[value] ? `${gearLabels[value]} (${value})` : value.toString();
+    }
+
+    function formatOpMode(value) {
+      if (value === undefined || value === null || Number.isNaN(value)) {
+        return '--';
+      }
+      return opModeLabels[value] || value.toString();
+    }
+
+    function formatBmsCounts(counts) {
+      const items = [
+        ['Limits', counts.bms_limits],
+        ['SOC', counts.bms_soc],
+        ['Status1', counts.bms_status_1],
+        ['Errors', counts.bms_errors],
+        ['Status2', counts.bms_status_2]
+      ];
+      return items.map(([label, val]) => `${label}: ${val ?? 0}`).join(' • ');
+    }
+
+    function formatDuCounts(counts) {
+      const items = [
+        ['Feedback', counts.du1_feedback],
+        ['Status', counts.du1_status]
+      ];
+      return items.map(([label, val]) => `${label}: ${val ?? 0}`).join(' • ');
+    }
+
+    function setValue(id, value, unit = '', decimals = 1) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (value === undefined || value === null || (typeof value === 'number' && !Number.isFinite(value))) {
+        el.textContent = '--';
+        return;
+      }
+      if (typeof value === 'number') {
+        const formatted = typeof decimals === 'number' ? value.toFixed(decimals) : value.toString();
+        el.textContent = unit ? `${formatted} ${unit}` : formatted;
+      } else {
+        el.textContent = value;
+      }
+    }
+
+    function setText(id, text) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = text && text !== '' ? text : '--';
+    }
+
     function updateFlag(elementId, isActive) {
       const element = document.getElementById(elementId);
       if (element) {
@@ -284,7 +638,7 @@
 
     // Auto-refresh every 2 seconds
     setInterval(fetchData, 2000);
-    
+
     // Initial load
     fetchData();
   </script>

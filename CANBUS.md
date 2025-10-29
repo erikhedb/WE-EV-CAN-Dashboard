@@ -11,6 +11,29 @@ This document describes the CAN bus messages used in the EV system, primarily fo
 
 ---
 
+## Message Metadata
+
+| CAN ID | Name | Source | Description |
+|--------|------|--------|-------------|
+| `0x036` | Battery Cell Broadcast | Orion BMS 2 | Aggregate cell voltage and balancing status payload broadcast on the standard CAN ID. |
+| `0x076` | Thermistor Broadcast | Orion BMS 2 | Standard thermistor frame with the latest pack temperature readings used by the charger and ECU. |
+| `0x125` | DU1Feedback | Drive Unit | Real-time inverter telemetry: throttle torque request, DC bus current, AC current, and bus voltage. |
+| `0x126` | DU1Status | Drive Unit | Inverter operating state flags plus motor/inverter temperatures, motor speed, gear selection, and operating mode. |
+| `0x127` | DU1Diagnostic | Drive Unit | Diagnostic bit-field indicating whether torque, current, voltage, or temperature limits are constraining the drive unit. |
+| `0x351` | BmsLimits | Orion BMS 2 | Charge/discharge current and voltage limits that the controller should respect for the HV battery. |
+| `0x355` | BmsSOC | Orion BMS 2 | State-of-charge metrics: pack SOC, high-definition SOC, and state-of-health. |
+| `0x356` | BmsStatus1 | Orion BMS 2 | Pack voltage, pack current, and aggregate HV battery temperature. |
+| `0x357` | BMSCCSCommands | Orion BMS 2 | CCS interface commands including AC current limit requests and isolation relay override flag. |
+| `0x35A` | BmsErrors | Orion BMS 2 | Bit-coded diagnostic trouble codes spanning pack isolation, thermistors, current sensors, and relay faults. |
+| `0x35B` | BmsStatus2 | Orion BMS 2 | Relay/contactor status bits along with the isolation monitor reading. |
+| `0x6B0` | Battery Pack Status | Orion BMS 2 | Custom frame with State of Charge, cell count, pack voltage, and checksum. |
+| `0x6B1` | High Cell Information | Orion BMS 2 | Reports highest cell ID, instantaneous pack current (signed), and high cell voltage. |
+| `0x6B2` | Low Cell Information | Orion BMS 2 | Reports lowest cell ID, 12 V auxiliary rail voltage, and low cell voltage. |
+| `0x6B3` | Temperature Information | Orion BMS 2 | Reports highest and lowest temperature sensor readings. |
+| `0x6B4` | System Control Information | Orion BMS 2 | Contains relay state bit-field plus charge/discharge current limits. |
+
+---
+
 ## Orion BMS 2 Messages
 
 ### Standard Broadcast IDs
@@ -125,19 +148,23 @@ The 12V system voltage field reflects the vehicle's auxiliary battery rail rathe
 
 ---
 
-## Zero EV CSS Controller Messages
+## Zero EV CSS Controller Interface (DBC-Derived)
 
-### From Orion BMS 2 to Controller
-The following message IDs are sent from the BMS to the EV Controller:
+The Zero EV DBC maps the Orion BMS broadcast frames that the EV controller consumes:
 
-- `0x351` - Control message 1
-- `0x355` - Control message 2  
-- `0x356` - Control message 3
-- `0x357` - Control message 4
-- `0x35A` - Control message 5
-- `0x35B` - Control message 6
+- `0x351` (`BmsLimits`): Charge/discharge current and voltage ceilings that the inverter should honor.
+- `0x355` (`BmsSOC`): Pack state of charge (coarse and high-definition) plus state of health.
+- `0x356` (`BmsStatus1`): Instantaneous pack voltage, pack current, and weighted HV battery temperature.
+- `0x357` (`BMSCCSCommands`): CCS/AC charging commands including AC current limit request and isolation relay override.
+- `0x35A` (`BmsErrors`): Bit-coded DTC summary covering isolation, sensor, relay, and thermal faults.
+- `0x35B` (`BmsStatus2`): Relay/contactor status bits (MP outputs, charge/discharge relays) and isolation monitor reading.
 
-*Note: Detailed message structure for these IDs is not yet documented.*
+These IDs align with the higher-frequency messages observed in log captures and replace the placeholder “control frame” labels used previously.
+
+### Drive Unit Messages
+- `0x125` (`DU1Feedback`): Drive Unit feedback frame with torque request, DC bus current, AC phase current, and bus voltage.
+- `0x126` (`DU1Status`): Operating state, inverter/motor temperatures, motor speed, gear selection, and drive mode flags.
+- `0x127` (`DU1Diagnostic`): Diagnostic limit flags indicating whether torque, current, voltage, or temperature limits are constraining the drive.
 
 ---
 
@@ -149,11 +176,11 @@ The following message IDs are sent from the BMS to the EV Controller:
 |--------|-------|------|-------------|
 | `036` | 52 | Low | Battery Cell Broadcast |
 | `076` | 262 | High | Thermistor Broadcast |
-| `351` | 252 | High | BMS → Controller |
-| `355` | 252 | High | BMS → Controller |
-| `356` | 252 | High | BMS → Controller |
-| `35A` | 52 | Low | BMS → Controller |
-| `35B` | 52 | Low | BMS → Controller |
+| `351` | 252 | High | BmsLimits |
+| `355` | 252 | High | BmsSOC |
+| `356` | 252 | High | BmsStatus1 |
+| `35A` | 52 | Low | BmsErrors |
+| `35B` | 52 | Low | BmsStatus2 |
 | `374-381` | 37-38 | Low | Unknown source |
 | `6B0-6B4` | 26 | Low | Custom BMS frames |
 

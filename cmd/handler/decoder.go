@@ -1,11 +1,36 @@
 package main
 
 import (
+	"encoding/binary"
+	"encoding/hex"
 	"fmt"
 	"log"
 	"strconv"
 	"time"
 )
+
+func decodeHexPayload(data string, expectedLen int) ([]byte, error) {
+	bytes, err := hex.DecodeString(data)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode hex payload: %w", err)
+	}
+	if expectedLen > 0 && len(bytes) != expectedLen {
+		return nil, fmt.Errorf("invalid data length: expected %d bytes, got %d", expectedLen, len(bytes))
+	}
+	return bytes, nil
+}
+
+func readUint16LE(b []byte, offset int) (uint16, error) {
+	if offset+2 > len(b) {
+		return 0, fmt.Errorf("offset %d out of range for %d byte slice", offset, len(b))
+	}
+	return binary.LittleEndian.Uint16(b[offset : offset+2]), nil
+}
+
+func readInt16LE(b []byte, offset int) (int16, error) {
+	val, err := readUint16LE(b, offset)
+	return int16(val), err
+}
 
 // decode6B1 handles High Cell ID, Pack Current, and High Cell Voltage
 // 0x6B1 - 0015 FF92 9BF3 00ED
@@ -261,5 +286,256 @@ func decode6B0(msg CANMessage) error {
 		log.Printf("⚠️  Failed to write JSON: %v", err)
 	}
 
+	return nil
+}
+
+// decodeBmsLimits handles CAN ID 0x351 (BmsLimits)
+func decodeBmsLimits(msg CANMessage) error {
+	payload, err := decodeHexPayload(msg.Data, 8)
+	if err != nil {
+		return err
+	}
+
+	cv, err := readUint16LE(payload, 0)
+	if err != nil {
+		return err
+	}
+	cc, err := readUint16LE(payload, 2)
+	if err != nil {
+		return err
+	}
+	dc, err := readUint16LE(payload, 4)
+	if err != nil {
+		return err
+	}
+	dv, err := readUint16LE(payload, 6)
+	if err != nil {
+		return err
+	}
+
+	mainData.BmsLimits.ChargeVoltageLimit = float64(cv) / 10.0
+	mainData.BmsLimits.ChargeCurrentLimit = float64(cc) / 10.0
+	mainData.BmsLimits.DischargeCurrentLimit = float64(dc) / 10.0
+	mainData.BmsLimits.DischargeVoltageLimit = float64(dv) / 10.0
+	mainData.LastUpdate.BmsLimits = time.Now().Format(time.RFC3339Nano)
+	mainData.MessageCount.BmsLimits++
+
+	if err := writeMainDataFile(); err != nil {
+		log.Printf("⚠️  Failed to write main data: %v", err)
+	}
+	return nil
+}
+
+// decodeBmsSOC handles CAN ID 0x355 (BmsSOC)
+func decodeBmsSOC(msg CANMessage) error {
+	payload, err := decodeHexPayload(msg.Data, 8)
+	if err != nil {
+		return err
+	}
+
+	socRaw, err := readUint16LE(payload, 0)
+	if err != nil {
+		return err
+	}
+	sohRaw, err := readUint16LE(payload, 2)
+	if err != nil {
+		return err
+	}
+	socHighRaw, err := readUint16LE(payload, 4)
+	if err != nil {
+		return err
+	}
+
+	mainData.BmsSOC.StateOfCharge = float64(socRaw)
+	mainData.BmsSOC.StateOfHealth = float64(sohRaw)
+	mainData.BmsSOC.StateOfChargeHighDef = float64(socHighRaw) / 10.0
+	mainData.LastUpdate.BmsSOC = time.Now().Format(time.RFC3339Nano)
+	mainData.MessageCount.BmsSOC++
+
+	if err := writeMainDataFile(); err != nil {
+		log.Printf("⚠️  Failed to write main data: %v", err)
+	}
+	return nil
+}
+
+// decodeBmsStatus1 handles CAN ID 0x356 (BmsStatus1)
+func decodeBmsStatus1(msg CANMessage) error {
+	payload, err := decodeHexPayload(msg.Data, 6)
+	if err != nil {
+		return err
+	}
+
+	packVoltRaw, err := readUint16LE(payload, 0)
+	if err != nil {
+		return err
+	}
+	packCurrentRaw, err := readInt16LE(payload, 2)
+	if err != nil {
+		return err
+	}
+	packTempRaw, err := readInt16LE(payload, 4)
+	if err != nil {
+		return err
+	}
+
+	mainData.BmsStatus1.PackVoltage = float64(packVoltRaw) / 10.0
+	mainData.BmsStatus1.PackCurrent = float64(packCurrentRaw) / 10.0
+	mainData.BmsStatus1.PackTemperature = float64(packTempRaw) / 10.0
+	mainData.LastUpdate.BmsStatus1 = time.Now().Format(time.RFC3339Nano)
+	mainData.MessageCount.BmsStatus1++
+
+	if err := writeMainDataFile(); err != nil {
+		log.Printf("⚠️  Failed to write main data: %v", err)
+	}
+	return nil
+}
+
+// decodeBmsErrors handles CAN ID 0x35A (BmsErrors)
+func decodeBmsErrors(msg CANMessage) error {
+	payload, err := decodeHexPayload(msg.Data, 4)
+	if err != nil {
+		return err
+	}
+
+	raw := binary.LittleEndian.Uint32(payload)
+
+	mainData.BmsErrors.P0A06ChgLimitEnforceFault = (raw>>31)&1 == 1
+	mainData.BmsErrors.P0A05InputPSUFault = (raw>>30)&1 == 1
+	mainData.BmsErrors.P0AA6HVIsolationFault = (raw>>29)&1 == 1
+	mainData.BmsErrors.P0560RedundantPSUFault = (raw>>28)&1 == 1
+	mainData.BmsErrors.U0100ExternalComms = (raw>>27)&1 == 1
+	mainData.BmsErrors.P0A9CThermistorFault = (raw>>26)&1 == 1
+	mainData.BmsErrors.P0A81FanMonitorFault = (raw>>25)&1 == 1
+	mainData.BmsErrors.P0A02WeakPackFault = (raw>>24)&1 == 1
+	mainData.BmsErrors.P0A0FCellASICFault = (raw>>23)&1 == 1
+	mainData.BmsErrors.P0A0DHighCell5VFault = (raw>>22)&1 == 1
+	mainData.BmsErrors.P0AC0CurrentSensorFault = (raw>>21)&1 == 1
+	mainData.BmsErrors.P0A04OpenWiringFault = (raw>>20)&1 == 1
+	mainData.BmsErrors.P0AFALowCellVoltFault = (raw>>19)&1 == 1
+	mainData.BmsErrors.P0A80WeakCellFault = (raw>>18)&1 == 1
+	mainData.BmsErrors.P0A12CellBalanceOffFault = (raw>>17)&1 == 1
+	mainData.BmsErrors.P0A1FInternalCommsFault = (raw>>16)&1 == 1
+	mainData.BmsErrors.P0A10PackHotFault = (raw>>7)&1 == 1
+	mainData.BmsErrors.P0A0ELowCellFault = (raw>>6)&1 == 1
+	mainData.BmsErrors.P0A0CHighCellFault = (raw>>5)&1 == 1
+	mainData.BmsErrors.P0A0BIntSWFault = (raw>>4)&1 == 1
+	mainData.BmsErrors.P0A0AIntHeatsinkFault = (raw>>3)&1 == 1
+	mainData.BmsErrors.P0A09InternalHWFault = (raw>>2)&1 == 1
+	mainData.BmsErrors.P0A08ChgSafetyRelay = (raw>>1)&1 == 1
+	mainData.BmsErrors.P0A07DischgLimitEnforce = raw&1 == 1
+	mainData.LastUpdate.BmsErrors = time.Now().Format(time.RFC3339Nano)
+	mainData.MessageCount.BmsErrors++
+
+	if err := writeMainDataFile(); err != nil {
+		log.Printf("⚠️  Failed to write main data: %v", err)
+	}
+	return nil
+}
+
+// decodeBmsStatus2 handles CAN ID 0x35B (BmsStatus2)
+func decodeBmsStatus2(msg CANMessage) error {
+	payload, err := decodeHexPayload(msg.Data, 4)
+	if err != nil {
+		return err
+	}
+
+	raw := binary.LittleEndian.Uint32(payload)
+	isoRaw := raw & 0xFFFF
+
+	mainData.BmsStatus2.IsolationADC = float64(isoRaw) * 0.001
+	mainData.BmsStatus2.ReadyPower = (raw>>16)&1 == 1
+	mainData.BmsStatus2.ChargePower = (raw>>17)&1 == 1
+	mainData.BmsStatus2.DischargeRelay = (raw>>18)&1 == 1
+	mainData.BmsStatus2.ChargeInterlock = (raw>>19)&1 == 1
+	mainData.BmsStatus2.MPO1 = (raw>>20)&1 == 1
+	mainData.BmsStatus2.MPO2 = (raw>>21)&1 == 1
+	mainData.BmsStatus2.MPO3 = (raw>>22)&1 == 1
+	mainData.BmsStatus2.MPO4 = (raw>>23)&1 == 1
+	mainData.LastUpdate.BmsStatus2 = time.Now().Format(time.RFC3339Nano)
+	mainData.MessageCount.BmsStatus2++
+
+	if err := writeMainDataFile(); err != nil {
+		log.Printf("⚠️  Failed to write main data: %v", err)
+	}
+	return nil
+}
+
+// decodeDU1Feedback handles CAN ID 0x125 (DU1Feedback)
+func decodeDU1Feedback(msg CANMessage) error {
+	payload, err := decodeHexPayload(msg.Data, 8)
+	if err != nil {
+		return err
+	}
+
+	dcRaw, err := readInt16LE(payload, 0)
+	if err != nil {
+		return err
+	}
+	voltageRaw, err := readUint16LE(payload, 2)
+	if err != nil {
+		return err
+	}
+	torqueRaw, err := readInt16LE(payload, 4)
+	if err != nil {
+		return err
+	}
+	acRaw, err := readInt16LE(payload, 6)
+	if err != nil {
+		return err
+	}
+
+	mainData.DU1Feedback.DCCurrent = float64(dcRaw) / 10.0
+	mainData.DU1Feedback.BusVoltage = float64(voltageRaw) / 10.0
+	mainData.DU1Feedback.ThrottleTorqueRequest = float64(torqueRaw)
+	mainData.DU1Feedback.ACCurrent = float64(acRaw) / 10.0
+	mainData.LastUpdate.DU1Feedback = time.Now().Format(time.RFC3339Nano)
+	mainData.MessageCount.DU1Feedback++
+
+	if err := writeMainDataFile(); err != nil {
+		log.Printf("⚠️  Failed to write main data: %v", err)
+	}
+	return nil
+}
+
+// decodeDU1Status handles CAN ID 0x126 (DU1Status)
+func decodeDU1Status(msg CANMessage) error {
+	payload, err := decodeHexPayload(msg.Data, 8)
+	if err != nil {
+		return err
+	}
+
+	// Lower nibble of byte 0 holds the op mode.
+	mainData.DU1Status.OpMode = payload[0] & 0x0F
+
+	// Lower nibble of byte 1 holds gear selection.
+	mainData.DU1Status.Gear = payload[1] & 0x0F
+
+	mainData.DU1Status.Mode = (payload[1] & 0x10) != 0
+	mainData.DU1Status.DrivePowerLimited = (payload[1] & 0x20) != 0
+	mainData.DU1Status.Error = (payload[1] & 0x40) != 0
+	mainData.DU1Status.BrakeRegenLightRequest = (payload[1] & 0x80) != 0
+
+	motorSpeedRaw, err := readInt16LE(payload, 2)
+	if err != nil {
+		return err
+	}
+	inverterTempRaw, err := readInt16LE(payload, 4)
+	if err != nil {
+		return err
+	}
+	motorTempRaw, err := readInt16LE(payload, 6)
+	if err != nil {
+		return err
+	}
+
+	mainData.DU1Status.MotorSpeed = float64(motorSpeedRaw)
+	mainData.DU1Status.InverterTemp = float64(inverterTempRaw)
+	mainData.DU1Status.MotorTemp = float64(motorTempRaw)
+	mainData.LastUpdate.DU1Status = time.Now().Format(time.RFC3339Nano)
+	mainData.MessageCount.DU1Status++
+
+	if err := writeMainDataFile(); err != nil {
+		log.Printf("⚠️  Failed to write main data: %v", err)
+	}
 	return nil
 }
