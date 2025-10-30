@@ -136,6 +136,8 @@ logs:
   service_log: logs/reader_service.log
 ```
 
+When the services are installed via `make install`, the working directory is `/opt/wecan`, so these relative paths resolve to `/opt/wecan/logs/...`.
+
 ---
 
 ## 📜 License
@@ -147,32 +149,22 @@ MIT License
 ## CAN Bus System Services Setup
 
 ### File Locations
-- **Reader executable**: `<repo>/bin/reader`
-- **Handler executable**: `<repo>/bin/handler`
-- **UI executable**: `<repo>/bin/ui/ui`
-- **Log file**: `<repo>/logs/canbus.json` (when `-l` flag is used)
+- **Reader executable**: `/opt/wecan/bin/reader`
+- **Handler executable**: `/opt/wecan/bin/handler`
+- **UI executable**: `/opt/wecan/bin/ui/ui`
+- **Service log**: `/opt/wecan/logs/reader_service.log`
+- **CAN capture log (via `-l`)**: `/opt/wecan/logs/canbus.json`
+- **Telemetry JSON data**: `/opt/wecan/data/*.json`
 - **Reader service**: `/etc/systemd/system/canbus-reader.service`
 - **Handler service**: `/etc/systemd/system/canbus-handler.service`
 - **UI service**: `/etc/systemd/system/canbus-ui.service`
-- **Configuration**: `<repo>/config.yaml`
+- **Configuration**: `/opt/wecan/config.yaml`
 
 ### Build and Install Services
 ```bash
-# Build all binaries (outputs to bin/)
-make build
-
-# Install systemd services
-sudo cp canbus-reader.service /etc/systemd/system/
-sudo cp canbus-handler.service /etc/systemd/system/
-sudo cp canbus-ui.service /etc/systemd/system/
-sudo systemctl daemon-reload
-
-# Enable and start all services
-sudo systemctl enable canbus-reader canbus-handler canbus-ui
-sudo systemctl start canbus-reader canbus-handler canbus-ui
+# Build, install to /opt/wecan, copy config/data, and restart services
+sudo make install
 ```
-
-The unit files expect the binaries to remain inside the repository `bin/` directory. If you relocate them, update `ExecStart` in each service file accordingly.
 
 ### Service Management
 ```bash
