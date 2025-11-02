@@ -5,7 +5,7 @@
 # Core binaries to build
 CORE_BINARIES = reader handler replay
 # Tool binaries
-TOOL_BINARIES = tools/raw-convert tools/raw-analysis
+TOOL_BINARIES = tools/raw-convert tools/raw-analysis tools/log-analysis
 # UI binary (special handling)
 UI_BINARY = ui
 
@@ -218,6 +218,9 @@ raw-convert: bin/
 
 raw-analysis: bin/
 	go build -o bin/raw-analysis ./cmd/tools/raw-analysis
+
+log-analysis: bin/
+	go build -o bin/log-analysis ./cmd/tools/log-analysis
 
 ui: build-ui
 

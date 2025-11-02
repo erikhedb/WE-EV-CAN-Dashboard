@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-29T21:29:53.489163+01:00",
+  "timestamp": "2025-11-02T21:03:43.436868+01:00",
   "bms_limits": {
     "charge_voltage_limit": 298.8,
     "charge_current_limit": 1,
@@ -14,7 +14,7 @@
   "bms_status_1": {
     "pack_voltage": 292.5,
     "pack_current": 0,
-    "pack_temperature": 18
+    "pack_temperature": 17
   },
   "bms_errors": {
     "p0a06_chg_limit_enforce_fault": false,
@@ -45,47 +45,49 @@
   "bms_status_2": {
     "mpo4": false,
     "mpo3": false,
-    "mpo2": true,
+    "mpo2": false,
     "mpo1": false,
     "charge_interlock": false,
     "discharge_relay": true,
     "charge_power": false,
     "ready_power": true,
-    "isolation_adc_volts": 4.23
+    "isolation_adc_volts": 2.41
   },
   "du1_feedback": {
     "dc_current": 1,
-    "bus_voltage": 0,
+    "bus_voltage": 293,
     "throttle_torque_request": 0,
     "ac_current": 0
   },
   "du1_status": {
     "brake_regen_light_request": true,
     "error": true,
-    "drive_power_limited": true,
+    "drive_power_limited": false,
     "mode": false,
-    "motor_temp": 18,
+    "motor_temp": 19,
     "inverter_temp": 16,
     "motor_speed": 0,
     "gear": 2,
     "op_mode": 0
   },
   "message_count": {
-    "bms_limits": 7593,
-    "bms_soc": 7593,
-    "bms_status_1": 7588,
-    "bms_errors": 1564,
-    "bms_status_2": 1569,
-    "du1_feedback": 7810,
-    "du1_status": 7820
+    "bms_limits": 141711,
+    "bms_soc": 141711,
+    "bms_status_1": 141711,
+    "bms_errors": 29197,
+    "bms_status_2": 29197,
+    "du1_feedback": 137083,
+    "du1_status": 137083
   },
   "last_update": {
-    "bms_limits": "2025-10-29T21:29:53.489087+01:00",
-    "bms_soc": "2025-10-29T21:29:53.488996+01:00",
-    "bms_status_1": "2025-10-29T21:29:53.489163+01:00",
-    "bms_errors": "2025-10-29T21:29:53.478404+01:00",
-    "bms_status_2": "2025-10-29T21:29:53.474929+01:00",
-    "du1_feedback": "2025-10-29T21:29:53.488701+01:00",
-    "du1_status": "2025-10-29T21:29:53.488887+01:00"
+    "bms_limits": "2025-11-02T21:03:43.423663+01:00",
+    "bms_soc": "2025-11-02T21:03:43.42394+01:00",
+    "bms_status_1": "2025-11-02T21:03:43.427273+01:00",
+    "bms_errors": "2025-11-02T21:03:43.39694+01:00",
+    "bms_status_2": "2025-11-02T21:03:43.397113+01:00",
+    "du1_feedback": "2025-11-02T21:03:43.436429+01:00",
+    "du1_status": "2025-11-02T21:03:43.436865+01:00"
+  }
+}
   }
 }

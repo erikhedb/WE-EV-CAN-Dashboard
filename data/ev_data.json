@@ -1,23 +1,23 @@
 {
-  "timestamp": "2025-10-29T21:29:53.289345+01:00",
+  "timestamp": "2025-11-02T21:03:43.410159+01:00",
   "pack_data": {
     "soc": 835,
     "cell_count": 72,
-    "pack_voltage": 292.58,
+    "pack_voltage": 292.56,
     "pack_current": 0
   },
   "high_cell": {
     "id": 21,
-    "voltage": 4.0651
+    "voltage": 4.065
   },
   "low_cell": {
     "id": 70,
-    "voltage": 4.0557
+    "voltage": 4.0554
   },
-  "aux_voltage": 12.6,
-  "cell_delta": 0.0094,
+  "aux_voltage": 11.5,
+  "cell_delta": 0.0096,
   "temperature_data": {
-    "high_temp": 18,
+    "high_temp": 17,
     "low_temp": 15
   },
   "system_control": {
@@ -33,7 +33,7 @@
       "mp_input_2": true,
       "mp_input_3": false,
       "reserved": false,
-      "mp_output_2": true,
+      "mp_output_2": false,
       "mp_output_3": false,
       "mp_output_4": false,
       "mp_enable": false,
@@ -43,12 +43,12 @@
     "pack_dcl": 2
   },
   "last_update": {
-    "pack_data": "2025-10-29T21:29:53.289054+01:00",
-    "pack_current": "2025-10-29T21:29:53.289345+01:00",
-    "high_cell": "2025-10-29T21:29:53.289345+01:00",
-    "low_cell": "2025-10-29T21:29:53.289285+01:00",
-    "aux_voltage": "2025-10-29T21:29:53.289285+01:00",
-    "temperature_data": "2025-10-29T21:29:53.289204+01:00",
-    "system_control": "2025-10-29T21:29:53.289132+01:00"
+    "pack_data": "2025-11-02T21:03:43.409407+01:00",
+    "pack_current": "2025-11-02T21:03:43.410159+01:00",
+    "high_cell": "2025-11-02T21:03:43.410159+01:00",
+    "low_cell": "2025-11-02T21:03:43.410097+01:00",
+    "aux_voltage": "2025-11-02T21:03:43.410097+01:00",
+    "temperature_data": "2025-11-02T21:03:43.410044+01:00",
+    "system_control": "2025-11-02T21:03:43.409914+01:00"
   }
 }
