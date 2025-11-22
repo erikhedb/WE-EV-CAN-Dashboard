@@ -1,36 +1,36 @@
 {
-  "timestamp": "2025-11-02T21:03:43.410159+01:00",
+  "timestamp": "2025-11-20T22:19:52.970575+01:00",
   "pack_data": {
-    "soc": 835,
-    "cell_count": 72,
-    "pack_voltage": 292.56,
-    "pack_current": 0
+    "soc": 0,
+    "cell_count": 0,
+    "pack_voltage": 0,
+    "pack_current": 1
   },
   "high_cell": {
-    "id": 21,
-    "voltage": 4.065
+    "id": 104,
+    "voltage": 0.4108
   },
   "low_cell": {
-    "id": 70,
-    "voltage": 4.0554
+    "id": 0,
+    "voltage": 0
   },
-  "aux_voltage": 11.5,
-  "cell_delta": 0.0096,
+  "aux_voltage": 0,
+  "cell_delta": 0.4108,
   "temperature_data": {
-    "high_temp": 17,
-    "low_temp": 15
+    "high_temp": 0,
+    "low_temp": 0
   },
   "system_control": {
     "relay_state": {
-      "discharge_relay": true,
-      "charge_relay": true,
+      "discharge_relay": false,
+      "charge_relay": false,
       "charger_safety": false,
       "malfunction_dtc": false,
       "mp_input_1": false,
-      "always_on": true,
-      "is_ready": true,
+      "always_on": false,
+      "is_ready": false,
       "is_charging": false,
-      "mp_input_2": true,
+      "mp_input_2": false,
       "mp_input_3": false,
       "reserved": false,
       "mp_output_2": false,
@@ -39,16 +39,16 @@
       "mp_enable": false,
       "mp_output_1": false
     },
-    "pack_ccl": 0.1,
-    "pack_dcl": 2
+    "pack_ccl": 0,
+    "pack_dcl": 0
   },
   "last_update": {
-    "pack_data": "2025-11-02T21:03:43.409407+01:00",
-    "pack_current": "2025-11-02T21:03:43.410159+01:00",
-    "high_cell": "2025-11-02T21:03:43.410159+01:00",
-    "low_cell": "2025-11-02T21:03:43.410097+01:00",
-    "aux_voltage": "2025-11-02T21:03:43.410097+01:00",
-    "temperature_data": "2025-11-02T21:03:43.410044+01:00",
-    "system_control": "2025-11-02T21:03:43.409914+01:00"
+    "pack_data": "",
+    "pack_current": "2025-11-20T22:19:52.970574+01:00",
+    "high_cell": "2025-11-20T22:19:52.970574+01:00",
+    "low_cell": "",
+    "aux_voltage": "",
+    "temperature_data": "",
+    "system_control": ""
   }
 }

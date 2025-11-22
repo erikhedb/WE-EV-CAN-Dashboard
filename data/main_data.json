@@ -1,20 +1,20 @@
 {
-  "timestamp": "2025-11-02T21:03:43.436868+01:00",
+  "timestamp": "2025-11-20T22:19:52.971036+01:00",
   "bms_limits": {
     "charge_voltage_limit": 298.8,
-    "charge_current_limit": 1,
-    "discharge_current_limit": 20,
-    "discharge_voltage_limit": 216
+    "charge_current_limit": 10,
+    "discharge_current_limit": 104,
+    "discharge_voltage_limit": 230.4
   },
   "bms_soc": {
-    "state_of_charge": 83,
+    "state_of_charge": 95,
     "state_of_health": 100,
-    "state_of_charge_high_def": 83.5
+    "state_of_charge_high_def": 95
   },
   "bms_status_1": {
-    "pack_voltage": 292.5,
+    "pack_voltage": 292.6,
     "pack_current": 0,
-    "pack_temperature": 17
+    "pack_temperature": 16
   },
   "bms_errors": {
     "p0a06_chg_limit_enforce_fault": false,
@@ -51,7 +51,7 @@
     "discharge_relay": true,
     "charge_power": false,
     "ready_power": true,
-    "isolation_adc_volts": 2.41
+    "isolation_adc_volts": 4.2540000000000004
   },
   "du1_feedback": {
     "dc_current": 1,
@@ -64,30 +64,28 @@
     "error": true,
     "drive_power_limited": false,
     "mode": false,
-    "motor_temp": 19,
-    "inverter_temp": 16,
+    "motor_temp": 18,
+    "inverter_temp": 14,
     "motor_speed": 0,
     "gear": 2,
     "op_mode": 0
   },
   "message_count": {
-    "bms_limits": 141711,
-    "bms_soc": 141711,
-    "bms_status_1": 141711,
-    "bms_errors": 29197,
-    "bms_status_2": 29197,
-    "du1_feedback": 137083,
-    "du1_status": 137083
+    "bms_limits": 1462780,
+    "bms_soc": 1462780,
+    "bms_status_1": 1462780,
+    "bms_errors": 300088,
+    "bms_status_2": 300088,
+    "du1_feedback": 1436927,
+    "du1_status": 1436927
   },
   "last_update": {
-    "bms_limits": "2025-11-02T21:03:43.423663+01:00",
-    "bms_soc": "2025-11-02T21:03:43.42394+01:00",
-    "bms_status_1": "2025-11-02T21:03:43.427273+01:00",
-    "bms_errors": "2025-11-02T21:03:43.39694+01:00",
-    "bms_status_2": "2025-11-02T21:03:43.397113+01:00",
-    "du1_feedback": "2025-11-02T21:03:43.436429+01:00",
-    "du1_status": "2025-11-02T21:03:43.436865+01:00"
-  }
-}
+    "bms_limits": "2025-11-20T22:19:52.971035+01:00",
+    "bms_soc": "2025-11-20T22:19:52.970942+01:00",
+    "bms_status_1": "2025-11-20T22:19:52.970777+01:00",
+    "bms_errors": "2025-11-20T22:19:52.734766+01:00",
+    "bms_status_2": "2025-11-20T22:19:52.734502+01:00",
+    "du1_feedback": "2025-11-20T22:18:34.540093+01:00",
+    "du1_status": "2025-11-20T22:18:34.540174+01:00"
   }
 }

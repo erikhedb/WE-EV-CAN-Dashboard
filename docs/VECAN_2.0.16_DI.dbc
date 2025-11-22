@@ -1,0 +1,806 @@
+VERSION ""
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: Vector_XXX_ Vector_XXX
+VAL_TABLE_ RD_stoppingMode 2 "HOLD" 1 "CREEP" 0 "STANDARD" ;
+
+
+BO_ 669 CP_dcChargeStatus: 4 Vector__XXX
+ SG_ CP_evseOutputDcCurrent : 1|15@1- (0.125,0) [0|0] "A"  Vector_XXX_
+ SG_ CP_evseOutputDcCurrentStale : 29|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_evseOutputDcVoltage : 16|13@1+ (0.0732,0) [0|0] "V"  Vector_XXX_
+
+BO_ 82 RD_Settings02: 8 Vector__XXX
+ SG_ SOFTWARE_VERSION_MAJOR : 5|3@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ SOFTWARE_VERSION_MINOR : 0|5@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ SOFTWARE_BUILD_DATE_EPOCH_S : 15|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DEVICE_STATE_BITS : 51|12@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DIF_heatsinkT : 40|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX
+ SG_ HARDWARE_REVISION : 52|4@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 83 RD_Settings01: 8 Vector__XXX
+ SG_ RD_stoppingMode : 14|2@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ RD_driveMode : 26|2@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ RD_displayUnit : 5|1@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ RD_chargeCurrentLimit : 8|6@1+ (1,0) [0|0] "A" Vector__XXX
+ SG_ RD_chargeTerminationPct : 16|10@1+ (0.1,0) [0|0] "%" Vector__XXX
+ SG_ RD_regenTorqueMax : 0|5@1+ (5,0) [0|0] "%" Vector__XXX
+ SG_ RD_speedLimit : 28|12@1+ (0.1,25) [0|0] "kph" Vector__XXX
+ SG_ RD_brakePressed : 7|1@1+ (1,0) [0|0] ""  Vector_XXX
+ SG_ DIR_heatsinkT : 40|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX
+ SG_ RD_lvVoltageTarget : 48|11@1+ (0.01,0) [0|0] "V"  Vector_XXX
+ SG_ RD_controllerType : 59|5@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ RD_pedalMap : 6|1@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 84 Control_battery_for_control: 8 Vector__XXX
+ SG_ Battery_number : 7|8@0+ (1,0) [0|8] "" Vector__XXX
+ SG_ Battery_mode : 16|8@1+ (1,0) [0|2] "" Vector__XXX
+ SG_ Term_charge_pourcent : 24|10@1+ (0.1,0) [0|102.3] "" Vector__XXX
+ SG_ Charge_current : 47|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ Pcs_12V_target : 48|8@1+ (0.1,0) [10|16] "V" Vector__XXX
+
+BO_ 100 PRND_command_for_control: 8 Vector__XXX
+ SG_ MaxRegenPower : 32|8@1+ (2,0) [0|0] "kW" Vector__XXX
+ SG_ MaxDischargePower : 24|8@1+ (2,0) [0|0] "kW" Vector__XXX
+ SG_ PRND_command : 7|8@0+ (1,0) [0|8] "" Vector__XXX
+ SG_ Counter_0_to_15 : 51|4@0+ (1,0) [0|15] "" Vector__XXX
+ SG_ Checksum : 63|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ AWD_RWD : 9|2@0+ (1,0) [0|2] "" Vector__XXX
+ SG_ Pedal : 16|1@0+ (1,0) [0|1] "" Vector__XXX
+ SG_ Regen_torque_max : 47|8@0+ (1,0) [0|255] "%" Vector__XXX
+ SG_ Stopping_mode : 22|3@0+ (1,0) [0|2] "" Vector__XXX
+
+BO_ 800 BMS_alertMatrix: 8 Vector__XXX
+ SG_ BMS_matrixIndex M : 0|4@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a001_Pack_Config_Mismatch m0 : 4|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a002_Pack_Performance_Config m0 : 5|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a003_SW_Pack_Birth_Date_Miss m0 : 6|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a004_SW_Incomplete_Hot_Seal_ m0 : 7|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a007_SW_Slowed_Chg_Batt_Cold m0 : 10|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a016_Pack_Module_Id_Mismatch m0 : 19|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a017_SW_Brick_OV m0 : 20|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a018_SW_Brick_UV m0 : 21|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a019_SW_Module_OT m0 : 22|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a020_SW_Brick_Instability m0 : 23|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a021_SW_Dr_Limits_Regulation m0 : 24|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a022_SW_Over_Current m0 : 25|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a023_SW_Stack_OV m0 : 26|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a024_SW_Islanded_Brick m0 : 27|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a025_SW_PwrBalance_Anomaly m0 : 28|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a026_SW_HFCurrent_Anomaly m0 : 29|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a027_SW_Repeated_Isolation_F m0 : 30|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a029_dSoc_Limiting m0 : 32|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a030_Impedance_Deviation m0 : 33|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a034_SW_Passive_Isolation m0 : 37|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a035_SW_Isolation m0 : 38|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a036_SW_HvpHvilFault m0 : 39|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a037_SW_Flood_Port_Open m0 : 40|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a039_SW_DC_Link_Over_Voltage m0 : 42|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a040_SW_Watch_Dog_HW_Trigger m0 : 43|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a041_SW_Destructive_Reset_So m0 : 44|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a042_SW_MPU_Error m0 : 45|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a043_SW_Watch_Dog_Reset m0 : 46|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a044_SW_Assertion m0 : 47|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a045_SW_Exception m0 : 48|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a046_SW_Task_Stack_Usage m0 : 49|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a047_SW_Task_Stack_Overflow m0 : 50|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a049_SW_Thermal_Event m0 : 52|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a050_SW_Brick_Voltage_MIA m0 : 53|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a051_SW_HVC_Vref_Bad m0 : 54|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a052_SW_PCS_MIA m0 : 55|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a054_SW_Ver_Supply_Fault m0 : 57|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a055_SW_HvChain_Model_Fault m0 : 58|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a056_SW_Standby_Supply_Fault m0 : 59|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a057_SW_Bandolier_Model_Warn m0 : 60|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a058_SW_Bandolier_Model_Rese m0 : 61|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a059_SW_Pack_Voltage_Sensing m0 : 62|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a060_SW_Leakage_Test_Failure m0 : 63|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a061_SW_BrickV_Change m1 : 4|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a062_SW_BrickV_Imbalance m1 : 5|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a063_SW_ChargePort_Fault m1 : 6|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a064_SW_SOC_Imbalance m1 : 7|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a065_SW_CAC_Imbalance m1 : 8|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a066_SOC_Imbalance_Warning m1 : 9|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a067_CAC_Imbalance_Limiting m1 : 10|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a068_CAC_Imbalance_Limp m1 : 11|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a069_SW_Low_Power m1 : 12|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a070_BrickV_Imbalance_Limiti m1 : 13|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a071_SW_SM_TransCon_Not_Met m1 : 14|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a072_Module_Brick_Split m1 : 15|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a074_Max_Charge_Level_Reduce m1 : 17|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a075_SW_Chg_Disable_Failure m1 : 18|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a076_SW_Dch_While_Charging m1 : 19|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a077_SW_Charger_Regulation m1 : 20|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a078_Rapid_Dch_While_Chargin m1 : 21|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a079_Max_Charge_Level_Exceed m1 : 22|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a080_SW_Pack_Ctr_Impedance m1 : 23|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a081_SW_Ctr_Close_Blocked m1 : 24|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a082_SW_Ctr_Force_Open m1 : 25|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a083_SW_Ctr_Close_Failure m1 : 26|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a084_SW_Sleep_Wake_Aborted m1 : 27|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a085_SW_Pack_Contactor_Misma m1 : 28|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a086_SW_FC_Contactor_Mismatc m1 : 29|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a087_SW_Feim_Test_Blocked m1 : 30|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a088_SW_VcFront_MIA_InDrive m1 : 31|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a089_SW_VcFront_MIA m1 : 32|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a090_SW_Gateway_MIA m1 : 33|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a091_SW_ChargePort_MIA m1 : 34|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a092_SW_ChargePort_Mia_On_Hv m1 : 35|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a094_SW_Drive_Inverter_MIA m1 : 37|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a095_SW_UI_MIA m1 : 38|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a097_SW_BMB_Over_CAN_Communi m1 : 40|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a098_SW_BMB_Data_Integrity_L m1 : 41|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a099_SW_BMB_Communication m1 : 42|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a105_SW_One_Module_Tsense m1 : 48|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a106_SW_All_Module_Tsense m1 : 49|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a107_SW_Stack_Voltage_MIA m1 : 50|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a108_SW_BMB_Device_OT m1 : 51|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a109_HW_BMB_Mute_Status_Mism m1 : 52|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a117_SW_Delta_SOC_Weak_Short m1 : 60|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a118_SW_SOC_Balance_Required m1 : 61|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a121_SW_NVRAM_Config_Error m2 : 4|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a122_SW_BMS_Therm_Irrational m2 : 5|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a123_SW_Internal_Isolation m2 : 6|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a126_SW_Thermistor_Failure m2 : 9|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a127_SW_shunt_SNA m2 : 10|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a128_SW_shunt_MIA m2 : 11|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a129_SW_VSH_Failure m2 : 12|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a130_IO_CAN_Error m2 : 13|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a131_Bleed_FET_Failure m2 : 14|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a132_HW_BMB_OTP_Uncorrctbl m2 : 15|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a133_IO_CAN_Bus_Off m2 : 16|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a134_SW_Delayed_Ctr_Off m2 : 17|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a135_HW_BMB_Diagnostics_Fail m2 : 18|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a136_SW_Module_OT_Warning m2 : 19|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a137_SW_Brick_UV_Warning m2 : 20|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a138_SW_Brick_OV_Warning m2 : 21|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a139_SW_DC_Link_V_Irrational m2 : 22|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a140_HW_BMB_Status_Fault m2 : 23|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a141_SW_BMB_Status_Warning m2 : 24|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a142_SW_Isolation_Degradatio m2 : 25|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a143_SW_CAC_Change m2 : 26|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a144_Hvp_Config_Mismatch m2 : 27|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a145_SW_SOC_Change m2 : 28|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a146_SW_Brick_Overdischarged m2 : 29|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a147_SW_SOC_High_Ah_Error m2 : 30|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a148_SW_Unsupported_BMB_ASIC m2 : 31|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a149_SW_Missing_Config_Block m2 : 32|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a150_SW_Missing_Part_Number m2 : 33|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a151_SW_external_isolation m2 : 34|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a152_Isolation_In_Dc_Charge m2 : 35|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a154_SW_Brick_OV_Warning_Sto m2 : 37|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a155_SW_Weak_short_impedence m2 : 38|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a156_SW_BMB_Vref_bad m2 : 39|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a157_SW_Hist_Update_Missed m2 : 40|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a158_SW_HVP_HVI_Comms m2 : 41|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a159_SW_HVP_ECU_Error m2 : 42|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a160_SW_FC_Ctr_Clean_Failed m2 : 43|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a161_SW_BMB_Vref_warning m2 : 44|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a162_SW_No_Power_For_Support m2 : 45|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a164_SW_Uncontrolled_Regen m2 : 47|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a165_SW_Pack_Partial_Weld m2 : 48|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a166_SW_Pack_Full_Weld m2 : 49|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a167_SW_FC_Partial_Weld m2 : 50|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a168_SW_FC_Full_Weld m2 : 51|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a169_SW_FC_Pack_Weld m2 : 52|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a170_SW_Limp_Mode m2 : 53|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a171_SW_Stack_Voltage_Sense m2 : 54|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a172_SW_Isolation_Failure_In m2 : 55|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a174_SW_Charge_Failure m2 : 57|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a175_Charge_Failure_External m2 : 58|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a176_SW_GracefulPowerOff m2 : 59|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a177_SW_Energy_Buffer_Size m2 : 60|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a178_SW_Uncontrolled_Regen_P m2 : 61|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a179_HvpGpoRequestActive m2 : 62|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_a180_SW_ECU_reset_blocked m2 : 63|1@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 818 BMS_bmbMinMax: 6 Vector__XXX
+ SG_ BMS_bmbMinMaxMultiplexer M : 0|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_thermistorNumTMax m0 : 2|4@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_thermistorNumTMin m0 : 8|4@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_thermistorTMax m0 : 16|8@1+ (0.5,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ BMS_thermistorTMin m0 : 24|8@1+ (0.5,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ BMS_brickVoltageMax m1 : 2|12@1+ (0.002,0) [0|0] "V"  Vector_XXX_
+ SG_ BMS_brickVoltageMin m1 : 16|12@1+ (0.002,0) [0|0] "V"  Vector_XXX_
+ SG_ BMS_brickNumVoltageMax m1 : 32|7@1+ (1,1) [0|0] ""  Vector_XXX_
+ SG_ BMS_brickNumVoltageMin m1 : 40|7@1+ (1,1) [0|0] ""  Vector_XXX_
+
+BO_ 722 BMS_driveLimits: 8 Vector__XXX
+ SG_ BMS_maxBusVoltage : 16|16@1+ (0.02,0) [0|0] "V"  Vector_XXX_
+ SG_ BMS_maxChargeCurrent : 32|14@1+ (0.1,0) [0|0] "A"  Vector_XXX_
+ SG_ BMS_maxDischargeCurrent : 48|14@1+ (0.15,0) [0|0] "A"  Vector_XXX_
+ SG_ BMS_minBusVoltage : 0|16@1+ (0.02,0) [0|0] "V"  Vector_XXX_
+
+BO_ 850 BMS_energyStatus: 8 Vector__XXX
+ SG_ BMS_energyStatusMultiplexer M : 0|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_nominalFullPackEnergy m0 : 16|16@1+ (0.02,0) [0|0] "kWh"  Vector_XXX_
+ SG_ BMS_nominalEnergyRemaining m0 : 32|16@1+ (0.02,0) [0|0] "kWh"  Vector_XXX_
+ SG_ BMS_idealEnergyRemaining m0 : 48|16@1+ (0.02,0) [0|0] "kWh"  Vector_XXX_
+ SG_ BMS_fullChargeComplete m1 : 15|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_energyBuffer m1 : 16|16@1+ (0.01,0) [0|0] "kWh"  Vector_XXX_
+ SG_ BMS_expectedEnergyRemaining m1 : 32|16@1+ (0.02,0) [0|0] "kWh"  Vector_XXX_
+ SG_ BMS_energyToChargeComplete m1 : 48|16@1+ (0.02,0) [0|0] "kWh"  Vector_XXX_
+
+BO_ 306 BMS_hvBusStatus: 8 Vector__XXX
+ SG_ BMS_chgTimeToFull : 48|12@1+ (0.0167,0) [0|0] "Hours"  Vector_XXX_
+ SG_ BMS_currentUnfiltered : 32|16@1- (0.05,-822) [0|0] "A"  Vector_XXX_
+ SG_ BMS_packCurrent : 16|16@1- (0.1,0) [0|0] "A"  Vector_XXX_
+ SG_ BMS_packVoltage : 0|16@1+ (0.01,0) [0|0] "V"  Vector_XXX_
+
+BO_ 594 BMS_powerAvailable: 8 Vector__XXX
+ SG_ BMS_maxDischargePower : 16|16@1+ (0.013,0) [0|0] "kW"  Vector_XXX_
+ SG_ BMS_maxRegenPower : 0|16@1+ (0.01,0) [0|0] "kW"  Vector_XXX_
+ SG_ BMS_maxStationaryHeatPower : 32|10@1+ (0.01,0) [0|0] "kW"  Vector_XXX_
+ SG_ BMS_powerLimitsState : 48|1@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 658 BMS_socStatus: 8 Vector__XXX
+ SG_ BMS_socUI : 10|10@1+ (0.1,0) [0|0] "%"  Vector_XXX_
+
+BO_ 530 BMS_status: 8 Vector__XXX
+ SG_ BMS_chargeRequest : 29|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_chgPowerAvailable : 40|11@1+ (0.125,0) [0|0] "kW"  Vector_XXX_
+ SG_ BMS_contactorState : 8|3@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_hvState : 16|3@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_isolationResistance : 19|10@1+ (10,0) [0|0] "kOhm"  Vector_XXX_
+ SG_ BMS_notEnoughPowerForDrive : 1|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_notEnoughPowerForSupport : 2|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_state : 32|4@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_userChargeStatus : 11|3@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 786 BMS_thermalStatus: 8 Vector__XXX
+ SG_ BMS_flowRequest : 10|7@1+ (0.3,0) [0|0] "LPM"  Vector_XXX_
+ SG_ BMS_inletActiveCoolTargetT : 17|9@1+ (0.25,-25) [0|0] "DegC"  Vector_XXX_
+ SG_ BMS_inletActiveHeatTargetT : 35|9@1+ (0.25,-25) [0|0] "DegC"  Vector_XXX_
+ SG_ BMS_inletPassiveTargetT : 26|9@1+ (0.25,-25) [0|0] "DegC"  Vector_XXX_
+ SG_ BMS_maxPackTemperature : 53|9@1+ (0.25,-25) [0|0] "DegC"  Vector_XXX_
+ SG_ BMS_minPackTemperature : 44|9@1+ (0.25,-25) [0|0] "DegC"  Vector_XXX_
+ SG_ BMS_noFlowRequest : 63|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_pcsNoFlowRequest : 62|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ BMS_powerDissipation : 0|10@1+ (0.02,0) [0|0] "kW"  Vector_XXX_
+
+BO_ 541 CP_evseStatus: 8 Vector__XXX
+ SG_ CP_acChargeState : 53|3@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_acNumRetries : 40|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_cableCurrentLimit : 24|7@1+ (1,0) [0|0] "A"  Vector_XXX_
+ SG_ CP_cableType : 16|3@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_digitalCommsAttempts : 31|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_digitalCommsEstablished : 37|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_evseAccept : 0|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_evseChargeType_UI : 38|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_evseRequest : 1|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_gbState : 42|4@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_gbdcChargeAttempts : 51|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_gbdcFailureReason : 49|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_gbdcStopChargeReason : 46|3@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_iecComboState : 60|4@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_iecPilotState : 19|4@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_pilot : 4|3@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_pilotCurrent : 8|8@1+ (0.5,0) [0|0] "A"  Vector_XXX_
+ SG_ CP_plcSupported : 23|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_proximity : 2|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_teslaDcState : 56|4@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_teslaSwcanState : 34|3@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 893 CP_thermalStatus: 8 Vector__XXX
+ SG_ CP_thermalStatusSelect M : 0|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ CP_pinTemperature1 m0 : 8|8@1+ (0.8039,-55) [0|0] "C"  Vector_XXX_
+ SG_ CP_pinTemperature2 m0 : 16|8@1+ (0.8039,-55) [0|0] "C"  Vector_XXX_
+ SG_ CP_pinTemperature3 m0 : 24|8@1+ (0.8039,-55) [0|0] "C"  Vector_XXX_
+
+BO_ 854 DIF_alertMatrix1: 8 Vector__XXX
+ SG_ DIF_a001_hwPhaseAgateDrive : 0|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a002_hwPhaseBgateDrive : 1|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a003_hwPhaseCgateDrive : 2|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a004_hwPhaseApeak : 3|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a005_hwPhaseBpeak : 4|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a006_hwPhaseCpeak : 5|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a007_statorAnomalyDetected : 6|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a008_hwEncoderA : 7|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a009_hwEncoderB : 8|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a010_unintendedReset : 9|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a011_swPowerStageNotReady : 10|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a013_eccError : 12|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a014_activeDamping : 13|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a015_mechSafeStateAnomaly : 14|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a016_safeStateApplied : 15|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a017_hwPedalMonitor : 16|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a018_hw12vSupplyUV : 17|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a020_hwMotorEncoder : 19|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a021_hwBusOV : 20|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a022_hw5vSupplyUV : 21|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a024_selfTest : 23|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a025_phaseApeak : 24|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a026_phaseBpeak : 25|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a027_phaseCpeak : 26|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a028_phaseArms : 27|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a029_phaseBrms : 28|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a030_phaseCrms : 29|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a031_phaseAcurrentOffset : 30|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a032_phaseBcurrentOffset : 31|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a033_phaseAcurrentSensor : 32|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a034_phaseBcurrentSensor : 33|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a035_phaseCurrentBalance : 34|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a036_busOV : 35|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a037_busUV : 36|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a038_busVsensor : 37|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a042_inletSensor : 41|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a043_outletOT : 42|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a044_outletUT : 43|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a045_outletSensor : 44|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a046_statorOT : 45|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a047_statorSensor1 : 46|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a048_statorSensor2 : 47|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a049_statorSensorDiff : 48|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a050_noStatorSensor : 49|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a053_unexpectedLatchState : 52|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a054_driveInverterOT : 53|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a055_trqCrossCheck : 54|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a056_ambientOT : 55|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a057_ambientUT : 56|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a058_ambientSensor : 57|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a059_heatsinkOT : 58|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a060_heatsinkUT : 59|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a061_heatsinkSensor : 60|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a062_systemLimpMode : 61|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a064_torqueIntervention : 63|1@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 855 DIF_alertMatrix2: 8 Vector__XXX
+ SG_ DIF_a069_rotorTempLimit : 4|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a071_busDisconnected : 6|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a072_gateDriveFaultCounter : 7|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a073_motorSpeed : 8|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a074_motorEncoder : 9|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a075_motorSpeedMismatch : 10|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a076_12vSupplyOV : 11|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a077_12vSupplyUV : 12|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a078_adcRefLow : 13|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a079_adcRefHigh : 14|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a084_eccTestData0 : 19|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a086_activeDischargeOn : 21|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a090_pmMIA : 25|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a096_memoryError : 31|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a097_eepromError : 32|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a098_intTimeTooLong : 33|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a099_threadOverrun : 34|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a100_assertion : 35|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a101_eccTestData1 : 36|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a103_lowFlow : 38|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a107_fpgaError : 42|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a108_stateTrans : 43|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a111_badPhaseSensorCalib : 46|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a112_noPhaseCurrent : 47|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a113_noFuncHeatsinkSensor : 48|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a114_noMotorSpeed : 49|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a117_diMIA : 52|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a119_hvpMIA : 54|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a120_hvlinkMIA : 55|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a121_motorControlRegulation : 56|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a122_highStackUsage : 57|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a123_lossMotorControl : 58|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a126_limpMode : 61|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a127_gracefulPowerOff : 62|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a128_fpgaVersionMismatch : 63|1@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 858 DIF_alertMatrix3: 8 Vector__XXX
+ SG_ DIF_a133_capacitorOT : 4|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a134_wheelSpeedIrrational : 5|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a136_spiError : 7|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a142_highLashAngle : 13|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a144_configMismatch : 15|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a147_highTorqueWearLimit : 18|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a148_burnInCycleEnded : 19|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a149_oilPumpFailure : 20|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a150_busVD : 21|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a151_shockTorqueLimiter : 22|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a152_linError : 23|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a153_oilPumpDiagnostics : 24|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a154_resolver : 25|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a156_currentObserver : 27|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a160_busVoltageAnomaly : 31|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a162_endOfLifetimeBurnIn : 33|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a174_unitMayNotRestart : 45|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a176_safetyICFault : 47|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a177_fluxReferenceCorrected : 48|1@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 859 DIF_alertMatrix4: 8 Vector__XXX
+ SG_ DIF_a202_excessHeatUnavailable : 9|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a225_tmpEstPlausibility : 32|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a233_diMsgMissed : 40|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a234_pcsMIA : 41|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a241_systemThermallyLimited : 48|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a242_spinDownLearning : 49|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a244_mechSafeStateApplied : 51|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a247_rotorOffsetError : 54|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a249_highStatorTempFromResis : 56|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a251_oilPumpService : 58|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a252_currentCoreFallback : 59|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a253_lvBoostedRail : 60|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a254_activeDischargeRail : 61|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_a255_currentGainFallback : 62|1@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 421 DIF_hvStatus: 7 Vector__XXX
+ SG_ DIF_motorCurrent : 11|11@1+ (1,0) [0|0] "A"  Vector_XXX_
+ SG_ DIF_vBat : 0|10@1+ (1,0) [0|0] "V"  Vector_XXX_
+
+BO_ 918 DIF_oilPump: 8 Vector__XXX
+ SG_ DIF_oilPumpFlowActual : 16|8@1+ (0.06,0) [0|0] "LPM"  Vector_XXX_
+ SG_ DIF_oilPumpFlowTarget : 8|8@1+ (0.06,0) [0|0] "LPM"  Vector_XXX_
+ SG_ DIF_oilPumpFluidT : 24|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ DIF_oilPumpPressureEstimate : 40|8@1+ (1,0) [0|0] "kPa"  Vector_XXX_
+ SG_ DIF_oilPumpPressureExpected : 48|8@1+ (1,0) [0|0] "kPa"  Vector_XXX_
+ SG_ DIF_oilPumpPressureResidual : 56|8@1+ (4,-500) [0|0] "kPa"  Vector_XXX_
+ SG_ DIF_oilPumpState : 0|3@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 741 DIF_power: 8 Vector__XXX
+ SG_ DIF_drivePowerMax : 48|9@1+ (1,0) [0|0] "kW"  Vector_XXX_
+ SG_ DIF_elecPower : 0|16@1- (0.5,0) [0|0] "kW"  Vector_XXX_
+
+BO_ 886 DIF_temperature: 8 Vector__XXX
+ SG_ DIF_tempIndex M : 0|3@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIF_pcbT m0 : 8|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ DIF_inverterT m0 : 16|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ DIF_statorT m0 : 24|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ DIF_dcCapT m0 : 32|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ DIF_heatsinkT m0 : 40|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ DIF_inverterTpct m0 : 48|8@1+ (0.4,0) [0|0] "%"  Vector_XXX_
+ SG_ DIF_statorTpct m0 : 56|8@1+ (0.4,0) [0|0] "%"  Vector_XXX_
+
+BO_ 1367 DIF_thermalControl: 5 Vector__XXX
+ SG_ DIF_activeInletTempReq : 8|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ DIF_coolantFlowReq : 16|8@1+ (0.2,0) [0|0] "LPM"  Vector_XXX_
+ SG_ DIF_oilFlowReq : 24|8@1+ (0.06,0) [0|0] "LPM"  Vector_XXX_
+ SG_ DIF_passiveInletTempReq : 0|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+
+BO_ 390 DIF_torque: 8 Vector__XXX
+ SG_ DIF_axleSpeed : 40|16@1- (0.1,0) [0|0] "RPM"  Vector_XXX_
+ SG_ DIF_torqueActual : 27|13@1- (2,0) [0|0] "Nm"  Vector_XXX_
+ SG_ DIF_torqueCommand : 12|13@1- (2,0) [0|0] "Nm"  Vector_XXX_
+
+BO_ 935 DIR_alertMatrix1: 8 Vector__XXX
+ SG_ DIR_a001_hwPhaseAgateDrive : 0|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a002_hwPhaseBgateDrive : 1|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a003_hwPhaseCgateDrive : 2|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a004_hwPhaseApeak : 3|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a005_hwPhaseBpeak : 4|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a006_hwPhaseCpeak : 5|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a007_statorAnomalyDetected : 6|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a008_hwEncoderA : 7|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a009_hwEncoderB : 8|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a010_unintendedReset : 9|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a011_swPowerStageNotReady : 10|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a013_eccError : 12|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a014_activeDamping : 13|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a015_mechSafeStateAnomaly : 14|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a016_safeStateApplied : 15|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a017_hwPedalMonitor : 16|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a018_hw12vSupplyUV : 17|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a020_hwMotorEncoder : 19|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a021_hwBusOV : 20|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a022_hw5vSupplyUV : 21|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a024_selfTest : 23|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a025_phaseApeak : 24|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a026_phaseBpeak : 25|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a027_phaseCpeak : 26|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a028_phaseArms : 27|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a029_phaseBrms : 28|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a030_phaseCrms : 29|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a031_phaseAcurrentOffset : 30|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a032_phaseBcurrentOffset : 31|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a033_phaseAcurrentSensor : 32|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a034_phaseBcurrentSensor : 33|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a035_phaseCurrentBalance : 34|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a036_busOV : 35|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a037_busUV : 36|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a038_busVsensor : 37|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a040_difMIA : 39|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a042_inletSensor : 41|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a043_outletOT : 42|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a044_outletUT : 43|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a045_outletSensor : 44|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a046_statorOT : 45|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a047_statorSensor1 : 46|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a048_statorSensor2 : 47|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a049_statorSensorDiff : 48|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a050_noStatorSensor : 49|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a052_dirMIA : 51|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a053_unexpectedLatchState : 52|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a054_driveInverterOT : 53|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a055_trqCrossCheck : 54|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a056_ambientOT : 55|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a057_ambientUT : 56|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a058_ambientSensor : 57|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a059_heatsinkOT : 58|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a060_heatsinkUT : 59|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a061_heatsinkSensor : 60|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a062_systemLimpMode : 61|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a064_torqueIntervention : 63|1@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 949 DIR_alertMatrix2: 8 Vector__XXX
+ SG_ DIR_a069_rotorTempLimit : 4|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a071_busDisconnected : 6|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a072_gateDriveFaultCounter : 7|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a073_motorSpeed : 8|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a074_motorEncoder : 9|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a075_motorSpeedMismatch : 10|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a076_12vSupplyOV : 11|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a077_12vSupplyUV : 12|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a078_adcRefLow : 13|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a079_adcRefHigh : 14|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a084_eccTestData0 : 19|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a086_activeDischargeOn : 21|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a090_pmMIA : 25|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a092_bmsMIA : 27|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a096_memoryError : 31|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a097_eepromError : 32|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a098_intTimeTooLong : 33|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a099_threadOverrun : 34|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a100_assertion : 35|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a101_eccTestData1 : 36|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a103_lowFlow : 38|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a107_fpgaError : 42|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a108_stateTrans : 43|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a111_badPhaseSensorCalib : 46|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a112_noPhaseCurrent : 47|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a113_noFuncHeatsinkSensor : 48|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a114_noMotorSpeed : 49|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a117_diMIA : 52|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a119_hvpMIA : 54|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a120_hvlinkMIA : 55|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a121_motorControlRegulation : 56|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a122_highStackUsage : 57|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a123_lossMotorControl : 58|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a126_limpMode : 61|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a127_gracefulPowerOff : 62|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a128_fpgaVersionMismatch : 63|1@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 965 DIR_alertMatrix3: 8 Vector__XXX
+ SG_ DIR_a133_capacitorOT : 4|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a134_wheelSpeedIrrational : 5|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a136_spiError : 7|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a142_highLashAngle : 13|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a144_configMismatch : 15|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a147_highTorqueWearLimit : 18|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a148_burnInCycleEnded : 19|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a149_oilPumpFailure : 20|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a150_busVD : 21|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a151_shockTorqueLimiter : 22|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a152_linError : 23|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a153_oilPumpDiagnostics : 24|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a154_resolver : 25|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a156_currentObserver : 27|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a160_busVoltageAnomaly : 31|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a162_endOfLifetimeBurnIn : 33|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a174_unitMayNotRestart : 45|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a176_safetyICFault : 47|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a177_fluxReferenceCorrected : 48|1@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 997 DIR_alertMatrix4: 8 Vector__XXX
+ SG_ DIR_a202_excessHeatUnavailable : 9|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a225_tmpEstPlausibility : 32|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a233_diMsgMissed : 40|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a234_pcsMIA : 41|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a241_systemThermallyLimited : 48|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a242_spinDownLearning : 49|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a243_ecuLogAvailable : 50|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a244_mechSafeStateApplied : 51|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a247_rotorOffsetError : 54|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a248_vehicleSpeedLimited : 55|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a249_highStatorTempFromResis : 56|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a251_oilPumpService : 58|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a252_currentCoreFallback : 59|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a253_lvBoostedRail : 60|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a254_activeDischargeRail : 61|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_a255_currentGainFallback : 62|1@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 294 DIR_hvStatus: 7 Vector__XXX
+ SG_ DIR_motorCurrent : 11|11@1+ (1,0) [0|0] "A"  Vector_XXX_
+ SG_ DIR_vBat : 0|10@1+ (1,0) [0|0] "V"  Vector_XXX_
+
+BO_ 2042 DIR_oilPump: 8 Vector__XXX
+ SG_ DIR_oilPumpFlowActual : 16|8@1+ (0.06,0) [0|0] "LPM"  Vector_XXX_
+ SG_ DIR_oilPumpFlowTarget : 8|8@1+ (0.06,0) [0|0] "LPM"  Vector_XXX_
+ SG_ DIR_oilPumpFluidT : 24|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ DIR_oilPumpPressureEstimate : 40|8@1+ (1,0) [0|0] "kPa"  Vector_XXX_
+ SG_ DIR_oilPumpPressureExpected : 48|8@1+ (1,0) [0|0] "kPa"  Vector_XXX_
+ SG_ DIR_oilPumpPressureResidual : 56|8@1+ (4,-500) [0|0] "kPa"  Vector_XXX_
+ SG_ DIR_oilPumpState : 0|3@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 614 DIR_power: 8 Vector__XXX
+ SG_ DIR_drivePowerMax : 48|9@1+ (1,0) [0|0] "kW"  Vector_XXX_
+ SG_ DIR_elecPower : 0|16@1- (0.5,0) [0|0] "kW"  Vector_XXX_
+
+BO_ 789 DIR_temperature: 8 Vector__XXX
+ SG_ DIR_tempIndex M : 0|3@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DIR_pcbT m0 : 8|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ DIR_inverterT m0 : 16|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ DIR_statorT m0 : 24|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ DIR_dcCapT m0 : 32|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ DIR_heatsinkT m0 : 40|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ DIR_inverterTpct m0 : 48|8@1+ (0.4,0) [0|0] "%"  Vector_XXX_
+ SG_ DIR_statorTpct m0 : 56|8@1+ (0.4,0) [0|0] "%"  Vector_XXX_
+
+BO_ 1495 DIR_thermalControl: 5 Vector__XXX
+ SG_ DIR_activeInletTempReq : 8|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+ SG_ DIR_coolantFlowReq : 16|8@1+ (0.2,0) [0|0] "LPM"  Vector_XXX_
+ SG_ DIR_oilFlowReq : 24|8@1+ (0.06,0) [0|0] "LPM"  Vector_XXX_
+ SG_ DIR_passiveInletTempReq : 0|8@1+ (1,-40) [0|0] "DegC"  Vector_XXX_
+
+BO_ 264 DIR_torque: 8 Vector__XXX
+ SG_ DIR_axleSpeed : 40|16@1- (0.1,0) [0|0] "RPM"  Vector_XXX_
+ SG_ DIR_torqueActual : 27|13@1- (2,0) [0|0] "Nm"  Vector_XXX_
+ SG_ DIR_torqueCommand : 12|13@1- (2,0) [0|0] "Nm"  Vector_XXX_
+
+BO_ 599 DI_speed: 8 Vector__XXX
+ SG_ DI_uiSpeed : 24|9@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DI_uiSpeedUnits : 33|1@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 280 DI_systemStatus: 8 Vector__XXX
+ SG_ DI_accelPedalPos : 32|8@1+ (0.4,0) [0|0] "%"  Vector_XXX_
+ SG_ DI_accelPedalPressed : 50|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DI_driveBlocked : 24|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DI_gear : 21|3@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DI_hvilSystemStatus : 27|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DI_immobilizerState : 13|3@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DI_proximity : 46|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ DI_systemState : 16|3@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 612 PCS_chgLineStatus: 6 Vector__XXX
+ SG_ PCS_chgAcCurrentLimit : 32|10@1+ (0.1,0) [0|0] "A"  Vector_XXX_
+ SG_ PCS_chgInputPower : 24|8@1+ (0.1,0) [0|0] "kW"  Vector_XXX_
+ SG_ PCS_chgInputVoltage : 0|14@1+ (0.033,0) [0|0] "V"  Vector_XXX_
+ SG_ PCS_chgLineCurrent : 14|10@1+ (0.1,0) [0|0] "A"  Vector_XXX_
+
+BO_ 516 PCS_chgStatus: 8 Vector__XXX
+ SG_ PCS_chargeShutdownRequest : 57|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ PCS_chgHighPowerActive : 11|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ PCS_chgInstantAcPowerAvailable : 16|8@1+ (0.1,0) [0|0] "kW"  Vector_XXX_
+ SG_ PCS_chgMainState : 0|4@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ PCS_chgMaxAcPowerAvailable : 24|8@1+ (0.1,0) [0|0] "kW"  Vector_XXX_
+ SG_ PCS_chgPHAEnable : 8|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ PCS_chgPHALineCurrentRequest : 32|8@1+ (0.1,0) [0|0] "A"  Vector_XXX_
+ SG_ PCS_chgPHBEnable : 9|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ PCS_chgPHBLineCurrentRequest : 40|8@1+ (0.1,0) [0|0] "A"  Vector_XXX_
+ SG_ PCS_chgPHCEnable : 10|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ PCS_chgPHCLineCurrentRequest : 48|8@1+ (0.1,0) [0|0] "A"  Vector_XXX_
+ SG_ PCS_chgPwmEnableLine : 56|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ PCS_gridConfig : 6|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ PCS_hvChargeStatus : 4|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ PCS_hwVariantType : 59|2@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 548 PCS_dcdcStatus: 8 Vector__XXX
+ SG_ PCS_dcdcHvBusDischargeStatus : 4|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ PCS_dcdcInitialPrechargeSubState : 59|5@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ PCS_dcdcPrechargeStatus : 0|2@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ PCS_dcdcSubState : 10|5@1+ (1,0) [0|0] ""  Vector_XXX_
+
+BO_ 692 PCS_dcdcRailStatus: 5 Vector__XXX
+ SG_ PCS_dcdcHvBusVolt : 10|12@1+ (0.1465,0) [0|0] "V"  Vector_XXX_
+ SG_ PCS_dcdcLvBusVolt : 0|10@1+ (0.0391,0) [0|0] "V"  Vector_XXX_
+ SG_ PCS_dcdcLvOutputCurrent : 24|12@1+ (0.1,0) [0|0] "A"  Vector_XXX_
+
+BO_ 676 PCS_thermalStatus: 8 Vector__XXX
+ SG_ PCS_ambientTemp : 44|11@1- (0.1,40) [0|0] "C"  Vector_XXX_
+ SG_ PCS_chgPhATemp : 0|16@1- (0.1,40) [0|0] "C"  Vector_XXX_
+ SG_ PCS_chgPhBTemp : 11|13@1- (0.1,40) [0|0] "C"  Vector_XXX_
+ SG_ PCS_chgPhCTemp : 22|18@1- (0.1,40) [0|0] "C"  Vector_XXX_
+ SG_ PCS_dcdcBusbarTemp : 55|9@1+ (0.2935,0) [0|0] "C"  Vector_XXX_
+ SG_ PCS_dcdcTemp : 33|15@1- (0.1,40) [0|0] "C"  Vector_XXX_
+
+BO_ 962 VCLEFT_switchStatus: 8 Vector__XXX
+ SG_ VCLEFT_switchStatusIndex M : 0|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ VCLEFT_brakeSwitchPressed m0 : 4|1@1+ (1,0) [0|0] ""  Vector_XXX_
+ SG_ VCLEFT_brakePressed m0 : 60|1@1+ (1,0) [0|0] ""  Vector_XXX_
+
+
+
+BA_DEF_ SG_  "SystemSignalLongSymbol" STRING ;
+BA_DEF_DEF_  "SystemSignalLongSymbol" "";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a002_Pack_Performance_Config "BMS_a002_Pack_Performance_Config_Mismat";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a003_SW_Pack_Birth_Date_Miss "BMS_a003_SW_Pack_Birth_Date_Missing";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a004_SW_Incomplete_Hot_Seal_ "BMS_a004_SW_Incomplete_Hot_Seal_Test";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a027_SW_Repeated_Isolation_F "BMS_a027_SW_Repeated_Isolation_Failure_";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a040_SW_Watch_Dog_HW_Trigger "BMS_a040_SW_Watch_Dog_HW_Triggered";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a041_SW_Destructive_Reset_So "BMS_a041_SW_Destructive_Reset_Source";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a057_SW_Bandolier_Model_Warn "BMS_a057_SW_Bandolier_Model_Warning";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a058_SW_Bandolier_Model_Rese "BMS_a058_SW_Bandolier_Model_Reset";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a070_BrickV_Imbalance_Limiti "BMS_a070_BrickV_Imbalance_Limiting";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a074_Max_Charge_Level_Reduce "BMS_a074_Max_Charge_Level_Reduced";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a078_Rapid_Dch_While_Chargin "BMS_a078_Rapid_Dch_While_Charging";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a079_Max_Charge_Level_Exceed "BMS_a079_Max_Charge_Level_Exceeded";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a085_SW_Pack_Contactor_Misma "BMS_a085_SW_Pack_Contactor_Mismatch";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a086_SW_FC_Contactor_Mismatc "BMS_a086_SW_FC_Contactor_Mismatch";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a092_SW_ChargePort_Mia_On_Hv "BMS_a092_SW_ChargePort_Mia_On_Hvs";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a097_SW_BMB_Over_CAN_Communi "BMS_a097_SW_BMB_Over_CAN_Communication";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a098_SW_BMB_Data_Integrity_L "BMS_a098_SW_BMB_Data_Integrity_Loss";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a109_HW_BMB_Mute_Status_Mism "BMS_a109_HW_BMB_Mute_Status_Mismatch";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a135_HW_BMB_Diagnostics_Fail "BMS_a135_HW_BMB_Diagnostics_Failure";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a142_SW_Isolation_Degradatio "BMS_a142_SW_Isolation_Degradation";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a148_SW_Unsupported_BMB_ASIC "BMS_a148_SW_Unsupported_BMB_ASIC_Type";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a154_SW_Brick_OV_Warning_Sto "BMS_a154_SW_Brick_OV_Warning_Stop_Charg";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a172_SW_Isolation_Failure_In "BMS_a172_SW_Isolation_Failure_In_Drive_";
+BA_ "SystemSignalLongSymbol" SG_ 800 BMS_a178_SW_Uncontrolled_Regen_P "BMS_a178_SW_Uncontrolled_Regen_PwrB";
+BA_ "SystemSignalLongSymbol" SG_ 859 DIF_a249_highStatorTempFromResis "DIF_a249_highStatorTempFromResist";
+BA_ "SystemSignalLongSymbol" SG_ 997 DIR_a249_highStatorTempFromResis "DIR_a249_highStatorTempFromResist";
+VAL_ 82 DEVICE_STATE_BITS 7 "DUALMOTORBATTERY" 6 "DUALMOTOR" 3 "REARMOTORBATTERY" 2 "REARMOTOR" 1 "BATTERY" 0 "NOTCONFIGURED" ;
+VAL_ 83 RD_stoppingMode 2 "HOLD" 1 "CREEP" 0 "STANDARD" ;
+VAL_ 83 RD_driveMode 2 "Charge" 1 "Drive" 0 "Off" ;
+VAL_ 83 RD_displayUnit 1 "mph" 0 "kph" ;
+VAL_ 83 RD_controllerType 7 "DUALMOTORBATTERY" 6 "DUALMOTOR" 3 "REARMOTORBATTERY" 2 "REARMOTOR" 1 "BATTERY" 0 "NOTCONFIGURED" ;
+VAL_ 83 RD_pedalMap 0 "Chill" 1 "Sport" ;
+VAL_ 84 Battery_number 1 "battery 1" 2 "battery 2" 3 "battery 3" 4 "battery 4" 5 "battery 5" 6 "battery 6" 7 "battery 7" 8 "battery 8" ;
+VAL_ 84 Battery_mode 1 "Drive" 0 "off" 2 "Charge" ;
+VAL_ 100 PRND_command 1 "Neutral" 2 "Reverse" 4 "Drive" 8 "Park" ;
+VAL_ 100 AWD_RWD 0 "Normal" 1 "FWD" 2 "RWD" ;
+VAL_ 100 Pedal 0 "Chill" 1 "Sport" ;
+VAL_ 100 Stopping_mode 0 "Standard" 1 "Creep" 2 "Hold" ;
+VAL_ 800 BMS_matrixIndex 0 "AlertMatrix0" 1 "AlertMatrix1" 2 "AlertMatrix2" ;
+VAL_ 818 BMS_bmbMinMaxMultiplexer 0 "THERM_MUX0" 1 "VOLT_MUX1" 2 "END" ;
+VAL_ 850 BMS_energyStatusMultiplexer 0 "Mux0" 1 "Mux1" ;
+VAL_ 594 BMS_powerLimitsState 0 "NOT_CALCULATED_FOR_DRIVE" 1 "CALCULATED_FOR_DRIVE" ;
+VAL_ 530 BMS_contactorState 0 "OPEN" 2 "OPENING" 3 "CLOSING" 4 "CLOSED" 5 "WELDED" 6 "BLOCKED" ;
+VAL_ 530 BMS_hvState 0 "DOWN" 1 "COMING_UP" 2 "GOING_DOWN" 3 "UP_FOR_DRIVE" 4 "UP_FOR_CHARGE" 5 "UP_FOR_DC_CHARGE" 6 "UP" ;
+VAL_ 530 BMS_state 0 "STANDBY" 1 "DRIVE" 2 "SUPPORT" 3 "CHARGE" 4 "FEIM" 5 "CLEAR_FAULT" 6 "FAULT" 7 "WELD" 8 "TEST" 10 "DIAG" ;
+VAL_ 530 BMS_userChargeStatus 0 "DISCONNECTED" 1 "NO_POWER" 2 "ABOUT_TO_CHARGE" 3 "CHARGING" 4 "CHARGE_COMPLETE" 5 "CHARGE_STOPPED" 6 "CALIBRATING" ;
+VAL_ 541 CP_acChargeState 0 "INACTIVE" 1 "CONNECTED_CHARGE_BLOCKED" 2 "STANDBY" 3 "ENABLED" 4 "ONBOARD_CHARGER_SHUTDOWN" 5 "VEH_SHUTDOWN" 6 "FAULT" ;
+VAL_ 541 CP_cableType 0 "IEC" 1 "SAE" 2 "GB_AC" 3 "GB_DC" ;
+VAL_ 541 CP_evseChargeType_UI 0 "NO_CHARGER_PRESENT" 1 "DC_CHARGER_PRESENT" 2 "AC_CHARGER_PRESENT" ;
+VAL_ 541 CP_iecComboState 0 "INACTIVE" 1 "CONNECTED" 2 "V2G_SESSION_SETUP" 3 "SERVICE_DISCOVERY" 4 "PAYMENT_SELECTION" 5 "CHARGE_PARAM_DISCOVERY" 6 "CABLE_CHECK" 7 "PRECHARGE" 8 "ENABLED" 9 "SHUTDOWN" 10 "END_OF_CHARGE" 11 "FAULT" 12 "WAIT_RESTART" ;
+VAL_ 541 CP_iecPilotState 0 "B1" 1 "B2" 2 "B3" 3 "C1" 4 "C2" 5 "C3" 6 "6" 7 "F" 8 "NUM" ;
+VAL_ 541 CP_pilot 0 "NONE" 1 "FAULTED" 2 "LINE_CHARGE" 3 "FAST_CHARGE" 4 "IDLE" 5 "INVALID" 6 "UNUSED_6" ;
+VAL_ 541 CP_proximity 0 "DISCONNECTED" 2 "UNLATCHED" 3 "LATCHED" ;
+VAL_ 541 CP_teslaDcState 0 "INACTIVE" 1 "CONNECTED_CHARGE_BLOCKED" 2 "STANDBY" 3 "EXT_TESTS_ENABLED" 4 "EXT_TEST_ACTIVE" 5 "EXT_PRECHARGE_ACTIVE" 6 "ENABLED" 7 "EVSE_SHUTDOWN" 8 "VEH_SHUTDOWN" 9 "EMERGENCY_SHUTDOWN" 10 "FAULT" ;
+VAL_ 541 CP_teslaSwcanState 0 "INACTIVE" 1 "ACCEPT" 2 "RECEIVE" 3 "ESTABLISHED" 4 "FAULT" 5 "GO_TO_SLEEP" 6 "OFFBOARD_UPDATE_IN_PROGRESS" ;
+VAL_ 893 CP_thermalStatusSelect 0 "0" 1 "1" ;
+VAL_ 918 DIF_oilPumpState 0 "STANDBY" 1 "ENABLE" 2 "COLD_STARTUP" 6 "FAULTED" ;
+VAL_ 886 DIF_tempIndex 0 "Mux0" 1 "Mux1" 2 "Mux2" 3 "Mux3" 4 "Mux4" ;
+VAL_ 2042 DIR_oilPumpState 0 "STANDBY" 1 "ENABLE" 2 "COLD_STARTUP" 6 "FAULTED" ;
+VAL_ 789 DIR_tempIndex 0 "Mux0" 1 "Mux1" 2 "Mux2" 3 "Mux3" 4 "Mux4" ;
+VAL_ 599 DI_uiSpeed 1 "DI_UI_SPEED_SNA" ;
+VAL_ 599 DI_uiSpeedUnits 0 "MPH" 1 "KPH" ;
+VAL_ 280 DI_gear 0 "INVALID" 1 "P" 2 "R" 3 "N" 4 "D" ;
+VAL_ 280 DI_hvilSystemStatus 0 "DISABLED" 1 "OPEN" 2 "CLOSED" ;
+VAL_ 280 DI_immobilizerState 0 "INIT_SNA" 1 "REQUEST" 2 "AUTHENTICATING" 3 "DISARMED" 4 "IDLE" 5 "RESET" 6 "FAULT" ;
+VAL_ 280 DI_systemState 0 "UNAVAILABLE" 1 "IDLE" 2 "STANDBY" 3 "FAULT" 4 "ABORT" 5 "ENABLE" ;
+VAL_ 516 PCS_chargeShutdownRequest 0 "NO_SHUTDOWN_REQUESTED" 1 "GRACEFUL_SHUTDOWN_REQUESTED" 2 "EMERGENCY_SHUTDOWN_REQUESTED" ;
+VAL_ 516 PCS_chgMainState 0 "INIT" 1 "IDLE" 2 "STARTUP" 3 "WAIT_FOR_LINE_VOLTAGE" 4 "QUALIFY_LINE_CONFIG" 5 "SYSTEM_CONFIG" 6 "ENABLE" 7 "SHUTDOWN" 8 "FAULTED" 9 "CLEAR_FAULTS" ;
+VAL_ 516 PCS_gridConfig 0 "SINGLE_PHASE" 2 "THREE_PHASE" 3 "THREE_PHASE_DELTA" ;
+VAL_ 516 PCS_hvChargeStatus 0 "STANDBY" 1 "BLOCKED" 2 "ENABLED" 3 "FAULTED" ;
+VAL_ 516 PCS_hwVariantType 0 "48A_SINGLE_PHASE_VARIANT" 1 "32A_SINGLE_PHASE_VARIANT" 2 "THREE_PHASES_VARIANT" 3 "HW_VARIANT_TYPE_SNA" ;
+VAL_ 548 PCS_dcdcHvBusDischargeStatus 0 "IDLE" 1 "ACTIVE" 2 "FAULTED" ;
+VAL_ 548 PCS_dcdcInitialPrechargeSubState 0 "PWR_UP_INIT" 1 "STANDBY" 2 "LV_SUPPORT_ACTIVE" 3 "FAST_DIS_HVBUS" 4 "SLOW_DIS_HVBUS" 5 "PCHG_FAST_DIS_HVBUS" 6 "PCHG_SLOW_DIS_HVBUS" 7 "PCHG_DWELL_CHARGE" 8 "PCHG_DWELL_WAIT" 9 "PCHG_DI_RECOVERY_WAIT" 10 "PCHG_ACTIVE" 11 "PCHG_FLT_FAST_DIS_HVBUS" 12 "SHUTDOWN" 13 "LV_SUPPORT_FAULTED" 14 "DIS_HVBUS_FAULTED" 15 "PCHG_FAULTED" 16 "CLEAR_FAULTS" 17 "FAULTED" 18 "NUM" ;
+VAL_ 548 PCS_dcdcPrechargeStatus 0 "IDLE" 1 "ACTIVE" 2 "FAULTED" ;
+VAL_ 548 PCS_dcdcSubState 0 "PWR_UP_INIT" 1 "STANDBY" 2 "LV_SUPPORT_ACTIVE" 3 "FAST_DIS_HVBUS" 4 "SLOW_DIS_HVBUS" 5 "PCHG_FAST_DIS_HVBUS" 6 "PCHG_SLOW_DIS_HVBUS" 7 "PCHG_DWELL_CHARGE" 8 "PCHG_DWELL_WAIT" 9 "PCHG_DI_RECOVERY_WAIT" 10 "PCHG_ACTIVE" 11 "PCHG_FLT_FAST_DIS_HVBUS" 12 "SHUTDOWN" 13 "LV_SUPPORT_FAULTED" 14 "DIS_HVBUS_FAULTED" 15 "PCHG_FAULTED" 16 "CLEAR_FAULTS" 17 "FAULTED" 18 "NUM" ;
+VAL_ 962 VCLEFT_switchStatusIndex 0 "0" 1 "1" ;
+
